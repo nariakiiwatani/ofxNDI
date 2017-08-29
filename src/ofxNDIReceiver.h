@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxNDI.h"
+#include "ofConstants.h"
 #include <Processing.NDI.Lib.h>
 #include <string>
 #include <vector>

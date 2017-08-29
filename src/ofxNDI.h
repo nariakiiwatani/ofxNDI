@@ -1,7 +1,4 @@
 #pragma once
 
-#include <string>
-
-namespace ofxNDI
-{
-}
+#include "ofxNDISender.h"
+#include "ofxNDIReceiver.h"

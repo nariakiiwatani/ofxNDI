@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofConstants.h"
 #include <Processing.NDI.Lib.h>
 #include <string>
 #include "ofPixels.h"
@@ -26,7 +27,7 @@ public:
 		video_frame_.xres = frame.getWidth();
 		video_frame_.yres = frame.getHeight();
 		video_frame_.picture_aspect_ratio = video_frame_.xres/(float)video_frame_.yres;
-		video_frame_.line_stride_in_bytes = video_frame_.xres*4;
+		video_frame_.line_stride_in_bytes = video_frame_.xres*frame.getBytesPerPixel();
 		video_frame_.p_data = const_cast<unsigned char*>(frame.getData());
 		if(is_async_) {
 			NDIlib_send_send_video_async(sender_, &video_frame_);
