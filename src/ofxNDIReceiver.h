@@ -13,11 +13,15 @@ public:
 
 	struct Source {
 		Source(){}
+		Source(const Source &src):Source(src.ndi_name.c_str(),src.ip_address.c_str()){}
 		Source(const char *_ndi_name, const char *_ip_address);
 		std::string machine_name="";
 		std::string source_name="";
 		std::string ip="";
 		int port=-1;
+		bool operator==(const Source &src) const {
+			return ndi_name == src.ndi_name && ip_address == src.ip_address;
+		}
 		operator NDIlib_source_t() const {
 			return NDIlib_source_t{ndi_name.c_str(), ip_address.c_str()};
 		}
@@ -34,7 +38,7 @@ public:
 	enum class Location {
 		LOCAL,REMOTE,BOTH
 	};
-	static std::vector<Source> listSources(Location location=Location::BOTH, const std::string &group="", const std::vector<std::string> extra_ips={});
+	static std::vector<Source> listSources(uint32_t waittime_ms=1000, Location location=Location::BOTH, const std::string &group="", const std::vector<std::string> extra_ips={});
 	
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const Source &source, const Settings &settings=Settings());

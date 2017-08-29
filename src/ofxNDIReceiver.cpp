@@ -29,7 +29,7 @@ ofxNDIReceiver::Source::Source(const char *_ndi_name, const char *_ip_address)
 }
 
 
-vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(Location location, const string &group, const vector<string> extra_ips)
+vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms, Location location, const string &group, const vector<string> extra_ips)
 {
 	if (!NDIlib_initialize())
 	{
@@ -37,16 +37,20 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(Location location, co
 		return {};
 	}
 
-	auto getSourceInfo = [](bool local, const string &group, const vector<string> extra_ips) -> vector<Source> {
+	auto getSourceInfo = [](uint32_t waittime_ms, bool local, const string &group, const vector<string> extra_ips) -> vector<Source> {
 		const NDIlib_find_create_t settings = {local, group.c_str(), ofJoinString(extra_ips, ",").c_str()};
-		NDIlib_find_instance_t finder = NDIlib_find_create2(&settings);
+		NDIlib_find_instance_t finder = NDIlib_find_create_v2(&settings);
 		if (!finder) return {};
 		
-		unsigned int num_sources;
-		NDIlib_find_wait_for_sources(finder, 1000);
-		const NDIlib_source_t* sources = NDIlib_find_get_current_sources(finder, &num_sources);
+		unsigned int num_sources=0;
+		const NDIlib_source_t* sources;
+		float endtime = ofGetElapsedTimef()+waittime_ms/1000.f;
+		while(endtime > ofGetElapsedTimef()) {
+			NDIlib_find_wait_for_sources(finder, 100);
+		}
 		
-		vector<ofxNDIReceiver::Source> ret;
+		sources = NDIlib_find_get_current_sources(finder, &num_sources);
+		vector<Source> ret;
 		ret.reserve(num_sources);
 		for(;num_sources-->0;) {
 			ret.emplace_back(sources->p_ndi_name, sources->p_ip_address);
@@ -55,19 +59,24 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(Location location, co
 		}
 		
 		NDIlib_find_destroy(finder);
-		return std::move(ret);
+		return move(ret);
 	};
 
-	vector<ofxNDIReceiver::Source> ret;
-	if(location == Location::BOTH || location == Location::LOCAL) {
-		auto &&sources = getSourceInfo(true, group, extra_ips);
-		copy(begin(sources), end(sources), back_inserter(ret));
+	switch(location) {
+		case Location::BOTH:
+			return move(getSourceInfo(waittime_ms, true, group, extra_ips));
+		case Location::REMOTE:
+			return move(getSourceInfo(waittime_ms, false, group, extra_ips));
+		case Location::LOCAL: {
+			vector<Source>&& both = getSourceInfo(waittime_ms, true, group, extra_ips);
+			vector<Source>&& remote = getSourceInfo(waittime_ms, false, group, extra_ips);
+			both.erase(remove_if(begin(both),end(both),[&remote](const Source &s){
+				return find(begin(remote), end(remote), s) != end(remote);
+			}), end(both));
+			return move(both);
+		}
 	}
-	if(location == Location::BOTH || location == Location::LOCAL) {
-		auto &&sources = getSourceInfo(false, group, extra_ips);
-		copy(begin(sources), end(sources), back_inserter(ret));
-	}
-	return move(ret);
+	return {};
 }
 
 bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
@@ -87,6 +96,11 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 	}
 	video_.setup(receiver_, timeout_ms_, false);
 	return true;
+}
+
+bool ofxNDIReceiver::isConnected() const
+{
+	return receiver_!=nullptr && NDIlib_recv_get_no_connections(receiver_);
 }
 
 void ofxNDIReceiver::update()
