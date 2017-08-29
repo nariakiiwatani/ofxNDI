@@ -81,7 +81,7 @@ bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 {
 	NDIlib_recv_create_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
-	receiver_ = NDIlib_recv_create2(&creator);
+	receiver_ = NDIlib_recv_create_v2(&creator);
 	if (!receiver_) {
 		return false;
 	}
@@ -94,11 +94,11 @@ void ofxNDIReceiver::update()
 	video_.update();
 	return;
 	// The descriptors
-	NDIlib_video_frame_t video_frame;
-	NDIlib_audio_frame_t audio_frame;
+	NDIlib_video_frame_v2_t video_frame;
+	NDIlib_audio_frame_v2_t audio_frame;
 	NDIlib_metadata_frame_t metadata_frame;
 	
-	switch (NDIlib_recv_capture(receiver_, nullptr, &audio_frame, &metadata_frame, timeout_ms_))
+	switch (NDIlib_recv_capture_v2(receiver_, nullptr, &audio_frame, &metadata_frame, timeout_ms_))
 	{	
 			// No data
 		case NDIlib_frame_type_none:
@@ -108,13 +108,13 @@ void ofxNDIReceiver::update()
 			// Video data
 		case NDIlib_frame_type_video:
 			printf("Video data received (%dx%d).\n", video_frame.xres, video_frame.yres);
-			NDIlib_recv_free_video(receiver_, &video_frame);
+			NDIlib_recv_free_video_v2(receiver_, &video_frame);
 			break;
 			
 			// Audio data
 		case NDIlib_frame_type_audio:
 			printf("Audio data received (%d samples).\n", audio_frame.no_samples);
-			NDIlib_recv_free_audio(receiver_, &audio_frame);
+			NDIlib_recv_free_audio_v2(receiver_, &audio_frame);
 			break;
 			
 			// Meta data

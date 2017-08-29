@@ -51,7 +51,7 @@ private:
 	NDIlib_recv_instance_t receiver_=nullptr;
 	std::size_t timeout_ms_=1000;
 	
-	NDIlib_audio_frame_t audio_frame_;
+	NDIlib_audio_frame_v2_t audio_frame_;
 	NDIlib_metadata_frame_t metadata_frame_;
 	
 	ofxNDI::VideoDecoder video_;

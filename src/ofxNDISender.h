@@ -24,20 +24,20 @@ public:
 	void setAsync(bool async) { is_async_ = async; }
 	
 	void sendVideoFrame(const ofPixels &frame) {
-		video_frame_.xres = frame.getWidth();
-		video_frame_.yres = frame.getHeight();
+		video_frame_.xres = (int)frame.getWidth();
+		video_frame_.yres = (int)frame.getHeight();
 		video_frame_.picture_aspect_ratio = video_frame_.xres/(float)video_frame_.yres;
-		video_frame_.line_stride_in_bytes = video_frame_.xres*frame.getBytesPerPixel();
+		video_frame_.line_stride_in_bytes = (int)(video_frame_.xres*frame.getBytesPerPixel());
 		video_frame_.p_data = const_cast<unsigned char*>(frame.getData());
 		if(is_async_) {
-			NDIlib_send_send_video_async(sender_, &video_frame_);
+			NDIlib_send_send_video_async_v2(sender_, &video_frame_);
 		}
 		else {
-			NDIlib_send_send_video(sender_, &video_frame_);
+			NDIlib_send_send_video_v2(sender_, &video_frame_);
 		}
 	}
 private:
 	NDIlib_send_instance_t sender_=nullptr;
-	NDIlib_video_frame_t video_frame_;
+	NDIlib_video_frame_v2_t video_frame_;
 	bool is_async_ = false;
 };

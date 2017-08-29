@@ -14,6 +14,6 @@
 
 namespace ofxNDI
 {
-	using VideoDecoder = FrameDecoder<NDIlib_video_frame_t>;
+	using VideoDecoder = FrameDecoder<NDIlib_video_frame_v2_t>;
 	template<> template<> void VideoDecoder::decodeTo<ofPixels>(ofPixels &dst);
 }
