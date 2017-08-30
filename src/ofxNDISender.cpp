@@ -19,7 +19,7 @@ ofxNDISender::ofxNDISender()
 	video_frame_.p_data = nullptr;
 }
 
-void ofxNDISender::setup(const std::string &name, const std::string &group, bool clock_video, bool clock_audio)
+bool ofxNDISender::setup(const std::string &name, const std::string &group, bool clock_video, bool clock_audio)
 {
 	NDIlib_send_create_t create_settings = {
 		name.c_str(),
@@ -27,6 +27,11 @@ void ofxNDISender::setup(const std::string &name, const std::string &group, bool
 		clock_video,
 		clock_audio };
 	sender_ = NDIlib_send_create(&create_settings);
+	if(!sender_) {
+		ofLogError("NDI Sender failed to initialize");
+		return false;
+	}
+	return true;
 }
 void ofxNDISender::addConnectionMetadata(const std::string &metadata, int64_t timecode)
 {

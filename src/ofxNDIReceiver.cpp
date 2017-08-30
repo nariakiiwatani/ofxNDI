@@ -85,6 +85,7 @@ bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 	if(index < sources.size()) {
 		return setup(sources[index], settings);
 	}
+	ofLogWarning("no NDI Source found");
 	return false;
 }
 bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
@@ -92,6 +93,7 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 	NDIlib_recv_create_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
 	receiver_ = NDIlib_recv_create_v2(&creator);
 	if (!receiver_) {
+		ofLogError("NDI Receiver failed to initialize");
 		return false;
 	}
 	video_.setup(receiver_, timeout_ms_, false);
