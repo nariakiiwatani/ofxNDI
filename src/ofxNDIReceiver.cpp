@@ -59,21 +59,21 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 		}
 		
 		NDIlib_find_destroy(finder);
-		return move(ret);
+		return ret;
 	};
 
 	switch(location) {
 		case Location::BOTH:
-			return move(getSourceInfo(waittime_ms, true, group, extra_ips));
+			return getSourceInfo(waittime_ms, true, group, extra_ips);
 		case Location::REMOTE:
-			return move(getSourceInfo(waittime_ms, false, group, extra_ips));
+			return getSourceInfo(waittime_ms, false, group, extra_ips);
 		case Location::LOCAL: {
 			vector<Source>&& both = getSourceInfo(waittime_ms, true, group, extra_ips);
 			vector<Source>&& remote = getSourceInfo(waittime_ms, false, group, extra_ips);
 			both.erase(remove_if(begin(both),end(both),[&remote](const Source &s){
 				return find(begin(remote), end(remote), s) != end(remote);
 			}), end(both));
-			return move(both);
+			return both;
 		}
 	}
 	return {};
