@@ -22,6 +22,6 @@ template<> template<>
 void VideoDecoder::decodeTo<ofPixels>(ofPixels &dst)
 {
 	if(is_front_allocated_) {
-		dst.setFromPixels(frame_.front().p_data, frame_.front().xres, frame_.front().yres, 4);
+		dst.setFromPixels(frame_.front().p_data, frame_.front().xres, frame_.front().yres, frame_.front().line_stride_in_bytes/frame_.front().xres);
 	}
 }
