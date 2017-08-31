@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		222937AE58FD5FB49FAABDE8 /* ofxNDISender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DF45D0623D6E64CBA08FBC /* ofxNDISender.cpp */; };
 		3E46C22ADD82E6283E88292F /* ofxNDIVideoFrameDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 456FBAA02C70832D0946BB17 /* ofxNDIVideoFrameDecoder.cpp */; };
-		81393E501F58022C00FFC473 /* ofxNDIAudioFrameDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81393E4E1F58022C00FFC473 /* ofxNDIAudioFrameDecoder.cpp */; };
-		81ADADD71F54FF5300BA65EE /* libndi.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81ADADD31F54FE8B00BA65EE /* libndi.3.dylib */; };
+		4AEC311485A0EE1B7C712BE8 /* ofxNDIAudioFrameDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9387AE0A646575E6312C1667 /* ofxNDIAudioFrameDecoder.cpp */; };
+		81393E581F5803AF00FFC473 /* libndi.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 81393E561F5803AF00FFC473 /* libndi.3.dylib */; };
 		8FB9E996B2B8AA3D2866EECE /* ofxNDIReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420F0DAA6BCD102088EF54AF /* ofxNDIReceiver.cpp */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -60,18 +60,17 @@
 		7205DA942AD413733A246F73 /* ofxNDIFrameDecoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIFrameDecoder.h; path = ../../../addons/ofxNDI/src/ofxNDIFrameDecoder.h; sourceTree = SOURCE_ROOT; };
 		756376F2CD9B663552247D28 /* ofxNDISender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDISender.h; path = ../../../addons/ofxNDI/src/ofxNDISender.h; sourceTree = SOURCE_ROOT; };
 		7E1550837C350E76309A37EB /* Processing.NDI.structs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.structs.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.structs.h; sourceTree = SOURCE_ROOT; };
-		81393E4E1F58022C00FFC473 /* ofxNDIAudioFrameDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxNDIAudioFrameDecoder.cpp; path = ../src/ofxNDIAudioFrameDecoder.cpp; sourceTree = "<group>"; };
-		81393E4F1F58022C00FFC473 /* ofxNDIAudioFrameDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxNDIAudioFrameDecoder.h; path = ../src/ofxNDIAudioFrameDecoder.h; sourceTree = "<group>"; };
-		81ADADCD1F54FE4200BA65EE /* libndi.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndi.3.dylib; path = ../libs/NDI/lib/x64/libndi.3.dylib; sourceTree = "<group>"; };
-		81ADADD31F54FE8B00BA65EE /* libndi.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libndi.3.dylib; sourceTree = "<group>"; };
+		81393E561F5803AF00FFC473 /* libndi.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libndi.3.dylib; sourceTree = "<group>"; };
 		836B71F953281552AC9ECF96 /* ofxNDIVideoFrameDecoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIVideoFrameDecoder.h; path = ../../../addons/ofxNDI/src/ofxNDIVideoFrameDecoder.h; sourceTree = SOURCE_ROOT; };
 		88DF45D0623D6E64CBA08FBC /* ofxNDISender.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDISender.cpp; path = ../../../addons/ofxNDI/src/ofxNDISender.cpp; sourceTree = SOURCE_ROOT; };
 		8B209C818662F2A6760D46B5 /* Processing.NDI.Routing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Routing.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Routing.h; sourceTree = SOURCE_ROOT; };
+		9387AE0A646575E6312C1667 /* ofxNDIAudioFrameDecoder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDIAudioFrameDecoder.cpp; path = ../../../addons/ofxNDI/src/ofxNDIAudioFrameDecoder.cpp; sourceTree = SOURCE_ROOT; };
+		A0C7B31A5E69AC2F7230C793 /* ofxNDIAudioFrameDecoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIAudioFrameDecoder.h; path = ../../../addons/ofxNDI/src/ofxNDIAudioFrameDecoder.h; sourceTree = SOURCE_ROOT; };
 		A70E5EEB46F8E59FC8AC6B4C /* Processing.NDI.Lib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Lib.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Lib.h; sourceTree = SOURCE_ROOT; };
 		B9A74F81C90F7B339D25E26D /* Processing.NDI.structs_deprecated.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.structs_deprecated.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.structs_deprecated.h; sourceTree = SOURCE_ROOT; };
 		C80AD5E204660C2D7AF596A4 /* ofxNDI.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDI.h; path = ../../../addons/ofxNDI/src/ofxNDI.h; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* example-sender-macosDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-sender-macosDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* example-audio-receiver-macosDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-audio-receiver-macosDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
@@ -87,7 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
-				81ADADD71F54FF5300BA65EE /* libndi.3.dylib in Frameworks */,
+				81393E581F5803AF00FFC473 /* libndi.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,8 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				C80AD5E204660C2D7AF596A4 /* ofxNDI.h */,
-				81393E4E1F58022C00FFC473 /* ofxNDIAudioFrameDecoder.cpp */,
-				81393E4F1F58022C00FFC473 /* ofxNDIAudioFrameDecoder.h */,
+				9387AE0A646575E6312C1667 /* ofxNDIAudioFrameDecoder.cpp */,
+				A0C7B31A5E69AC2F7230C793 /* ofxNDIAudioFrameDecoder.h */,
 				7205DA942AD413733A246F73 /* ofxNDIFrameDecoder.h */,
 				420F0DAA6BCD102088EF54AF /* ofxNDIReceiver.cpp */,
 				635299AD231089503BB3620A /* ofxNDIReceiver.h */,
@@ -136,29 +135,21 @@
 			name = local_addons;
 			sourceTree = "<group>";
 		};
-		81ADADCC1F54FE4200BA65EE /* Frameworks */ = {
+		81393E521F5803AF00FFC473 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADCD1F54FE4200BA65EE /* libndi.3.dylib */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		81ADADD11F54FE7C00BA65EE /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				81ADADD21F54FE8B00BA65EE /* x64 */,
+				81393E551F5803AF00FFC473 /* x64 */,
 			);
 			name = lib;
+			path = ../libs/NDI/lib;
 			sourceTree = "<group>";
 		};
-		81ADADD21F54FE8B00BA65EE /* x64 */ = {
+		81393E551F5803AF00FFC473 /* x64 */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADD31F54FE8B00BA65EE /* libndi.3.dylib */,
+				81393E561F5803AF00FFC473 /* libndi.3.dylib */,
 			);
-			name = x64;
-			path = ../libs/NDI/lib/x64;
+			path = x64;
 			sourceTree = "<group>";
 		};
 		AB039F8D669FDEF1B43F2BFC /* utils */ = {
@@ -198,7 +189,7 @@
 		C8FD27A7BED99B4346F86955 /* NDI */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADD11F54FE7C00BA65EE /* lib */,
+				81393E521F5803AF00FFC473 /* lib */,
 				C00801729FA803477B18B616 /* include */,
 			);
 			name = NDI;
@@ -221,8 +212,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				6948EE371B920CB800B5AC1A /* local_addons */,
-				E4B69B5B0A3A1756003C02F2 /* example-sender-macosDebug.app */,
-				81ADADCC1F54FE4200BA65EE /* Frameworks */,
+				E4B69B5B0A3A1756003C02F2 /* example-audio-receiver-macosDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -248,9 +238,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* example-sender-macos */ = {
+		E4B69B5A0A3A1756003C02F2 /* example-audio-receiver-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-sender-macos" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-audio-receiver-macos" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -262,9 +252,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = "example-sender-macos";
+			name = "example-audio-receiver-macos";
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* example-sender-macosDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* example-audio-receiver-macosDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -273,9 +263,9 @@
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0600;
 			};
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-sender-macos" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-audio-receiver-macos" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -296,7 +286,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* example-sender-macos */,
+				E4B69B5A0A3A1756003C02F2 /* example-audio-receiver-macos */,
 			);
 		};
 /* End PBXProject section */
@@ -334,10 +324,10 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
+				4AEC311485A0EE1B7C712BE8 /* ofxNDIAudioFrameDecoder.cpp in Sources */,
 				8FB9E996B2B8AA3D2866EECE /* ofxNDIReceiver.cpp in Sources */,
 				222937AE58FD5FB49FAABDE8 /* ofxNDISender.cpp in Sources */,
 				3E46C22ADD82E6283E88292F /* ofxNDIVideoFrameDecoder.cpp in Sources */,
-				81393E501F58022C00FFC473 /* ofxNDIAudioFrameDecoder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,41 +346,23 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
-				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					src,
 					../../../addons/ofxNDI/libs,
 					../../../addons/ofxNDI/libs/NDI,
 					../../../addons/ofxNDI/libs/NDI/include,
@@ -414,41 +386,24 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
 			buildSettings = {
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_UNROLL_LOOPS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;
-				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					src,
 					../../../addons/ofxNDI/libs,
 					../../../addons/ofxNDI/libs/NDI,
 					../../../addons/ofxNDI/libs/NDI/include,
@@ -483,7 +438,6 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					src,
 					../../../addons/ofxNDI/libs,
 					../../../addons/ofxNDI/libs/NDI,
 					../../../addons/ofxNDI/libs/NDI/include,
@@ -501,7 +455,6 @@
 					"$(inherited)",
 					"../libs/NDI/lib/**",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cc.openFrameworks.ofapp;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
 				WRAPPER_EXTENSION = app;
 			};
@@ -522,7 +475,6 @@
 				GCC_MODEL_TUNING = NONE;
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					src,
 					../../../addons/ofxNDI/libs,
 					../../../addons/ofxNDI/libs/NDI,
 					../../../addons/ofxNDI/libs/NDI/include,
@@ -540,7 +492,6 @@
 					"$(inherited)",
 					"../libs/NDI/lib/**",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cc.openFrameworks.ofapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 				baseConfigurationReference = E4EB6923138AFD0F00A09F29;
@@ -550,7 +501,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-sender-macos" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example-audio-receiver-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -559,7 +510,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-sender-macos" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "example-audio-receiver-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,

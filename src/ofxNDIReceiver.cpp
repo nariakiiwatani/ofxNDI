@@ -97,6 +97,7 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 		return false;
 	}
 	video_.setup(receiver_, timeout_ms_, false);
+	audio_.setup(receiver_, timeout_ms_, false);
 	return true;
 }
 
@@ -108,6 +109,7 @@ bool ofxNDIReceiver::isConnected() const
 void ofxNDIReceiver::update()
 {
 	video_.update();
+	audio_.update();
 	return;
 	// The descriptors
 	NDIlib_video_frame_v2_t video_frame;

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "ofxNDIVideoFrameDecoder.h"
+#include "ofxNDIAudioFrameDecoder.h"
 
 class ofxNDIReceiver
 {
@@ -47,17 +48,22 @@ public:
 	bool isConnected() const;
 	
 	void update();
+
 	bool isVideoFrameNew() const { return video_.isFrameNew(); }
 	template<typename Result>
 	void getVideoFrame(Result &result) { video_.decodeTo(result); }
+	
+	bool isAudioFrameNew() const { return audio_.isFrameNew(); }
+	template<typename Result>
+	void getAudioFrame(Result &result) { audio_.decodeTo(result); }
 	
 private:
 	NDIlib_recv_instance_t receiver_=nullptr;
 	std::size_t timeout_ms_=1000;
 	
-	NDIlib_audio_frame_v2_t audio_frame_;
 	NDIlib_metadata_frame_t metadata_frame_;
 	
 	ofxNDI::VideoDecoder video_;
+	ofxNDI::AudioDecoder audio_;
 };
 

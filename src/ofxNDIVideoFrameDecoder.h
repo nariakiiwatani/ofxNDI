@@ -10,7 +10,6 @@
 
 #include "ofxNDIFrameDecoder.h"
 #include "ofPixels.h"
-#include "ofFbo.h"
 
 namespace ofxNDI
 {
