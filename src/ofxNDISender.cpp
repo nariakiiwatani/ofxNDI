@@ -9,6 +9,8 @@
 #include <atomic>
 #include <chrono>
 
+using namespace std;
+
 ofxNDISender::ofxNDISender()
 {
 	video_frame_.frame_rate_N = 60000;
@@ -19,7 +21,7 @@ ofxNDISender::ofxNDISender()
 	video_frame_.p_data = nullptr;
 }
 
-bool ofxNDISender::setup(const std::string &name, const std::string &group, bool clock_video, bool clock_audio)
+bool ofxNDISender::setup(const string &name, const string &group, bool clock_video, bool clock_audio)
 {
 	NDIlib_send_create_t create_settings = {
 		name.c_str(),
@@ -33,7 +35,7 @@ bool ofxNDISender::setup(const std::string &name, const std::string &group, bool
 	}
 	return true;
 }
-void ofxNDISender::addConnectionMetadata(const std::string &metadata, int64_t timecode)
+void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecode)
 {
 	const NDIlib_metadata_frame_t data = {
 		static_cast<int>(metadata.length()+1),
