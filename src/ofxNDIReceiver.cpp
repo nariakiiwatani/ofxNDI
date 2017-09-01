@@ -1,33 +1,8 @@
 #include "ofxNDIReceiver.h"
-#include "ofUtils.h"
-#include <regex>
-
 #include <Processing.NDI.Lib.h>
+#include "ofUtils.h"
 
 using namespace std;
-
-ofxNDIReceiver::Source::Source(const char *_ndi_name, const char *_ip_address)
-{
-	ndi_name = _ndi_name;
-	ip_address = _ip_address;
-	{
-		smatch match;
-		string raw = string(_ndi_name);
-		if(regex_match(raw, match, regex(R"((.*?) \((.*)\))"))) {
-			machine_name = match[1];
-			source_name = match[2];
-		}
-	}
-	{
-		smatch match;
-		string raw = string(_ip_address);
-		if(regex_match(raw, match, regex(R"(([\d.]*?):(\d*))"))) {
-			ip = match[1];
-			port = ofToInt(match[2]);
-		}
-	}
-}
-
 
 vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms, Location location, const string &group, const vector<string> extra_ips)
 {
@@ -53,7 +28,7 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 		vector<Source> ret;
 		ret.reserve(num_sources);
 		for(;num_sources-->0;) {
-			ret.emplace_back(sources->p_ndi_name, sources->p_ip_address);
+			ret.emplace_back(*sources);
 			cout << "NDI Source Detected : " << sources->p_ndi_name << "," << sources->p_ip_address << endl;
 			++sources;
 		}
@@ -68,10 +43,12 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 		case Location::REMOTE:
 			return getSourceInfo(waittime_ms, false, group, extra_ips);
 		case Location::LOCAL: {
-			vector<Source>&& both = getSourceInfo(waittime_ms, true, group, extra_ips);
-			vector<Source>&& remote = getSourceInfo(waittime_ms, false, group, extra_ips);
-			both.erase(remove_if(begin(both),end(both),[&remote](const Source &s){
-				return find(begin(remote), end(remote), s) != end(remote);
+			auto&& both = getSourceInfo(waittime_ms, true, group, extra_ips);
+			auto&& remote = getSourceInfo(waittime_ms, false, group, extra_ips);
+			both.erase(remove_if(begin(both),end(both),[&remote](const NDIlib_source_t &s){
+				return find_if(begin(remote), end(remote), [&s](const NDIlib_source_t &r){
+					return strcmp(s.p_ndi_name,r.p_ndi_name)==0 && strcmp(s.p_ip_address,r.p_ip_address)==0;
+				}) != end(remote);
 			}), end(both));
 			return both;
 		}
@@ -96,8 +73,6 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 		ofLogError("NDI Receiver failed to initialize");
 		return false;
 	}
-	video_.setup(receiver_, timeout_ms_, false);
-	audio_.setup(receiver_, timeout_ms_, false);
 	return true;
 }
 
@@ -106,53 +81,9 @@ bool ofxNDIReceiver::isConnected() const
 	return receiver_!=nullptr && NDIlib_recv_get_no_connections(receiver_);
 }
 
-void ofxNDIReceiver::update()
+ofxNDIReceiver::~Receiver()
 {
-	video_.update();
-	audio_.update();
-	return;
-	// The descriptors
-	NDIlib_video_frame_v2_t video_frame;
-	NDIlib_audio_frame_v2_t audio_frame;
-	NDIlib_metadata_frame_t metadata_frame;
-	
-	switch (NDIlib_recv_capture_v2(receiver_, nullptr, &audio_frame, &metadata_frame, timeout_ms_))
-	{	
-			// No data
-		case NDIlib_frame_type_none:
-			printf("No data received.\n");
-			break;
-			
-			// Video data
-		case NDIlib_frame_type_video:
-			printf("Video data received (%dx%d).\n", video_frame.xres, video_frame.yres);
-			NDIlib_recv_free_video_v2(receiver_, &video_frame);
-			break;
-			
-			// Audio data
-		case NDIlib_frame_type_audio:
-			printf("Audio data received (%d samples).\n", audio_frame.no_samples);
-			NDIlib_recv_free_audio_v2(receiver_, &audio_frame);
-			break;
-			
-			// Meta data
-		case NDIlib_frame_type_metadata:
-			printf("Meta data received (%s).\n", metadata_frame.p_data);
-			NDIlib_recv_free_metadata(receiver_, &metadata_frame);
-			break;
-			
-			// Everything else
-		default:
-			break;
-	}
-}
-
-ofxNDIReceiver::~ofxNDIReceiver()
-{
-	// Destroy the receiver
 	NDIlib_recv_destroy(receiver_);
-	
-	// Not required, but nice
 	NDIlib_destroy();
 }
 

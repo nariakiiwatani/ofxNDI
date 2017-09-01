@@ -17,7 +17,6 @@ public:
 	
 	bool isSetup() const { return sender_!=nullptr; }
 	
-	
 	void setFrameRate(int rate_n, int rate_d) { video_frame_.frame_rate_N=rate_n, video_frame_.frame_rate_D=rate_d; }
 	void setFourCCType(NDIlib_FourCC_type_e four_cc) { video_frame_.FourCC = four_cc; }
 	void setFrameFormatType(NDIlib_frame_format_type_e format) { video_frame_.frame_format_type = format; }
