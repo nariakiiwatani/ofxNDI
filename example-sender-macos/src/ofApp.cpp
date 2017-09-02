@@ -4,8 +4,9 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	sender_.setup("ofxNDISender example macos");
-	sender_.setFourCCType(NDIlib_FourCC_type_RGBX);
+	if(sender_.setup("ofxNDISender example macos")) {
+		video_.setup(sender_);
+	}
 }
 
 //--------------------------------------------------------------
@@ -24,7 +25,7 @@ void ofApp::draw(){
 	ofPopStyle();
 	ofPixels pixels;
 	ofGetGLRenderer()->saveFullViewport(pixels);
-	sender_.sendVideoFrame(pixels);
+	video_.send(pixels, false);
 }
 
 //--------------------------------------------------------------

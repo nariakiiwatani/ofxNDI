@@ -11,7 +11,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		222937AE58FD5FB49FAABDE8 /* ofxNDISender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88DF45D0623D6E64CBA08FBC /* ofxNDISender.cpp */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		3E46C22ADD82E6283E88292F /* ofxNDIVideoFrameDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 456FBAA02C70832D0946BB17 /* ofxNDIVideoFrameDecoder.cpp */; };
+		4B03289C24842F5B76F8698D /* ofxNDIRecvStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C9FC1AFDD5E1276BF1A1BCD /* ofxNDIRecvStream.cpp */; };
 		5326AEA810A23A0500278DE6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5326AEA710A23A0500278DE6 /* CoreLocation.framework */; };
 		53F323EB10A20EDB00E0DAE4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F323EA10A20EDB00E0DAE4 /* OpenAL.framework */; };
 		678E130817951530005B6D19 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130717951530005B6D19 /* Icon@2x.png */; };
@@ -20,7 +20,8 @@
 		678E130E17951540005B6D19 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130D17951540005B6D19 /* Default@2x.png */; };
 		678E131017951549005B6D19 /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130F17951549005B6D19 /* Default-568h@2x~iphone.png */; };
 		67DFA53619F92A69003B3434 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DFA53419F92A5E003B3434 /* Accelerate.framework */; };
-		81F41B021F5678B0002E8518 /* libndi_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81ADADE41F55307600BA65EE /* libndi_ios.a */; };
+		68A19D836E5BA0ED60A3DE5B /* ofxNDISendStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D3DB1AC54CF9DC356CF0A8 /* ofxNDISendStream.cpp */; };
+		81A8E49B1F5B6E4600827233 /* libndi_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81A8E4981F5B6E4600827233 /* libndi_ios.a */; };
 		8FB9E996B2B8AA3D2866EECE /* ofxNDIReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 420F0DAA6BCD102088EF54AF /* ofxNDIReceiver.cpp */; };
 		BB16EBD20F2B2A9500518274 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB16EBD10F2B2A9500518274 /* OpenGLES.framework */; };
 		BB16EBD90F2B2AB500518274 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB16EBD80F2B2AB500518274 /* QuartzCore.framework */; };
@@ -52,9 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03D3DB1AC54CF9DC356CF0A8 /* ofxNDISendStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDISendStream.cpp; path = ../../../addons/ofxNDI/src/ofxNDISendStream.cpp; sourceTree = SOURCE_ROOT; };
 		09417F3BCD7E6FB6CE3AD0C0 /* Processing.NDI.Send.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Send.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Send.h; sourceTree = SOURCE_ROOT; };
 		0B2CB21FCA3A6FE3D640E9F1 /* Processing.NDI.Recv.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Recv.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Recv.h; sourceTree = SOURCE_ROOT; };
-		115A8CEEFE6D80D4AC4BF1A8 /* DoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DoubleBuffer.h; path = ../../../addons/ofxNDI/src/utils/DoubleBuffer.h; sourceTree = SOURCE_ROOT; };
 		15718EF0626345FC9172263A /* Processing.NDI.Lib.cplusplus.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Lib.cplusplus.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Lib.cplusplus.h; sourceTree = SOURCE_ROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* example-receiver-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-receiver-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,8 +63,9 @@
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* ofxiOS_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxiOS_Prefix.pch; sourceTree = "<group>"; };
 		39A11DFB66069FB43B4C3B57 /* Processing.NDI.DynamicLoad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.DynamicLoad.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.DynamicLoad.h; sourceTree = SOURCE_ROOT; };
+		3C9FC1AFDD5E1276BF1A1BCD /* ofxNDIRecvStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDIRecvStream.cpp; path = ../../../addons/ofxNDI/src/ofxNDIRecvStream.cpp; sourceTree = SOURCE_ROOT; };
 		420F0DAA6BCD102088EF54AF /* ofxNDIReceiver.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDIReceiver.cpp; path = ../../../addons/ofxNDI/src/ofxNDIReceiver.cpp; sourceTree = SOURCE_ROOT; };
-		456FBAA02C70832D0946BB17 /* ofxNDIVideoFrameDecoder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDIVideoFrameDecoder.cpp; path = ../../../addons/ofxNDI/src/ofxNDIVideoFrameDecoder.cpp; sourceTree = SOURCE_ROOT; };
+		4B2B6D2203619DD01589FF5F /* ofxNDISendStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDISendStream.h; path = ../../../addons/ofxNDI/src/ofxNDISendStream.h; sourceTree = SOURCE_ROOT; };
 		5004301C0A0BDFAD714943B4 /* Processing.NDI.Find.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Find.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Find.h; sourceTree = SOURCE_ROOT; };
 		5326AEA710A23A0500278DE6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		53F323EA10A20EDB00E0DAE4 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
@@ -75,11 +77,11 @@
 		678E130D17951540005B6D19 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "bin/data/Default@2x.png"; sourceTree = "<group>"; };
 		678E130F17951549005B6D19 /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x~iphone.png"; path = "bin/data/Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		67DFA53419F92A5E003B3434 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		7205DA942AD413733A246F73 /* ofxNDIFrameDecoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIFrameDecoder.h; path = ../../../addons/ofxNDI/src/ofxNDIFrameDecoder.h; sourceTree = SOURCE_ROOT; };
+		6AFE0C8241EA292710CE9DF6 /* ofxNDIRecvStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIRecvStream.h; path = ../../../addons/ofxNDI/src/ofxNDIRecvStream.h; sourceTree = SOURCE_ROOT; };
 		756376F2CD9B663552247D28 /* ofxNDISender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDISender.h; path = ../../../addons/ofxNDI/src/ofxNDISender.h; sourceTree = SOURCE_ROOT; };
 		7E1550837C350E76309A37EB /* Processing.NDI.structs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.structs.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.structs.h; sourceTree = SOURCE_ROOT; };
-		81ADADE41F55307600BA65EE /* libndi_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libndi_ios.a; sourceTree = "<group>"; };
-		836B71F953281552AC9ECF96 /* ofxNDIVideoFrameDecoder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNDIVideoFrameDecoder.h; path = ../../../addons/ofxNDI/src/ofxNDIVideoFrameDecoder.h; sourceTree = SOURCE_ROOT; };
+		81A8E4981F5B6E4600827233 /* libndi_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libndi_ios.a; sourceTree = "<group>"; };
+		879903AB83A468A6710DE45D /* DoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DoubleBuffer.h; path = ../../../addons/ofxNDI/libs/utils/DoubleBuffer.h; sourceTree = SOURCE_ROOT; };
 		88DF45D0623D6E64CBA08FBC /* ofxNDISender.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNDISender.cpp; path = ../../../addons/ofxNDI/src/ofxNDISender.cpp; sourceTree = SOURCE_ROOT; };
 		8B209C818662F2A6760D46B5 /* Processing.NDI.Routing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Routing.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Routing.h; sourceTree = SOURCE_ROOT; };
 		A70E5EEB46F8E59FC8AC6B4C /* Processing.NDI.Lib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Processing.NDI.Lib.h; path = ../../../addons/ofxNDI/libs/NDI/include/Processing.NDI.Lib.h; sourceTree = SOURCE_ROOT; };
@@ -119,7 +121,7 @@
 				5326AEA810A23A0500278DE6 /* CoreLocation.framework in Frameworks */,
 				E41D400B13B39D2100A75A5D /* AVFoundation.framework in Frameworks */,
 				E41D400C13B39D2100A75A5D /* CoreMedia.framework in Frameworks */,
-				81F41B021F5678B0002E8518 /* libndi_ios.a in Frameworks */,
+				81A8E49B1F5B6E4600827233 /* libndi_ios.a in Frameworks */,
 				E41D400D13B39D2100A75A5D /* CoreVideo.framework in Frameworks */,
 				E41D400E13B39D2100A75A5D /* MapKit.framework in Frameworks */,
 				67DFA53619F92A69003B3434 /* Accelerate.framework in Frameworks */,
@@ -141,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				C8FD27A7BED99B4346F86955 /* NDI */,
+				AF93EAD5C6EBABD87A6B8495 /* utils */,
 			);
 			name = libs;
 			sourceTree = "<group>";
@@ -196,14 +199,14 @@
 			isa = PBXGroup;
 			children = (
 				C80AD5E204660C2D7AF596A4 /* ofxNDI.h */,
-				7205DA942AD413733A246F73 /* ofxNDIFrameDecoder.h */,
 				420F0DAA6BCD102088EF54AF /* ofxNDIReceiver.cpp */,
 				635299AD231089503BB3620A /* ofxNDIReceiver.h */,
+				3C9FC1AFDD5E1276BF1A1BCD /* ofxNDIRecvStream.cpp */,
+				6AFE0C8241EA292710CE9DF6 /* ofxNDIRecvStream.h */,
 				88DF45D0623D6E64CBA08FBC /* ofxNDISender.cpp */,
 				756376F2CD9B663552247D28 /* ofxNDISender.h */,
-				456FBAA02C70832D0946BB17 /* ofxNDIVideoFrameDecoder.cpp */,
-				836B71F953281552AC9ECF96 /* ofxNDIVideoFrameDecoder.h */,
-				AB039F8D669FDEF1B43F2BFC /* utils */,
+				03D3DB1AC54CF9DC356CF0A8 /* ofxNDISendStream.cpp */,
+				4B2B6D2203619DD01589FF5F /* ofxNDISendStream.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -215,27 +218,27 @@
 			name = local_addons;
 			sourceTree = "<group>";
 		};
-		81ADADE21F55307600BA65EE /* lib */ = {
+		81A8E4961F5B6E4600827233 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADE31F55307600BA65EE /* iOS */,
+				81A8E4971F5B6E4600827233 /* iOS */,
 			);
 			name = lib;
 			path = ../libs/NDI/lib;
 			sourceTree = "<group>";
 		};
-		81ADADE31F55307600BA65EE /* iOS */ = {
+		81A8E4971F5B6E4600827233 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADE41F55307600BA65EE /* libndi_ios.a */,
+				81A8E4981F5B6E4600827233 /* libndi_ios.a */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
 		};
-		AB039F8D669FDEF1B43F2BFC /* utils */ = {
+		AF93EAD5C6EBABD87A6B8495 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				115A8CEEFE6D80D4AC4BF1A8 /* DoubleBuffer.h */,
+				879903AB83A468A6710DE45D /* DoubleBuffer.h */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -298,7 +301,7 @@
 		C8FD27A7BED99B4346F86955 /* NDI */ = {
 			isa = PBXGroup;
 			children = (
-				81ADADE21F55307600BA65EE /* lib */,
+				81A8E4961F5B6E4600827233 /* lib */,
 				C00801729FA803477B18B616 /* include */,
 			);
 			name = NDI;
@@ -426,8 +429,9 @@
 				E4D8936E11527B74007E1F53 /* main.mm in Sources */,
 				E4D8936F11527B74007E1F53 /* ofApp.mm in Sources */,
 				8FB9E996B2B8AA3D2866EECE /* ofxNDIReceiver.cpp in Sources */,
+				4B03289C24842F5B76F8698D /* ofxNDIRecvStream.cpp in Sources */,
 				222937AE58FD5FB49FAABDE8 /* ofxNDISender.cpp in Sources */,
-				3E46C22ADD82E6283E88292F /* ofxNDIVideoFrameDecoder.cpp in Sources */,
+				68A19D836E5BA0ED60A3DE5B /* ofxNDISendStream.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,8 +455,7 @@
 				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
 				INFOPLIST_FILE = "ofxiOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "../libs/NDI/lib/iOS/**";
-				OTHER_LDFLAGS = "$(OF_CORE_LIBS)";
+				LIBRARY_SEARCH_PATHS = "../libs/NDI/lib/**";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -466,8 +469,7 @@
 				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
 				INFOPLIST_FILE = "ofxiOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "../libs/NDI/lib/iOS/**";
-				OTHER_LDFLAGS = "$(OF_CORE_LIBS)";
+				LIBRARY_SEARCH_PATHS = "../libs/NDI/lib/**";
 				PRODUCT_NAME = "${TARGET_NAME}";
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
@@ -502,8 +504,8 @@
 					../../../addons/ofxNDI/libs/NDI/lib,
 					../../../addons/ofxNDI/libs/NDI/lib/iOS,
 					../../../addons/ofxNDI/libs/NDI/lib/x64,
+					../../../addons/ofxNDI/libs/utils,
 					../../../addons/ofxNDI/src,
-					../../../addons/ofxNDI/src/utils,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				ONLY_ACTIVE_ARCH = NO;
@@ -543,8 +545,8 @@
 					../../../addons/ofxNDI/libs/NDI/lib,
 					../../../addons/ofxNDI/libs/NDI/lib/iOS,
 					../../../addons/ofxNDI/libs/NDI/lib/x64,
+					../../../addons/ofxNDI/libs/utils,
 					../../../addons/ofxNDI/src,
-					../../../addons/ofxNDI/src/utils,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				ONLY_ACTIVE_ARCH = NO;

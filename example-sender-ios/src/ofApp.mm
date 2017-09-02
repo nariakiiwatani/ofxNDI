@@ -2,8 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	sender_.setup("ofxNDI sender example ios");
-	sender_.setFourCCType(NDIlib_FourCC_type_RGBX);
+	if(sender_.setup("ofxNDI sender example ios")) {
+		video_.setup(sender_);
+	}
 }
 
 //--------------------------------------------------------------
@@ -16,7 +17,7 @@ void ofApp::draw(){
 	ofPixels pixels;
 	pixels.allocate(320, 240, 3);
 	pixels.set(gray);
-	sender_.sendVideoFrame(pixels);
+	video_.send(pixels, false);
 	ofImage(pixels).draw(0,0);
 }
 

@@ -4,20 +4,20 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	receiver_.setup();
+	if(receiver_.setup()) {
+		video_.setup(receiver_, 1000, true);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if(receiver_.isConnected()) {
-		receiver_.update();
-	}	
+	video_.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofPixels pixels;
-	receiver_.getVideoFrame(pixels);
+	video_.decodeTo(pixels);
 	ofImage(pixels).draw(0,0);
 }
 
