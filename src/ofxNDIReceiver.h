@@ -11,7 +11,7 @@ namespace Recv {
 class Receiver
 {
 public:
-	virtual ~Receiver();
+	~Receiver();
 
 	struct Settings {
 		Settings(){}
@@ -26,6 +26,7 @@ public:
 	
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const NDIlib_source_t &source, const Settings &settings=Settings());
+	bool isSetup() const { return receiver_ != nullptr; }
 	bool isConnected() const;
 	
 	NDIlib_recv_instance_t getReceiver() const { return receiver_; }

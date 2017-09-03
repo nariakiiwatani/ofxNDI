@@ -3,8 +3,6 @@
 #include "ofConstants.h"
 #include <Processing.NDI.Lib.h>
 #include <string>
-#include "ofPixels.h"
-
 
 namespace ofxNDI {
 namespace Send {
@@ -17,11 +15,10 @@ public:
 	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize);
 	void clearConnectionMetadata();
 	
-	bool isSetup() const { return sender_!=nullptr; }
+	bool isSetup() const { return sender_ != nullptr; }
 	NDIlib_send_instance_t getSender() const { return sender_; }
 private:
 	NDIlib_send_instance_t sender_=nullptr;
-	bool is_async_ = false;
 };
 }}
 

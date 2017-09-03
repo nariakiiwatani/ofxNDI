@@ -1,13 +1,5 @@
 #include "ofxNDISender.h"
-
-#include <csignal>
-#include <cstddef>
-#include <cstring>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <atomic>
-#include <chrono>
+#include "ofLog.h"
 
 using namespace std;
 
