@@ -1,5 +1,6 @@
 #include "ofxNDISendStream.h"
 
+#pragma mark video
 
 void ofxNDIVideoSendStream::reallocFrame(NDIlib_video_frame_v2_t &frame)
 {
@@ -16,6 +17,7 @@ void ofxNDIVideoSendStream::reallocFrame(NDIlib_video_frame_v2_t &frame)
 		frame.p_metadata = p_metadata;
 	}
 }
+
 void ofxNDIVideoSendStream::freeFrame(NDIlib_video_frame_v2_t &frame)
 {
 	if(frame.p_data != nullptr) {
@@ -28,13 +30,17 @@ void ofxNDIVideoSendStream::freeFrame(NDIlib_video_frame_v2_t &frame)
 	}
 }
 
-void ofxNDIVideoSendStream::sendFrame(NDIlib_video_frame_v2_t &frame, bool async)
+void ofxNDIVideoSendStream::sendFrame(const NDIlib_video_frame_v2_t &_frame)
 {
-	if(async) {
-		NDIlib_send_send_video_async_v2(sender_, nullptr);
+	if(is_async_) {
+		auto &frame = frame_.back();
+		frame = _frame;
+		reallocFrame(frame);
 		NDIlib_send_send_video_async_v2(sender_, &frame);
+		frame_.swap();
+		freeFrame(frame_.back());
 	}
 	else {
-		NDIlib_send_send_video_v2(sender_, &frame);
+		NDIlib_send_send_video_v2(sender_, &_frame);
 	}
 }

@@ -5,10 +5,11 @@
 #include "ofSoundBuffer.h"
 
 namespace ofxNDI {
-	static void decode(NDIlib_video_frame_v2_t frame, ofPixels &dst) {
+	static void decode(const NDIlib_video_frame_v2_t frame, ofPixels &dst) {
 		dst.setFromPixels(frame.p_data, frame.xres, frame.yres, frame.line_stride_in_bytes/frame.xres);
 	}
-	static void encode(ofPixels &src, NDIlib_video_frame_v2_t &frame) {
+	static NDIlib_video_frame_v2_t encode(const ofPixels &src) {
+		NDIlib_video_frame_v2_t frame;
 		int w = (int)src.getWidth(), h = (int)src.getHeight();
 		frame.xres = w;
 		frame.yres = h;
@@ -25,10 +26,11 @@ namespace ofxNDI {
 				ofLogWarning("ofxNDI : this pixel format is not supported");
 				break;
 		}
+		return frame;
 	}
 
 
-	static void decode(NDIlib_audio_frame_v2_t frame, ofSoundBuffer &dst) {
+	static void decode(const NDIlib_audio_frame_v2_t frame, ofSoundBuffer &dst) {
 		dst.copyFrom(frame.p_data, frame.no_samples, frame.no_channels, frame.sample_rate);
 	}
 }
