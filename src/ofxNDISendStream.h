@@ -37,3 +37,4 @@ protected:
 }}
 
 using ofxNDIVideoSendStream = ofxNDI::Send::VideoStream;
+using ofxNDIAudioSendStream = ofxNDI::Send::Stream<NDIlib_audio_frame_v2_t>;

@@ -44,3 +44,9 @@ void ofxNDIVideoSendStream::sendFrame(const NDIlib_video_frame_v2_t &_frame)
 		NDIlib_send_send_video_v2(sender_, &_frame);
 	}
 }
+
+template<>
+void ofxNDIAudioSendStream::sendFrame(const NDIlib_audio_frame_v2_t &frame)
+{
+	NDIlib_send_send_audio_v2(sender_, &frame);
+}
