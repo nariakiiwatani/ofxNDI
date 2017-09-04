@@ -17,7 +17,7 @@ void ofApp::draw(){
 	ofPixels pixels;
 	pixels.allocate(320, 240, 3);
 	pixels.set(gray);
-	video_.send(pixels, false);
+	video_.send(pixels);
 	ofImage(pixels).draw(0,0);
 }
 

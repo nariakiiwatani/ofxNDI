@@ -11,7 +11,6 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
 }
 
 //--------------------------------------------------------------
@@ -25,7 +24,7 @@ void ofApp::draw(){
 	ofPopStyle();
 	ofPixels pixels;
 	ofGetGLRenderer()->saveFullViewport(pixels);
-	video_.send(pixels, false);
+	video_.send(pixels);
 }
 
 //--------------------------------------------------------------
