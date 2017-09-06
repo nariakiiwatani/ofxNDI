@@ -16,7 +16,14 @@ public:
 	using Frame = FrameType;
 	void setup(Sender &sender) { setup(sender.getSender()); }
 	void setup(NDIlib_send_instance_t sender) { sender_ = sender; }
-	template<typename Src> void send(const Src &src) { sendFrame(ofxNDI::encode(src)); }
+	template<typename Src>
+	void send(const Src &src, const std::string &metadata="", int64_t timecode=NDIlib_send_timecode_synthesize) {
+		static_assert(!std::is_same<Frame, NDIlib_metadata_frame_t>::value, "this function is not for ofxNDISendMetadataStream");
+		Frame frame = ofxNDI::encode(src);
+		frame.p_metadata = metadata.c_str();
+		frame.timecode = timecode;
+		sendFrame(frame);
+	}
 	virtual void sendFrame(const Frame &frame){}
 protected:
 	NDIlib_send_instance_t sender_;
@@ -34,7 +41,21 @@ protected:
 	void freeFrame(Frame &frame);
 };
 
+class MetadataStream : public Stream<NDIlib_metadata_frame_t>
+{
+public:
+	void send(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize) {
+		Frame frame;
+		frame.p_data = const_cast<char*>(metadata.c_str());
+		frame.length = metadata.size()+1;
+		frame.timecode = timecode;
+		sendFrame(frame);
+	}
+protected:
+	void sendFrame(const Frame &frame);
+};
 }}
 
 using ofxNDIVideoSendStream = ofxNDI::Send::VideoStream;
 using ofxNDIAudioSendStream = ofxNDI::Send::Stream<NDIlib_audio_frame_v2_t>;
+using ofxNDIMetadataSendStream = ofxNDI::Send::MetadataStream;

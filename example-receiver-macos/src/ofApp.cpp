@@ -6,6 +6,7 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	if(receiver_.setup()) {
 		video_.setup(receiver_, 1000, true);
+		meta_.setup(receiver_, 1000, true);
 	}
 }
 
@@ -13,6 +14,12 @@ void ofApp::setup(){
 void ofApp::update(){
 	if(receiver_.isConnected()) {
 		video_.update();
+		meta_.update();
+		if(meta_.isFrameNew()) {
+			std::string data;
+			meta_.decodeTo(data);
+			cout << data << endl;
+		}
 	}	
 }
 

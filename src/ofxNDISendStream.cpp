@@ -50,3 +50,8 @@ void ofxNDIAudioSendStream::sendFrame(const NDIlib_audio_frame_v2_t &frame)
 {
 	NDIlib_send_send_audio_v2(sender_, &frame);
 }
+
+void ofxNDIMetadataSendStream::sendFrame(const NDIlib_metadata_frame_t &frame)
+{
+	NDIlib_send_send_metadata(sender_, &frame);
+}

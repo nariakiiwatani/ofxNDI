@@ -6,11 +6,13 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	if(sender_.setup("ofxNDISender example macos")) {
 		video_.setup(sender_);
+		meta_.setup(sender_);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	meta_.send("<metadata sent from macos example>");
 }
 
 //--------------------------------------------------------------

@@ -25,4 +25,5 @@ public:
 private:
 	ofxNDISender sender_;
 	ofxNDIVideoSendStream video_;
+	ofxNDIMetadataSendStream meta_;
 };

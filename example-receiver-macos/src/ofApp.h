@@ -25,4 +25,5 @@ public:
 private:
 	ofxNDIReceiver receiver_;
 	ofxNDIVideoRecvStream video_;
+	ofxNDIMetadataRecvStream meta_;
 };

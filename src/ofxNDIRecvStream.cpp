@@ -17,3 +17,12 @@ template<> void ofxNDIAudioRecvStream::freeFrame() {
 template<> bool ofxNDIAudioRecvStream::captureFrame() {
 	return NDIlib_recv_capture_v2(receiver_, nullptr, &frame_.back(), nullptr, timeout_ms_) == NDIlib_frame_type_audio;
 }
+
+#pragma mark Metadata Stream
+
+template<> void ofxNDIMetadataRecvStream::freeFrame() {
+	NDIlib_recv_free_metadata(receiver_, &frame_.back());
+}
+template<> bool ofxNDIMetadataRecvStream::captureFrame() {
+	return NDIlib_recv_capture_v2(receiver_, nullptr, nullptr, &frame_.back(), timeout_ms_) == NDIlib_frame_type_metadata;
+}

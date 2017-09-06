@@ -55,4 +55,9 @@ namespace ofxNDI {
 		frame.p_data = const_cast<float*>(src.getBuffer().data());
 		return frame;
 	}
+
+#pragma mark metadata
+	static void decode(const NDIlib_metadata_frame_t frame, std::string &dst) {
+		dst = frame.p_data;
+	}
 }
