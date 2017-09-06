@@ -18,6 +18,7 @@ public:
 	void update();
 	bool isFrameNew() const { return is_frame_new_; }
 	template<typename Output> void decodeTo(Output &dst);
+	Frame& getFrame() const { return frame_.front(); }
 private:
 	NDIlib_recv_instance_t receiver_;
 	DoubleBuffer<Frame> frame_;

@@ -22,20 +22,28 @@ public:
 		Frame frame = ofxNDI::encode(src);
 		frame.p_metadata = metadata.c_str();
 		frame.timecode = timecode;
+		additionalUpdate(frame);
 		sendFrame(frame);
 	}
 	virtual void sendFrame(const Frame &frame){}
 protected:
 	NDIlib_send_instance_t sender_;
+	virtual void additionalUpdate(Frame &frame){}
 };
 
 class VideoStream : public Stream<NDIlib_video_frame_v2_t>
 {
 public:
 	void setAsync(bool async) { is_async_ = async; }
+	void setFrameRate(int frame_rate_n, int frame_rate_d) { frame_rate_n_=frame_rate_n; frame_rate_d_=frame_rate_d; }
 protected:
 	bool is_async_=false;
+	int frame_rate_n_=30000, frame_rate_d_=1001;
 	DoubleBuffer<Frame> frame_;
+	void additionalUpdate(Frame &frame) {
+		frame.frame_rate_N = frame_rate_n_;
+		frame.frame_rate_D = frame_rate_d_;
+	}
 	void sendFrame(const Frame &frame);
 	void reallocFrame(Frame &frame);
 	void freeFrame(Frame &frame);
