@@ -10,9 +10,9 @@ namespace ofxNDI {
 	static void decode(const NDIlib_video_frame_v2_t frame, ofPixels &dst) {
 		ofPixelFormat format;
 		switch(frame.FourCC) {
-			case NDIlib_FourCC_type_RGBX:	format = OF_PIXELS_RGB;		break;
-			case NDIlib_FourCC_type_BGRX:	format = OF_PIXELS_BGR;		break;
+			case NDIlib_FourCC_type_RGBX:
 			case NDIlib_FourCC_type_RGBA:	format = OF_PIXELS_RGBA;	break;
+			case NDIlib_FourCC_type_BGRX:
 			case NDIlib_FourCC_type_BGRA:	format = OF_PIXELS_BGRA;	break;
 			case NDIlib_FourCC_type_UYVY:	format = OF_PIXELS_UYVY;	break;
 			default:
