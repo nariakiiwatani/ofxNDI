@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxNDIReceiver.h"
+#include "ofxNDIRecvStream.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -23,4 +24,5 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDIReceiver receiver_;
+	ofxNDIVideoRecvStream video_;
 };

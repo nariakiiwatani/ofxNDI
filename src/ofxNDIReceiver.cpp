@@ -1,5 +1,4 @@
 #include "ofxNDIReceiver.h"
-#include <Processing.NDI.Lib.h>
 #include "ofUtils.h"
 
 using namespace std;
@@ -78,7 +77,7 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 
 bool ofxNDIReceiver::isConnected() const
 {
-	return receiver_!=nullptr && NDIlib_recv_get_no_connections(receiver_);
+	return isSetup() && NDIlib_recv_get_no_connections(receiver_);
 }
 
 ofxNDIReceiver::~Receiver()
