@@ -3,7 +3,7 @@
 
 using namespace std;
 
-vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms, Location location, const string &group, const vector<string> extra_ips)
+vector<NDIlib_source_t> ofxNDIReceiver::listSources(uint32_t waittime_ms, Location location, const string &group, const vector<string> extra_ips)
 {
 	if (!NDIlib_initialize())
 	{
@@ -11,7 +11,7 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 		return {};
 	}
 
-	auto getSourceInfo = [](uint32_t waittime_ms, bool local, const string &group, const vector<string> extra_ips) -> vector<Source> {
+	auto getSourceInfo = [](uint32_t waittime_ms, bool local, const string &group, const vector<string> extra_ips) -> vector<NDIlib_source_t> {
 		const NDIlib_find_create_t settings = {local, group.c_str(), ofJoinString(extra_ips, ",").c_str()};
 		NDIlib_find_instance_t finder = NDIlib_find_create_v2(&settings);
 		if (!finder) return {};
@@ -24,14 +24,11 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 		}
 		
 		sources = NDIlib_find_get_current_sources(finder, &num_sources);
-		vector<Source> ret;
-		ret.reserve(num_sources);
-		for(;num_sources-->0;) {
-			ret.emplace_back(*sources);
-			cout << "NDI Source Detected : " << sources->p_ndi_name << "," << sources->p_ip_address << endl;
-			++sources;
+		vector<NDIlib_source_t> ret;
+		ret.insert(end(ret), sources, sources+num_sources);
+		for(auto &r : ret) {
+			cout << "NDI Source Detected : " << r.p_ndi_name << "," << r.p_url_address << endl;
 		}
-		
 		NDIlib_find_destroy(finder);
 		return ret;
 	};
@@ -46,7 +43,7 @@ vector<ofxNDIReceiver::Source> ofxNDIReceiver::listSources(uint32_t waittime_ms,
 			auto&& remote = getSourceInfo(waittime_ms, false, group, extra_ips);
 			both.erase(remove_if(begin(both),end(both),[&remote](const NDIlib_source_t &s){
 				return find_if(begin(remote), end(remote), [&s](const NDIlib_source_t &r){
-					return strcmp(s.p_ndi_name,r.p_ndi_name)==0 && strcmp(s.p_ip_address,r.p_ip_address)==0;
+					return strcmp(s.p_ndi_name,r.p_ndi_name)==0 && strcmp(s.p_url_address,r.p_url_address)==0;
 				}) != end(remote);
 			}), end(both));
 			return both;
@@ -64,10 +61,11 @@ bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 	ofLogWarning("no NDI Source found");
 	return false;
 }
-bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
+bool ofxNDIReceiver::setup(const NDIlib_source_t &source, const Settings &settings)
 {
-	NDIlib_recv_create_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
-	receiver_ = NDIlib_recv_create_v2(&creator);
+	NDIlib_recv_create_v3_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
+	creator.p_ndi_name = settings.name==""?nullptr:settings.name.c_str();
+	receiver_ = NDIlib_recv_create_v3(&creator);
 	if (!receiver_) {
 		ofLogError("NDI Receiver failed to initialize");
 		return false;
