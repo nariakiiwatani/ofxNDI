@@ -7,7 +7,7 @@
 //
 //***********************************************************************************************************************************************
 // 
-// Copyright(c) 2014-2017 NewTek, inc
+// Copyright(c) 2014-2018 NewTek, inc
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -71,15 +71,16 @@
 #ifndef NDILIB_CPP_DEFAULT_CONSTRUCTORS
 #ifdef __cplusplus
 #define NDILIB_CPP_DEFAULT_CONSTRUCTORS 1
+#define NDILIB_CPP_DEFAULT_VALUE(a) =(a)
 #else // __cplusplus
 #define NDILIB_CPP_DEFAULT_CONSTRUCTORS 0
+#define NDILIB_CPP_DEFAULT_VALUE(a)
 #endif // __cplusplus
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 // Data structures shared by multiple SDKs
 #include "Processing.NDI.compat.h"
 #include "Processing.NDI.structs.h"
-#include "Processing.NDI.structs_deprecated.h"
 
 // This is not actually required, but will start and end the libraries which might get
 // you slightly better performance in some cases. In general it is more "correct" to 
@@ -101,19 +102,30 @@ const char* NDIlib_version(void);
 PROCESSINGNDILIB_API
 bool NDIlib_is_supported_CPU(void);
 
-// The main SDKs
+// The finding (discovery API)
 #include "Processing.NDI.Find.h"
+
+// The receiving video and audio API
 #include "Processing.NDI.Recv.h"
+// Extensions to support PTZ control, etc...
+#include "Processing.NDI.Recv.ex.h"
+
+// The sending video API
 #include "Processing.NDI.Send.h"
+
+// The routing of inputs API
 #include "Processing.NDI.Routing.h"
 
 // Utility functions
 #include "Processing.NDI.utilities.h"
 
+// Deprecated structures and functions
+#include "Processing.NDI.deprecated.h"
+
 // Dynamic loading used for OSS libraries
 #include "Processing.NDI.DynamicLoad.h"
 
-// The C++ implemenrations
+// The C++ implementations
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
 #include "Processing.NDI.Lib.cplusplus.h"
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS

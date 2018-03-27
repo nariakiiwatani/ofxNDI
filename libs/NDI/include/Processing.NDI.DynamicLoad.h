@@ -7,7 +7,7 @@
 //
 //***********************************************************************************************************************************************
 // 
-// Copyright(c) 2014-2017 NewTek, inc
+// Copyright(c) 2014-2018 NewTek, inc
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -47,8 +47,8 @@ typedef struct NDIlib_v3
 	void(*NDIlib_send_clear_connection_metadata)(NDIlib_send_instance_t p_instance);
 	void(*NDIlib_send_add_connection_metadata)(NDIlib_send_instance_t p_instance, const NDIlib_metadata_frame_t* p_metadata);
 	void(*NDIlib_send_set_failover)(NDIlib_send_instance_t p_instance, const NDIlib_source_t* p_failover_source);
-	NDIlib_recv_instance_t(*NDIlib_recv_create_v2)(const NDIlib_recv_create_t* p_create_settings);
-	NDIlib_recv_instance_t(*NDIlib_recv_create)(const NDIlib_recv_create_t* p_create_settings);
+	PROCESSINGNDILIB_DEPRECATED NDIlib_recv_instance_t(*NDIlib_recv_create_v2)(const NDIlib_recv_create_t* p_create_settings);
+	PROCESSINGNDILIB_DEPRECATED NDIlib_recv_instance_t(*NDIlib_recv_create)(const NDIlib_recv_create_t* p_create_settings);
 	void(*NDIlib_recv_destroy)(NDIlib_recv_instance_t p_instance);
 	PROCESSINGNDILIB_DEPRECATED NDIlib_frame_type_e(*NDIlib_recv_capture)(NDIlib_recv_instance_t p_instance, NDIlib_video_frame_t* p_video_data, NDIlib_audio_frame_t* p_audio_data, NDIlib_metadata_frame_t* p_metadata, uint32_t timeout_in_ms);
 	PROCESSINGNDILIB_DEPRECATED void(*NDIlib_recv_free_video)(NDIlib_recv_instance_t p_instance, const NDIlib_video_frame_t* p_video_data);
@@ -113,6 +113,10 @@ typedef struct NDIlib_v3
 	const char*(*NDIlib_recv_recording_get_filename)(NDIlib_recv_instance_t p_instance);
 	const char*(*NDIlib_recv_recording_get_error)(NDIlib_recv_instance_t p_instance);
 	bool(*NDIlib_recv_recording_get_times)(NDIlib_recv_instance_t p_instance, NDIlib_recv_recording_time_t* p_times);
+	// V3.10
+	NDIlib_recv_instance_t(*NDIlib_recv_create_v3)(const NDIlib_recv_create_v3_t* p_create_settings);
+	// V3.5
+	void(*NDIlib_recv_connect)(NDIlib_recv_instance_t p_instance, const NDIlib_source_t* p_src);
 
 }	NDIlib_v3;
 

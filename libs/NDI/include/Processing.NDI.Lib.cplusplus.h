@@ -7,7 +7,7 @@
 //
 //***********************************************************************************************************************************************
 // 
-// Copyright(c) 2014-2017 NewTek, inc
+// Copyright(c) 2014-2018 NewTek, inc
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -24,12 +24,12 @@
 //***********************************************************************************************************************************************
 
 
-// C++ implemenrations of default constructors are here to avoid them needing to be inline with
+// C++ implementations of default constructors are here to avoid them needing to be inline with
 // all of the rest of the code.
 
 // All the structs used and reasonable defaults are here
-inline NDIlib_source_t::NDIlib_source_t(const char* p_ndi_name_, const char* p_ip_address_)
-	: p_ndi_name(p_ndi_name_), p_ip_address(p_ip_address_) {}
+inline NDIlib_source_t::NDIlib_source_t(const char* p_ndi_name_, const char* p_url_address_)
+	: p_ndi_name(p_ndi_name_), p_url_address(p_url_address_) {}
 
 inline NDIlib_video_frame_v2_t::NDIlib_video_frame_v2_t(int xres_, int yres_, NDIlib_FourCC_type_e FourCC_, int frame_rate_N_, int frame_rate_D_,
 														float picture_aspect_ratio_, NDIlib_frame_format_type_e frame_format_type_,
@@ -64,6 +64,9 @@ inline NDIlib_tally_t::NDIlib_tally_t(bool on_program_, bool on_preview_)
 inline NDIlib_routing_create_t::NDIlib_routing_create_t(const char* p_ndi_name_, const char* p_groups_)
 	: p_ndi_name(p_ndi_name_), p_groups(p_groups_) {}
 
+inline NDIlib_recv_create_v3_t::NDIlib_recv_create_v3_t(const NDIlib_source_t source_to_connect_to_, NDIlib_recv_color_format_e color_format_,
+	NDIlib_recv_bandwidth_e bandwidth_, bool allow_video_fields_, const char* p_ndi_name_)
+	: source_to_connect_to(source_to_connect_to_), color_format(color_format_), bandwidth(bandwidth_), allow_video_fields(allow_video_fields_), p_ndi_name(p_ndi_name_) {}
 inline NDIlib_recv_create_t::NDIlib_recv_create_t(const NDIlib_source_t source_to_connect_to_, NDIlib_recv_color_format_e color_format_,
 												  NDIlib_recv_bandwidth_e bandwidth_, bool allow_video_fields_)
 	: source_to_connect_to(source_to_connect_to_), color_format(color_format_), bandwidth(bandwidth_), allow_video_fields(allow_video_fields_) {}

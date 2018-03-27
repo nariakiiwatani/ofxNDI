@@ -7,7 +7,7 @@
 //
 //***********************************************************************************************************************************************
 // 
-// Copyright(c) 2014-2017 NewTek, inc
+// Copyright(c) 2014-2018 NewTek, inc
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -47,6 +47,11 @@ typedef enum NDIlib_frame_type_e
 typedef enum NDIlib_FourCC_type_e
 {	// YCbCr color space
 	NDIlib_FourCC_type_UYVY = NDI_LIB_FOURCC('U', 'Y', 'V', 'Y'),
+
+	// 4:2:0 formats
+	NDIlib_FourCC_type_YV12 = NDI_LIB_FOURCC('Y', 'V', '1', '2'),
+	NDIlib_FourCC_type_NV12 = NDI_LIB_FOURCC('N', 'V', '1', '2'),
+	NDIlib_FourCC_type_I420 = NDI_LIB_FOURCC('I', '4', '2', '0'),
 
 	// BGRA
 	NDIlib_FourCC_type_BGRA = NDI_LIB_FOURCC('B', 'G', 'R', 'A'),
@@ -103,7 +108,6 @@ typedef enum NDIlib_frame_format_type_e
 // last ones known and the time since it was sent.
 //
 static const int64_t NDIlib_send_timecode_synthesize = INT64_MAX;
-static const int64_t NDIlib_send_timecode_empty = 0;
 
 // If the time-stamp is not available (i.e. a version of a sender before v2.5)
 static const int64_t NDIlib_recv_timestamp_undefined = INT64_MAX;
@@ -114,20 +118,26 @@ typedef struct NDIlib_source_t
 	// This can be used for serialization, etc... and comprises the machine
 	// name and the source name on that machine. In the form
 	//		MACHINE_NAME (NDI_SOURCE_NAME)
-	// If you specify this parameter either as NULL, or an EMPTY string then the 
+	// If you specify this parameter either as nullptr, or an EMPTY string then the 
 	// specific ip addres adn port number from below is used.
 	const char* p_ndi_name;
 
-	// A UTF8 string that provides the actual IP address and port number. 
-	// This is in the form : IP_ADDRESS:PORT_NO, for instance "127.0.0.1:10000"
-	// If you leave this parameter either as NULL, or an EMPTY string then the 
-	// ndi name above is used to look up the mDNS name to determine the IP and 
-	// port number. Connection is faster if the IP address is known.
-	const char* p_ip_address;
+	// A UTF8 string that provides the actual network address and any parameters. 
+	// This is not meant to be application readable and might well change in teh future.
+	// This can be nullptr if you do not know it and the API internally will instantiate
+	// a finder that is used to discover it even if it is not yet available on the network.
+	union
+	{	// The current way of addressing the value
+		const char* p_url_address;
+
+		// We used to use an IP address before we used the more general URL notification
+		// this is now depreciated byt maintained for compatability. 
+		PROCESSINGNDILIB_DEPRECATED const char* p_ip_address;
+	};
 
 	// Default constructor in C++
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
-	NDIlib_source_t(const char* p_ndi_name_ = NULL, const char* p_ip_address_ = NULL);
+	NDIlib_source_t(const char* p_ndi_name_ = nullptr, const char* p_url_address_ = nullptr);
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 }	NDIlib_source_t;
@@ -158,11 +168,11 @@ typedef struct NDIlib_video_frame_v2_t
 	// The video data itself
 	uint8_t* p_data;
 
-	// The inter line stride of the video data, in bytes.
+	// The inter line stride of the video data, in bytes. If the stride is 0 then it is sizeof(one pixel)*xres
 	int line_stride_in_bytes;
 
-	// Per frame metadata for this frame. This is a NULL terminated UTF8 string that should be
-	// in XML format. If you do not want any metadata then you may specify NULL here. 
+	// Per frame metadata for this frame. This is a nullptr terminated UTF8 string that should be
+	// in XML format. If you do not want any metadata then you may specify nullptr here. 
 	const char* p_metadata;		// Present in >= v2.5
 
 	// This is only valid when receiving a frame and is specified as a 100ns time that was the exact
@@ -173,7 +183,7 @@ typedef struct NDIlib_video_frame_v2_t
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
 	NDIlib_video_frame_v2_t(int xres_ = 0, int yres_ = 0, NDIlib_FourCC_type_e FourCC_ = NDIlib_FourCC_type_UYVY, int frame_rate_N_ = 30000, int frame_rate_D_ = 1001,
 							float picture_aspect_ratio_ = 0.0f, NDIlib_frame_format_type_e frame_format_type_ = NDIlib_frame_format_type_progressive, 
-							int64_t timecode_ = NDIlib_send_timecode_synthesize, uint8_t* p_data_ = NULL, int line_stride_in_bytes_ = 0, const char* p_metadata_ = NULL, int64_t timestamp_ = NDIlib_send_timecode_empty);
+							int64_t timecode_ = NDIlib_send_timecode_synthesize, uint8_t* p_data_ = nullptr, int line_stride_in_bytes_ = 0, const char* p_metadata_ = nullptr, int64_t timestamp_ = 0);
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 }	NDIlib_video_frame_v2_t;
@@ -198,8 +208,8 @@ typedef struct NDIlib_audio_frame_v2_t
 	// The inter channel stride of the audio channels, in bytes
 	int channel_stride_in_bytes;
 
-	// Per frame metadata for this frame. This is a NULL terminated UTF8 string that should be
-	// in XML format. If you do not want any metadata then you may specify NULL here. 
+	// Per frame metadata for this frame. This is a nullptr terminated UTF8 string that should be
+	// in XML format. If you do not want any metadata then you may specify nullptr here. 
 	const char* p_metadata;		// Present in >= v2.5
 
 	// This is only valid when receiving a frame and is specified as a 100ns time that was the exact
@@ -209,25 +219,25 @@ typedef struct NDIlib_audio_frame_v2_t
 
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
 	NDIlib_audio_frame_v2_t(int sample_rate_ = 48000, int no_channels_ = 2, int no_samples_ = 0, int64_t timecode_ = NDIlib_send_timecode_synthesize,
-							float* p_data_ = NULL, int channel_stride_in_bytes_ = 0, const char* p_metadata_ = NULL, int64_t timestamp_ = NDIlib_send_timecode_empty);
+							float* p_data_ = nullptr, int channel_stride_in_bytes_ = 0, const char* p_metadata_ = nullptr, int64_t timestamp_ = 0);
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 }	NDIlib_audio_frame_v2_t;
 
 // The data description for metadata
 typedef struct NDIlib_metadata_frame_t
-{	// The length of the string in UTF8 characters. This includes the NULL terminating character.
-	// If this is 0, then the length is assume to be the length of a null terminated string.
+{	// The length of the string in UTF8 characters. This includes the nullptr terminating character.
+	// If this is 0, then the length is assume to be the length of a nullptr terminated string.
 	int length;
 
 	// The timecode of this frame in 100ns intervals
 	int64_t timecode;
 
-	// The metadata as a UTF8 XML string. This is a NULL terminated string.
+	// The metadata as a UTF8 XML string. This is a nullptr terminated string.
 	char* p_data;
 
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
-	NDIlib_metadata_frame_t(int length_ = 0, int64_t timecode_ = NDIlib_send_timecode_synthesize, char* p_data_ = NULL);
+	NDIlib_metadata_frame_t(int length_ = 0, int64_t timecode_ = NDIlib_send_timecode_synthesize, char* p_data_ = nullptr);
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 }	NDIlib_metadata_frame_t;

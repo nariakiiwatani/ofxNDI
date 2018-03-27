@@ -7,7 +7,7 @@
 //
 //***********************************************************************************************************************************************
 // 
-// Copyright(c) 2014-2017 NewTek, inc
+// Copyright(c) 2014-2018 NewTek, inc
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
 // files(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, 
@@ -30,14 +30,14 @@ typedef void* NDIlib_routing_instance_t;
 
 // The creation structure that is used when you are creating a sender
 typedef struct NDIlib_routing_create_t
-{	// The name of the NDI source to create. This is a NULL terminated UTF8 string.
+{	// The name of the NDI source to create. This is a nullptr terminated UTF8 string.
 	const char* p_ndi_name;
 
 	// What groups should this source be part of
 	const char* p_groups;
 
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
-	NDIlib_routing_create_t(const char* p_ndi_name_ = NULL, const char* p_groups_ = NULL);
+	NDIlib_routing_create_t(const char* p_ndi_name_ = nullptr, const char* p_groups_ = nullptr);
 #endif // NDILIB_CPP_DEFAULT_CONSTRUCTORS
 
 } NDIlib_routing_create_t;
