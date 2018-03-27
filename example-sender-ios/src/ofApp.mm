@@ -22,56 +22,51 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-
+void ofApp::exit(){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
+void ofApp::touchDown(ofTouchEventArgs & touch){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
+void ofApp::touchMoved(ofTouchEventArgs & touch){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
+void ofApp::touchUp(ofTouchEventArgs & touch){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
+void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
+void ofApp::touchCancelled(ofTouchEventArgs & touch){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
+void ofApp::lostFocus(){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
+void ofApp::gotFocus(){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
+void ofApp::gotMemoryWarning(){
+	
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::deviceOrientationChanged(int newOrientation){
+	
 }

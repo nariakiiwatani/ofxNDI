@@ -1,27 +1,27 @@
 #pragma once
 
-#include "ofMain.h"
+#include "ofxiOS.h"
 #include "ofxNDISender.h"
 #include "ofxNDISendStream.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofxiOSApp{
 	
 public:
 	void setup();
 	void update();
 	void draw();
+	void exit();
 	
-	void keyPressed(int key);
-	void keyReleased(int key);
-	void mouseMoved(int x, int y );
-	void mouseDragged(int x, int y, int button);
-	void mousePressed(int x, int y, int button);
-	void mouseReleased(int x, int y, int button);
-	void mouseEntered(int x, int y);
-	void mouseExited(int x, int y);
-	void windowResized(int w, int h);
-	void dragEvent(ofDragInfo dragInfo);
-	void gotMessage(ofMessage msg);
+	void touchDown(ofTouchEventArgs & touch);
+	void touchMoved(ofTouchEventArgs & touch);
+	void touchUp(ofTouchEventArgs & touch);
+	void touchDoubleTap(ofTouchEventArgs & touch);
+	void touchCancelled(ofTouchEventArgs & touch);
+	
+	void lostFocus();
+	void gotFocus();
+	void gotMemoryWarning();
+	void deviceOrientationChanged(int newOrientation);
 private:
 	ofxNDISender sender_;
 	ofxNDIVideoSendStream video_;
