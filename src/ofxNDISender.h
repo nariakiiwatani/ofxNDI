@@ -19,6 +19,8 @@ public:
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected(int64_t timeout_ms) const;
 	
+	void setFailover(const NDIlib_source_t &source);
+	
 	NDIlib_send_instance_t getInstance() const { return instance_; }
 private:
 	NDIlib_send_instance_t instance_=nullptr;

@@ -37,6 +37,10 @@ void ofxNDISender::clearConnectionMetadata()
 	NDIlib_send_clear_connection_metadata(instance_);
 }
 
+void ofxNDISender::setFailover(const NDIlib_source_t &source)
+{
+	NDIlib_send_set_failover(instance_, &source);
+}
 ofxNDISender::~Sender()
 {
 	NDIlib_send_destroy(instance_);
