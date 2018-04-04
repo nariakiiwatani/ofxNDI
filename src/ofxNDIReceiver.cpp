@@ -92,9 +92,17 @@ bool ofxNDIReceiver::isConnected() const
 	return isSetup() && NDIlib_recv_get_no_connections(instance_);
 }
 
+void ofxNDIReceiver::getQueue(int &video, int &audio, int &metadata) const
+{
+	NDIlib_recv_queue_t que;
+	NDIlib_recv_get_queue(instance_, &que);
+	video = que.video_frames;
+	audio = que.audio_frames;
+	metadata = que.metadata_frames;
+}
+
 ofxNDIReceiver::~Receiver()
 {
 	NDIlib_recv_destroy(instance_);
 	NDIlib_destroy();
 }
-

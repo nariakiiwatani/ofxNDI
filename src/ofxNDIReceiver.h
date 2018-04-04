@@ -34,6 +34,8 @@ public:
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected() const;
 	
+	void getQueue(int &video, int &audio, int &metadata) const;
+	
 	NDIlib_recv_instance_t getInstance() const { return instance_; }
 private:
 	NDIlib_recv_instance_t instance_=nullptr;
