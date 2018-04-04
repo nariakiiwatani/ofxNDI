@@ -17,9 +17,9 @@ public:
 	void setup(Sender &sender) { setup(sender.getSender()); }
 	void setup(NDIlib_send_instance_t sender) { sender_ = sender; }
 	template<typename Src>
-	void send(const Src &src, const std::string &metadata="", int64_t timecode=NDIlib_send_timecode_synthesize) {
+	void send(Src &&src, const std::string &metadata="", int64_t timecode=NDIlib_send_timecode_synthesize) {
 		static_assert(!std::is_same<Frame, NDIlib_metadata_frame_t>::value, "this function is not for ofxNDISendMetadataStream");
-		Frame frame = ofxNDI::encode(src);
+		Frame frame = ofxNDI::encode(std::move(src));
 		frame.p_metadata = metadata.c_str();
 		frame.timecode = timecode;
 		additionalUpdate(frame);

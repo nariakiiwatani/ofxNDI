@@ -21,7 +21,7 @@ void ofApp::draw(){
 	ofPushStyle();
 	ofSetColor(gray);
 	ofDrawRectangle(ofGetCurrentViewport());
-	ofSetColor(255-gray);
+	ofSetColor(255-gray,0,0);
 	ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
 	ofPopStyle();
 	ofPixels pixels;
