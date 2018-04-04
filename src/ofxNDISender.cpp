@@ -10,8 +10,8 @@ bool ofxNDISender::setup(const string &name, const string &group, bool clock_vid
 		group.c_str(),
 		clock_video,
 		clock_audio };
-	sender_ = NDIlib_send_create(&create_settings);
-	if(!sender_) {
+	instance_ = NDIlib_send_create(&create_settings);
+	if(!instance_) {
 		ofLogError("NDI Sender failed to initialize");
 		return false;
 	}
@@ -24,15 +24,15 @@ void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecod
 		timecode,
 		const_cast<char*>(metadata.c_str())
 	};
-	NDIlib_send_add_connection_metadata(sender_, &data);
+	NDIlib_send_add_connection_metadata(instance_, &data);
 }
 void ofxNDISender::clearConnectionMetadata()
 {
-	NDIlib_send_clear_connection_metadata(sender_);
+	NDIlib_send_clear_connection_metadata(instance_);
 }
 
 ofxNDISender::~Sender()
 {
-	NDIlib_send_destroy(sender_);
+	NDIlib_send_destroy(instance_);
 	NDIlib_destroy();
 }

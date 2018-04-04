@@ -11,6 +11,7 @@ namespace Recv {
 class Receiver
 {
 public:
+	using Instance = NDIlib_recv_instance_t;
 	~Receiver();
 
 	struct Settings {
@@ -30,12 +31,12 @@ public:
 	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize);
 	void clearConnectionMetadata();
 
-	bool isSetup() const { return receiver_ != nullptr; }
+	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected() const;
 	
-	NDIlib_recv_instance_t getReceiver() const { return receiver_; }
+	NDIlib_recv_instance_t getInstance() const { return instance_; }
 private:
-	NDIlib_recv_instance_t receiver_=nullptr;
+	NDIlib_recv_instance_t instance_=nullptr;
 };
 
 }}

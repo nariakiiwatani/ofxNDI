@@ -36,22 +36,32 @@ void ofxNDIVideoSendStream::sendFrame(const NDIlib_video_frame_v2_t &_frame)
 		auto &frame = frame_.back();
 		frame = _frame;
 		reallocFrame(frame);
-		NDIlib_send_send_video_async_v2(sender_, &frame);
+		NDIlib_send_send_video_async_v2(instance_, &frame);
 		frame_.swap();
 		freeFrame(frame_.back());
 	}
 	else {
-		NDIlib_send_send_video_v2(sender_, &_frame);
+		NDIlib_send_send_video_v2(instance_, &_frame);
 	}
 }
 
 template<>
 void ofxNDIAudioSendStream::sendFrame(const NDIlib_audio_frame_v2_t &frame)
 {
-	NDIlib_send_send_audio_v2(sender_, &frame);
+	NDIlib_send_send_audio_v2(instance_, &frame);
 }
 
 void ofxNDIMetadataSendStream::sendFrame(const NDIlib_metadata_frame_t &frame)
 {
-	NDIlib_send_send_metadata(sender_, &frame);
+	NDIlib_send_send_metadata(instance_, &frame);
+}
+
+template<>
+void ofxNDIMetadataSendRecvStream::freeFrame()
+{
+	NDIlib_send_free_metadata(instance_, &frame_.back());
+}
+template<>
+bool ofxNDIMetadataSendRecvStream::captureFrame() {
+	return NDIlib_send_capture(instance_, &frame_.back(), timeout_ms_) == NDIlib_frame_type_metadata;
 }

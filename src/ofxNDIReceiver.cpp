@@ -65,8 +65,8 @@ bool ofxNDIReceiver::setup(const NDIlib_source_t &source, const Settings &settin
 {
 	NDIlib_recv_create_v3_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
 	creator.p_ndi_name = settings.name==""?nullptr:settings.name.c_str();
-	receiver_ = NDIlib_recv_create_v3(&creator);
-	if (!receiver_) {
+	instance_ = NDIlib_recv_create_v3(&creator);
+	if (!instance_) {
 		ofLogError("NDI Receiver failed to initialize");
 		return false;
 	}
@@ -80,21 +80,21 @@ void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timec
 		timecode,
 		const_cast<char*>(metadata.c_str())
 	};
-	NDIlib_recv_add_connection_metadata(receiver_, &data);
+	NDIlib_recv_add_connection_metadata(instance_, &data);
 }
 void ofxNDIReceiver::clearConnectionMetadata()
 {
-	NDIlib_recv_clear_connection_metadata(receiver_);
+	NDIlib_recv_clear_connection_metadata(instance_);
 }
 
 bool ofxNDIReceiver::isConnected() const
 {
-	return isSetup() && NDIlib_recv_get_no_connections(receiver_);
+	return isSetup() && NDIlib_recv_get_no_connections(instance_);
 }
 
 ofxNDIReceiver::~Receiver()
 {
-	NDIlib_recv_destroy(receiver_);
+	NDIlib_recv_destroy(instance_);
 	NDIlib_destroy();
 }
 
