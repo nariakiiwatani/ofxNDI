@@ -94,11 +94,11 @@ bool ofxNDIReceiver::isConnected() const
 
 void ofxNDIReceiver::getQueue(int &video, int &audio, int &metadata) const
 {
-	NDIlib_recv_queue_t que;
-	NDIlib_recv_get_queue(instance_, &que);
-	video = que.video_frames;
-	audio = que.audio_frames;
-	metadata = que.metadata_frames;
+	NDIlib_recv_queue_t frames;
+	NDIlib_recv_get_queue(instance_, &frames);
+	video = frames.video_frames;
+	audio = frames.audio_frames;
+	metadata = frames.metadata_frames;
 }
 
 std::string ofxNDIReceiver::getWebControl() const
@@ -108,6 +108,24 @@ std::string ofxNDIReceiver::getWebControl() const
 	NDIlib_recv_free_string(instance_, ptr);
 	return ret;
 }
+
+void ofxNDIReceiver::getNumReceivedFrame(int64_t &video, int64_t &audio, int64_t &metadata) const
+{
+	NDIlib_recv_performance_t frames;
+	NDIlib_recv_get_performance(instance_, &frames, nullptr);
+	video = frames.video_frames;
+	audio = frames.audio_frames;
+	metadata = frames.metadata_frames;
+}
+void ofxNDIReceiver::getNumDroppedFrame(int64_t &video, int64_t &audio, int64_t &metadata) const
+{
+	NDIlib_recv_performance_t frames;
+	NDIlib_recv_get_performance(instance_, nullptr, &frames);
+	video = frames.video_frames;
+	audio = frames.audio_frames;
+	metadata = frames.metadata_frames;
+}
+
 ofxNDIReceiver::~Receiver()
 {
 	NDIlib_recv_destroy(instance_);
