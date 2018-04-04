@@ -17,6 +17,12 @@ bool ofxNDISender::setup(const string &name, const string &group, bool clock_vid
 	}
 	return true;
 }
+
+bool ofxNDISender::isConnected(int64_t timeout_ms) const
+{
+	return isSetup() && NDIlib_send_get_no_connections(instance_, timeout_ms);
+}
+
 void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecode)
 {
 	const NDIlib_metadata_frame_t data = {
