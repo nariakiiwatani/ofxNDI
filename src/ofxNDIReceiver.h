@@ -35,6 +35,7 @@ public:
 	bool isConnected() const;
 	
 	void getQueue(int &video, int &audio, int &metadata) const;
+	std::string getWebControl() const;
 	
 	NDIlib_recv_instance_t getInstance() const { return instance_; }
 private:

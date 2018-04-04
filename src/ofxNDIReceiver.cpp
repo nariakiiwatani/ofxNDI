@@ -101,6 +101,13 @@ void ofxNDIReceiver::getQueue(int &video, int &audio, int &metadata) const
 	metadata = que.metadata_frames;
 }
 
+std::string ofxNDIReceiver::getWebControl() const
+{
+	const char *ptr = NDIlib_recv_get_web_control(instance_);
+	std::string ret = ptr;
+	NDIlib_recv_free_string(instance_, ptr);
+	return ret;
+}
 ofxNDIReceiver::~Receiver()
 {
 	NDIlib_recv_destroy(instance_);
