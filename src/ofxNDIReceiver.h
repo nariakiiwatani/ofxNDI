@@ -34,6 +34,8 @@ public:
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected() const;
 	
+	bool setTally(bool on_program, bool on_preview) const;
+	
 	void getQueue(int &video, int &audio, int &metadata) const;
 	std::string getWebControl() const;
 	

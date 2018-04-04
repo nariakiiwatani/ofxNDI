@@ -92,6 +92,15 @@ bool ofxNDIReceiver::isConnected() const
 	return isSetup() && NDIlib_recv_get_no_connections(instance_);
 }
 
+bool ofxNDIReceiver::setTally(bool on_program, bool on_preview) const
+{
+	const NDIlib_tally_t tally = {
+		on_program, on_preview
+	};
+	
+	return NDIlib_recv_set_tally(instance_, &tally);
+}
+
 void ofxNDIReceiver::getQueue(int &video, int &audio, int &metadata) const
 {
 	NDIlib_recv_queue_t frames;
