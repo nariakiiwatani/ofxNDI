@@ -73,6 +73,20 @@ bool ofxNDIReceiver::setup(const NDIlib_source_t &source, const Settings &settin
 	return true;
 }
 
+void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timecode)
+{
+	const NDIlib_metadata_frame_t data = {
+		static_cast<int>(metadata.length()+1),
+		timecode,
+		const_cast<char*>(metadata.c_str())
+	};
+	NDIlib_recv_add_connection_metadata(receiver_, &data);
+}
+void ofxNDIReceiver::clearConnectionMetadata()
+{
+	NDIlib_recv_clear_connection_metadata(receiver_);
+}
+
 bool ofxNDIReceiver::isConnected() const
 {
 	return isSetup() && NDIlib_recv_get_no_connections(receiver_);
