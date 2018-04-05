@@ -1,11 +1,11 @@
 #include "ofxNDIRecorder.h"
 
 
-bool ofxNDIRecorder::setup(Receiver &receiver)
+bool ofxNDIRecorder::setup(ofxNDIReceiver &receiver)
 {
 	return setup(receiver.getInstance());
 }
-bool ofxNDIRecorder::setup(Receiver::Instance instance)
+bool ofxNDIRecorder::setup(ofxNDIReceiver::Instance instance)
 {
 	instance_ = instance;
 	return NDIlib_recv_recording_is_supported(instance_);

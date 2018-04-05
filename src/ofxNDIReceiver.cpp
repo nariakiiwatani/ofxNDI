@@ -15,9 +15,14 @@ bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 }
 bool ofxNDIReceiver::setup(const NDIlib_source_t &source, const Settings &settings)
 {
+#ifdef OFXNDI_USE_V2
+	NDIlib_recv_create_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
+	instance_ = NDIlib_recv_create_v2(&creator);
+#else
 	NDIlib_recv_create_v3_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace };
 	creator.p_ndi_name = settings.name==""?nullptr:settings.name.c_str();
 	instance_ = NDIlib_recv_create_v3(&creator);
+#endif
 	if (!instance_) {
 		ofLogError("NDI Receiver failed to initialize");
 		return false;

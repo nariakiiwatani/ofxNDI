@@ -4,6 +4,10 @@
 #include "ofPixels.h"
 #include "ofSoundBuffer.h"
 
+#ifdef TARGET_WIN32
+#include <Processing.NDI.deprecated.h>
+#define OFXNDI_USE_V2
+#endif
 namespace ofxNDI {
 
 	enum class Location {

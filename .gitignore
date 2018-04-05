@@ -24,19 +24,19 @@ example-*/Project.xcconfig
 *.pch
 
 # Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+#*.so
+#*.dylib
+#*.dll
 
 # Fortran module files
 *.mod
 *.smod
 
 # Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+#*.lai
+#*.la
+#*.a
+#*.lib
 
 # Executables
 *.exe
@@ -149,8 +149,8 @@ DerivedData/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
-x86/
+#x64/
+#x86/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -351,7 +351,7 @@ ClientBin/
 *.publishsettings
 orleans.codegen.cs
 
-# Including strong name files can present a security risk 
+# Including strong name files can present a security risk
 # (https://github.com/github/gitignore/pull/2483#issue-259490424)
 #*.snk
 
@@ -447,11 +447,8 @@ __pycache__/
 # OpenCover UI analysis results
 OpenCover/
 
-# Azure Stream Analytics local run output 
+# Azure Stream Analytics local run output
 ASALocalRun/
 
 # MSBuild Binary and Structured Log
 *.binlog
-
-
-
