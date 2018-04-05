@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxNDISender.h"
-#include "ofxNDISendStream.h"
+#include "ofxNDIReceiver.h"
+#include "ofxNDIRecvStream.h"
+#include "ofxNDIRecorder.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -23,7 +24,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 private:
-	ofxNDISender sender_;
-	ofxNDIVideoSendStream video_;
-	ofxNDIMetadataSendStream meta_;
+	ofxNDIReceiver receiver_;
+	ofxNDIRecorder recorder_;
+	ofxNDIRecvVideo video_;
 };

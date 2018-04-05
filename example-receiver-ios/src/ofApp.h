@@ -24,5 +24,5 @@ public:
 	void deviceOrientationChanged(int newOrientation);
 private:
 	ofxNDIReceiver receiver_;
-	ofxNDIVideoRecvStream video_;
+	ofxNDIRecvVideo video_;
 };

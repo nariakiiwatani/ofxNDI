@@ -24,5 +24,5 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDIReceiver receiver_;
-	ofxNDIAudioRecvStream audio_;
+	ofxNDIRecvAudio audio_;
 };

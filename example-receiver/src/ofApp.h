@@ -24,6 +24,5 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDIReceiver receiver_;
-	ofxNDIVideoRecvStream video_;
-	ofxNDIMetadataRecvStream meta_;
+	ofxNDIRecvVideo video_;
 };

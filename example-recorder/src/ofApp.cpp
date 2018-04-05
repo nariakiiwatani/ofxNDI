@@ -4,34 +4,48 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	if(sender_.setup("ofxNDISender example macos")) {
-		video_.setup(sender_);
-		meta_.setup(sender_);
+	if(receiver_.setup()) {
+		video_.setup(receiver_, 1000, true);
+		recorder_.setup(receiver_);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	meta_.send("<metadata sent from macos example>");
+	if(receiver_.isConnected()) {
+		video_.update();
+	}	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	int gray = ofGetFrameNum()%256;
-	ofPushStyle();
-	ofSetColor(gray);
-	ofDrawRectangle(ofGetCurrentViewport());
-	ofSetColor(255-gray,0,0);
-	ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
-	ofPopStyle();
 	ofPixels pixels;
-	ofGetGLRenderer()->saveFullViewport(pixels);
-	video_.send(pixels);
+	video_.decodeTo(pixels);
+	ofImage(pixels).draw(0,0);
+	if(recorder_.isRecording()) {
+		ofPushStyle();
+		ofSetColor(ofColor::red);
+		ofDrawRectangle(50,50,100,100);
+		ofPopStyle();
+	}
+	std::string err;
+	if(recorder_.isError(&err)) {
+		ofDrawBitmapString(err, 10,10);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	switch(key) {
+		case ' ':
+			if(recorder_.isRecording()) {
+				recorder_.stop();
+			}
+			else {
+				recorder_.start("test");
+			}
+			break;
+	}
 }
 
 //--------------------------------------------------------------

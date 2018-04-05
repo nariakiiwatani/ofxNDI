@@ -4,30 +4,27 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	if(receiver_.setup()) {
-		video_.setup(receiver_, 1000, true);
-		meta_.setup(receiver_, 1000, true);
+	if(sender_.setup("ofxNDISender example macos")) {
+		video_.setup(sender_);
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if(receiver_.isConnected()) {
-		video_.update();
-		meta_.update();
-		if(meta_.isFrameNew()) {
-			std::string data;
-			meta_.decodeTo(data);
-			cout << data << endl;
-		}
-	}	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	int gray = ofGetFrameNum()%256;
+	ofPushStyle();
+	ofSetColor(gray);
+	ofDrawRectangle(ofGetCurrentViewport());
+	ofSetColor(255-gray,0,0);
+	ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
+	ofPopStyle();
 	ofPixels pixels;
-	video_.decodeTo(pixels);
-	ofImage(pixels).draw(0,0);
+	ofGetGLRenderer()->saveFullViewport(pixels);
+	video_.send(pixels);
 }
 
 //--------------------------------------------------------------
