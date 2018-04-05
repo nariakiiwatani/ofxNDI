@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxNDI.h"
 #include "ofxNDIRouter.h"
 
 class ofApp : public ofBaseApp{
@@ -23,5 +24,5 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDIRouter router_;
-	std::vector<NDIlib_source_t> sources_;
+	std::vector<ofxNDI::Source> sources_;
 };

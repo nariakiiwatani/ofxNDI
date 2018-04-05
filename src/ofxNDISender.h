@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofConstants.h"
+#include "ofxNDI.h"
 #include <Processing.NDI.Lib.h>
 #include <string>
 
@@ -19,7 +20,7 @@ public:
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected(int64_t timeout_ms) const;
 	
-	void setFailover(const NDIlib_source_t &source);
+	void setFailover(const Source &source);
 	
 	NDIlib_send_instance_t getInstance() const { return instance_; }
 private:

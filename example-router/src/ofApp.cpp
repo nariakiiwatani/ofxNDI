@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "ofxNDI.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){

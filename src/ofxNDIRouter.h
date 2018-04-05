@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofxNDI.h"
 #include <string>
 #include <Processing.NDI.Lib.h>
 
@@ -11,7 +12,7 @@ public:
 	~Router();
 
 	bool setup(const std::string &name, const std::string &group="");
-	bool setRoute(const NDIlib_source_t &p_source);
+	bool setRoute(const ofxNDI::Source &source);
 	bool clear();
 private:
 	Instance instance_=nullptr;
