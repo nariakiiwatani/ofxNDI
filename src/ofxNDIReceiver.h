@@ -31,11 +31,11 @@ public:
 	
 	bool setTally(bool on_program, bool on_preview) const;
 	
-	void getQueue(int &video, int &audio, int &metadata) const;
+	void getQueue(int *video, int *audio, int *metadata) const;
 	std::string getWebControl() const;
 	
-	void getNumReceivedFrame(int64_t &video, int64_t &audio, int64_t &metadata) const;
-	void getNumDroppedFrame(int64_t &video, int64_t &audio, int64_t &metadata) const;
+	void getNumReceivedFrame(int64_t *video, int64_t *audio, int64_t *metadata) const;
+	void getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t *metadata) const;
 	
 	NDIlib_recv_instance_t getInstance() const { return instance_; }
 private:

@@ -37,10 +37,10 @@ std::string ofxNDIRecorder::getFilename() const
 	return ret;
 }
 
-bool ofxNDIRecorder::isError(std::string &info) const
+bool ofxNDIRecorder::isError(std::string *info) const
 {
 	const char *str = NDIlib_recv_recording_get_filename(instance_);
-	info = str;
+	if(info) { *info = str; }
 	if(str == nullptr) {
 		return false;
 	}
@@ -48,13 +48,13 @@ bool ofxNDIRecorder::isError(std::string &info) const
 	return true;
 }
 
-bool ofxNDIRecorder::getTimes(int64_t &frames, int64_t &start, int64_t &last) const
+bool ofxNDIRecorder::getTimes(int64_t *frames, int64_t *start, int64_t *last) const
 {
 	NDIlib_recv_recording_time_t times;
 	bool ret = NDIlib_recv_recording_get_times(instance_, &times);
-	frames = times.no_frames;
-	start = times.start_time;
-	last = times.last_time;
+	if(frames) { *frames = times.no_frames; }
+	if(start) { *start = times.start_time; }
+	if(last) { *last = times.last_time; }
 	return ret;
 }
 
