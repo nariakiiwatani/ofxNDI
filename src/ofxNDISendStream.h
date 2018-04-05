@@ -66,8 +66,8 @@ protected:
 
 }}
 
-using ofxNDIVideoSendStream = ofxNDI::Send::VideoStream;
-using ofxNDIAudioSendStream = ofxNDI::Send::Stream<NDIlib_audio_frame_v2_t>;
-using ofxNDIMetadataSendStream = ofxNDI::Send::MetadataStream;
-using ofxNDIMetadataSendRecvStream = ofxNDI::Recv::Stream<NDIlib_metadata_frame_t, ofxNDISender>;
+using ofxNDISendVideo = ofxNDI::Send::VideoStream;
+using ofxNDISendAudio = ofxNDI::Send::Stream<NDIlib_audio_frame_v2_t>;
+using ofxNDISendMetadata = ofxNDI::Send::MetadataStream;
+using ofxNDISendMetadataRecv = ofxNDI::Recv::Stream<NDIlib_metadata_frame_t, ofxNDISender>;
  

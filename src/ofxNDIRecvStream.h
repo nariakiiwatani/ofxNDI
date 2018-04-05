@@ -82,6 +82,6 @@ void Stream<Frame, Type>::decodeTo(Output &dst) {
 }
 }}
 
-using ofxNDIVideoRecvStream = ofxNDI::Recv::Stream<NDIlib_video_frame_v2_t>;
-using ofxNDIAudioRecvStream = ofxNDI::Recv::Stream<NDIlib_audio_frame_v2_t>;
-using ofxNDIMetadataRecvStream = ofxNDI::Recv::Stream<NDIlib_metadata_frame_t>;
+using ofxNDIRecvVideo = ofxNDI::Recv::Stream<NDIlib_video_frame_v2_t>;
+using ofxNDIRecvAudio = ofxNDI::Recv::Stream<NDIlib_audio_frame_v2_t>;
+using ofxNDIRecvMetadata = ofxNDI::Recv::Stream<NDIlib_metadata_frame_t>;
