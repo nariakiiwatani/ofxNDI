@@ -101,15 +101,15 @@ namespace ofxNDI {
 
 #pragma mark audio
 	static void decode(const NDIlib_audio_frame_v2_t frame, ofSoundBuffer &dst) {
-		dst.copyFrom(frame.p_data, frame.no_samples*sizeof(float)/frame.channel_stride_in_bytes, frame.no_channels, frame.sample_rate);
+		dst.copyFrom(frame.p_data, frame.channel_stride_in_bytes/sizeof(decltype(*frame.p_data)), frame.no_channels, frame.sample_rate);
 	}
 	static NDIlib_audio_frame_v2_t encode(ofSoundBuffer &&src) {
 		NDIlib_audio_frame_v2_t frame;
 		frame.sample_rate = src.getSampleRate();
 		frame.no_channels = src.getNumChannels();
 		frame.no_samples = src.size();
-		frame.channel_stride_in_bytes = src.size()/src.getNumFrames()*sizeof(float);
 		frame.p_data = static_cast<float*>(src.getBuffer().data());
+		frame.channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*frame.p_data));
 		return frame;
 	}
 

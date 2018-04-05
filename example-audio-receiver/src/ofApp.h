@@ -22,7 +22,11 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+	
+	void audioOut(ofSoundBuffer &buffer);
 private:
 	ofxNDIReceiver receiver_;
 	ofxNDIRecvAudio audio_;
+	ofSoundBuffer buffer_;
+	ofSoundStream stream_;
 };

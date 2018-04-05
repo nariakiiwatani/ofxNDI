@@ -4,6 +4,7 @@
 void ofApp::setup(){
 	if(receiver_.setup()) {
 		audio_.setup(receiver_, 1000, true);
+		stream_.setup(this, 2, 1, 44100, 256, 2);
 	}
 }
 
@@ -19,9 +20,18 @@ void ofApp::draw(){
 	if(audio_.isFrameNew()) {
 		ofSoundBuffer buffer;
 		audio_.decodeTo(buffer);
+		buffer_.append(buffer);
 	}
 }
 
+//--------------------------------------------------------------
+void ofApp::audioOut(ofSoundBuffer &buffer){
+	int length = min(buffer_.getNumFrames(), buffer.getNumFrames());
+	buffer_.copyTo(buffer, length, buffer.getNumChannels(), 0, false);
+	
+	auto &data = buffer_.getBuffer();
+	data.erase(begin(data), begin(data) + (buffer.getNumFrames()*buffer_.getNumChannels()));
+}
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
