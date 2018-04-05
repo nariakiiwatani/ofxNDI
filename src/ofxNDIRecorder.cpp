@@ -32,6 +32,9 @@ bool ofxNDIRecorder::setAudioLevel(float dB) const
 std::string ofxNDIRecorder::getFilename() const
 {
 	const char *str = NDIlib_recv_recording_get_filename(instance_);
+	if(str == nullptr) {
+		return "";
+	}
 	std::string ret = str;
 	NDIlib_recv_free_string(instance_, str);
 	return ret;
@@ -40,10 +43,10 @@ std::string ofxNDIRecorder::getFilename() const
 bool ofxNDIRecorder::isError(std::string *info) const
 {
 	const char *str = NDIlib_recv_recording_get_filename(instance_);
-	if(info) { *info = str; }
 	if(str == nullptr) {
 		return false;
 	}
+	if(info) { *info = str; }
 	NDIlib_recv_free_string(instance_, str);
 	return true;
 }
