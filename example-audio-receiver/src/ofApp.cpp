@@ -12,16 +12,16 @@ void ofApp::setup(){
 void ofApp::update(){
 	if(receiver_.isConnected()) {
 		audio_.update();
+		if(audio_.isFrameNew()) {
+			ofSoundBuffer buffer;
+			audio_.decodeTo(buffer);
+			buffer_.append(buffer);
+		}
 	}	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	if(audio_.isFrameNew()) {
-		ofSoundBuffer buffer;
-		audio_.decodeTo(buffer);
-		buffer_.append(buffer);
-	}
 }
 
 //--------------------------------------------------------------
