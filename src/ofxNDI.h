@@ -14,6 +14,7 @@ namespace ofxNDI {
 		LOCAL,REMOTE,BOTH
 	};
 	struct Source {
+		Source(){}
 		Source(const NDIlib_source_t &src)
 		:p_ndi_name(src.p_ndi_name)
 		,p_url_address(src.p_url_address){}
