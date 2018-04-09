@@ -5,7 +5,7 @@ using namespace std;
 
 bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 {
-	auto &&sources = ofxNDI::listSources(5000);
+	auto &&sources = ofxNDI::listSources();
 	if(index < sources.size()) {
 		return setup(sources[index], settings);
 	}

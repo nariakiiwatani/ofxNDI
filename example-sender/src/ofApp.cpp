@@ -4,6 +4,7 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
+	camera_.setup(1920, 1080);
 	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
 		video_.setAsync(true);
@@ -12,20 +13,29 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	camera_.update();
+	if(camera_.isFrameNew()) {
+		video_.send(camera_.getPixels());
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	int gray = ofGetFrameNum()%256;
-	ofPushStyle();
-	ofSetColor(gray);
-	ofDrawRectangle(ofGetCurrentViewport());
-	ofSetColor(255-gray,0,0);
-	ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
-	ofPopStyle();
-	ofPixels pixels;
-	ofGetGLRenderer()->saveFullViewport(pixels);
-	video_.send(pixels);
+	if(camera_.isInitialized()) {
+		camera_.draw(ofGetCurrentViewport());
+	}
+	else {
+		int gray = ofGetFrameNum()%256;
+		ofPushStyle();
+		ofSetColor(gray);
+		ofDrawRectangle(ofGetCurrentViewport());
+		ofSetColor(255-gray,0,0);
+		ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
+		ofPopStyle();
+		ofPixels pixels;
+		ofGetGLRenderer()->saveFullViewport(pixels);
+		video_.send(pixels);
+	}
 }
 
 //--------------------------------------------------------------

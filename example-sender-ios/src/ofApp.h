@@ -25,4 +25,5 @@ public:
 private:
 	ofxNDISender sender_;
 	ofxNDISendVideo video_;
+	ofVideoGrabber camera_;
 };
