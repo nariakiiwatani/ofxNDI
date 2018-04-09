@@ -3,6 +3,7 @@
 #include "ofThread.h"
 #include "DoubleBuffer.h"
 #include <Processing.NDI.Lib.h>
+#include "ofxNDIFrame.h"
 #include "ofxNDIReceiver.h"
 #include "ofxNDI.h"
 
@@ -18,7 +19,6 @@ public:
 	void update();
 	bool isFrameNew() const { return is_frame_new_; }
 	template<typename Output> void decodeTo(Output &dst);
-	Frame& getFrame() const { return frame_.front(); }
 private:
 	typename Type::Instance instance_;
 	DoubleBuffer<Frame> frame_;
@@ -47,11 +47,18 @@ void Stream<Frame, Type>::setup(typename Type::Instance instance, uint32_t timeo
 }
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::update() {
-	if(!isThreadRunning()) {
-		updateFrame();
+	if(isThreadRunning()) {
+		if(lock()) {
+			is_frame_new_ = has_new_frame_;
+			has_new_frame_ = false;
+			unlock();
+		}
 	}
-	is_frame_new_ = has_new_frame_;
-	has_new_frame_ = false;
+	else {
+		updateFrame();
+		is_frame_new_ = has_new_frame_;
+		has_new_frame_ = false;
+	}
 }
 
 template<typename Frame, typename Type>
@@ -60,6 +67,7 @@ void Stream<Frame, Type>::threadedFunction() {
 		if(lock()) {
 			updateFrame();
 			unlock();
+			sleep(1);
 		}
 	}
 }
@@ -77,11 +85,14 @@ void Stream<Frame, Type>::updateFrame() {
 template<typename Frame, typename Type> template<typename Output>
 void Stream<Frame, Type>::decodeTo(Output &dst) {
 	if(is_front_allocated_) {
-		ofxNDI::decode(frame_.front(), dst);
+		if(lock()) {
+			frame_.front().decode(dst);
+			unlock();
+		}
 	}
 }
 }}
 
-using ofxNDIRecvVideo = ofxNDI::Recv::Stream<NDIlib_video_frame_v2_t>;
-using ofxNDIRecvAudio = ofxNDI::Recv::Stream<NDIlib_audio_frame_v2_t>;
-using ofxNDIRecvMetadata = ofxNDI::Recv::Stream<NDIlib_metadata_frame_t>;
+using ofxNDIRecvVideo = ofxNDI::Recv::Stream<ofxNDI::VideoFrame>;
+using ofxNDIRecvAudio = ofxNDI::Recv::Stream<ofxNDI::AudioFrame>;
+using ofxNDIRecvMetadata = ofxNDI::Recv::Stream<ofxNDI::MetadataFrame>;

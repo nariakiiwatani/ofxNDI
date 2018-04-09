@@ -4,8 +4,9 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	if(sender_.setup("ofxNDISender example macos")) {
+	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
+		video_.setAsync(true);
 	}
 }
 

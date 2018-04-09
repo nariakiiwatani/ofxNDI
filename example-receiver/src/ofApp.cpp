@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	NDIlib_initialize();
 	ofBackground(0);
 	ofSetFrameRate(60);
 	if(receiver_.setup()) {
@@ -13,14 +14,17 @@ void ofApp::setup(){
 void ofApp::update(){
 	if(receiver_.isConnected()) {
 		video_.update();
+		if(video_.isFrameNew()) {
+			video_.decodeTo(pixels_);
+		}
 	}	
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofPixels pixels;
-	video_.decodeTo(pixels);
-	ofImage(pixels).draw(0,0);
+	if(pixels_.isAllocated()) {
+		ofImage(pixels_).draw(0,0);
+	}
 }
 
 //--------------------------------------------------------------
