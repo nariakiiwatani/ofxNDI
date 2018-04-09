@@ -31,6 +31,8 @@ private:
 	void updateFrame();
 	bool captureFrame();
 	void freeFrame();
+	
+	std::mutex mutex_;
 };
 
 template<typename Frame, typename Type>
@@ -48,11 +50,9 @@ void Stream<Frame, Type>::setup(typename Type::Instance instance, uint32_t timeo
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::update() {
 	if(isThreadRunning()) {
-		if(lock()) {
-			is_frame_new_ = has_new_frame_;
-			has_new_frame_ = false;
-			unlock();
-		}
+		std::lock_guard<std::mutex> lock(mutex_);
+		is_frame_new_ = has_new_frame_;
+		has_new_frame_ = false;
 	}
 	else {
 		updateFrame();
@@ -64,11 +64,9 @@ void Stream<Frame, Type>::update() {
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::threadedFunction() {
 	while(isThreadRunning()) {
-		if(lock()) {
-			updateFrame();
-			unlock();
-			sleep(1);
-		}
+		std::lock_guard<std::mutex> lock(mutex_);
+		updateFrame();
+		sleep(1);
 	}
 }
 template<typename Frame, typename Type>
@@ -85,10 +83,8 @@ void Stream<Frame, Type>::updateFrame() {
 template<typename Frame, typename Type> template<typename Output>
 void Stream<Frame, Type>::decodeTo(Output &dst) {
 	if(is_front_allocated_) {
-		if(lock()) {
-			frame_.front().decode(dst);
-			unlock();
-		}
+		std::lock_guard<std::mutex> lock(mutex_);
+		frame_.front().decode(dst);
 	}
 }
 }}
