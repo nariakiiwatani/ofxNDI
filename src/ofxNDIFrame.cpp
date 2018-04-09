@@ -25,8 +25,9 @@ void VideoFrame::encode(ofPixels &&src, bool copy) {
 	}
 
 	int w = (int)src.getWidth(), h = (int)src.getHeight();
+	NDIlib_FourCC_type_e type = getFourCCTypeFromOfPixelFormat(src.getPixelFormat());
 	if(copy) {
-		uint64_t size = allocate(w, h, getFourCCTypeFromOfPixelFormat(src.getPixelFormat()));
+		uint64_t size = allocate(w, h, type);
 		memcpy(p_data, static_cast<unsigned char*>(src.getData()), size);
 	}
 	else {
@@ -35,8 +36,8 @@ void VideoFrame::encode(ofPixels &&src, bool copy) {
 	}
 	xres = w;
 	yres = h;
+	FourCC = type;
 	picture_aspect_ratio = w/(float)h;
-	FourCC = getFourCCTypeFromOfPixelFormat(src.getPixelFormat());
 	line_stride_in_bytes = getLineStrideInBytes(FourCC, xres);
 }
 void VideoFrame::decode(ofPixels &dst) {
