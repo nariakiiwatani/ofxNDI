@@ -22,10 +22,10 @@ public:
 
 	template<typename Src>
 	void send(Src &&src, const std::string &metadata="", int64_t timecode=NDIlib_send_timecode_synthesize) {
-		static_assert(!std::is_same<Frame, NDIlib_metadata_frame_t>::value, "this function is not for ofxNDISendMetadataStream");
+		static_assert(!std::is_same<Frame, MetadataFrame>::value, "this function is not for ofxNDISendMetadata");
 		auto &frame = frame_.back();
 		frame.encode(std::move(src), isAsync());
-		frame.p_metadata = metadata.c_str();
+		frame.setMetadata(metadata);
 		frame.timecode = timecode;
 		additionalUpdate(frame);
 		sendFrame(frame);

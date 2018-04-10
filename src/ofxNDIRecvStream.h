@@ -18,7 +18,8 @@ public:
 	void setup(typename Type::Instance instance, uint32_t timeout_ms, bool threaded=true);
 	void update();
 	bool isFrameNew() const { return is_frame_new_; }
-	template<typename Output> void decodeTo(Output &dst);
+	template<typename Output> void decodeTo(Output &dst) const;
+	std::string getMetadata() const;
 private:
 	typename Type::Instance instance_;
 	DoubleBuffer<Frame> frame_;
@@ -32,7 +33,7 @@ private:
 	bool captureFrame();
 	void freeFrame();
 	
-	std::mutex mutex_;
+	mutable std::mutex mutex_;
 };
 
 template<typename Frame, typename Type>
@@ -81,11 +82,17 @@ void Stream<Frame, Type>::updateFrame() {
 	}
 }
 template<typename Frame, typename Type> template<typename Output>
-void Stream<Frame, Type>::decodeTo(Output &dst) {
+void Stream<Frame, Type>::decodeTo(Output &dst) const {
 	if(is_front_allocated_) {
 		std::lock_guard<std::mutex> lock(mutex_);
 		frame_.front().decode(dst);
 	}
+}
+template<typename Frame, typename Type>
+std::string Stream<Frame, Type>::getMetadata() const
+{
+	static_assert(!std::is_same<Frame, ofxNDI::MetadataFrame>::value, "this function is not for ofxNDIRecvMetadata");
+	return frame_.front().p_metadata;
 }
 }}
 

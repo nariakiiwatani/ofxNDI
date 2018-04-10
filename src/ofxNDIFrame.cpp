@@ -54,6 +54,12 @@ void VideoFrame::decode(ofPixels &dst) {
 	}
 	dst.setFromPixels(p_data, xres, yres, format);
 }
+void VideoFrame::setMetadata(const std::string &metadata)
+{
+	metadata_buffer_ = metadata;
+	p_metadata = metadata_buffer_.c_str();
+}
+
 int VideoFrame::getBitsPerPixel(NDIlib_FourCC_type_e type) {
 	switch(type) {
 		case NDIlib_FourCC_type_RGBX:
@@ -137,6 +143,11 @@ void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 void AudioFrame::decode(ofSoundBuffer &dst)
 {
 	dst.copyFrom(p_data, channel_stride_in_bytes/sizeof(decltype(*p_data)), no_channels, sample_rate);
+}
+void AudioFrame::setMetadata(const std::string &metadata)
+{
+	metadata_buffer_ = metadata;
+	p_metadata = metadata_buffer_.c_str();
 }
 
 

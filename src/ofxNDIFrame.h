@@ -10,7 +10,9 @@ public:
 	void free();
 	void encode(ofPixels &&src, bool copy);
 	void decode(ofPixels &dst);
+	void setMetadata(const std::string &metadata);
 private:
+	std::string metadata_buffer_;
 	bool is_allocated_=false;
 	static int getBitsPerPixel(NDIlib_FourCC_type_e type);
 	static int getLineStrideInBytes(NDIlib_FourCC_type_e type, int width);
@@ -25,7 +27,9 @@ public:
 	void free();
 	void encode(ofSoundBuffer &&src, bool copy);
 	void decode(ofSoundBuffer &dst);
+	void setMetadata(const std::string &metadata);
 private:
+	std::string metadata_buffer_;
 	bool is_allocated_=false;
 };
 class MetadataFrame : public NDIlib_metadata_frame_t
