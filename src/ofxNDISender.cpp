@@ -23,7 +23,7 @@ bool ofxNDISender::isConnected(int64_t timeout_ms) const
 	return isSetup() && NDIlib_send_get_no_connections(instance_, timeout_ms);
 }
 
-void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecode)
+void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecode) const
 {
 	const NDIlib_metadata_frame_t data = {
 		static_cast<int>(metadata.length()+1),
@@ -32,12 +32,12 @@ void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecod
 	};
 	NDIlib_send_add_connection_metadata(instance_, &data);
 }
-void ofxNDISender::clearConnectionMetadata()
+void ofxNDISender::clearConnectionMetadata() const
 {
 	NDIlib_send_clear_connection_metadata(instance_);
 }
 
-void ofxNDISender::setFailover(const Source &source)
+void ofxNDISender::setFailover(const Source &source) const
 {
 	NDIlib_source_t src = source;
 	NDIlib_send_set_failover(instance_, &src);

@@ -9,12 +9,12 @@ bool ofxNDIRouter::setup(const std::string &name, const std::string &group)
 	instance_ = NDIlib_routing_create(&info);
 	return instance_ != nullptr;
 }
-bool ofxNDIRouter::setRoute(const ofxNDI::Source &source)
+bool ofxNDIRouter::setRoute(const ofxNDI::Source &source) const
 {
 	NDIlib_source_t src = source;
 	return NDIlib_routing_change(instance_, &src);
 }
-bool ofxNDIRouter::clear()
+bool ofxNDIRouter::clear() const
 {
 	return NDIlib_routing_clear(instance_);
 }

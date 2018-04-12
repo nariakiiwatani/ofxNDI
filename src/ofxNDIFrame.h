@@ -9,7 +9,7 @@ public:
 	uint64_t allocate(int width, int height, NDIlib_FourCC_type_e type);
 	void free();
 	void encode(ofPixels &&src, bool copy);
-	void decode(ofPixels &dst);
+	void decode(ofPixels &dst) const;
 	void setMetadata(const std::string &metadata);
 private:
 	std::string metadata_buffer_;
@@ -26,7 +26,7 @@ public:
 	uint64_t allocate(uint64_t samples);
 	void free();
 	void encode(ofSoundBuffer &&src, bool copy);
-	void decode(ofSoundBuffer &dst);
+	void decode(ofSoundBuffer &dst) const;
 	void setMetadata(const std::string &metadata);
 private:
 	std::string metadata_buffer_;
@@ -36,7 +36,7 @@ class MetadataFrame : public NDIlib_metadata_frame_t
 {
 public:
 	void encode(std::string &&src, bool copy);
-	void decode(std::string &dst);
+	void decode(std::string &dst) const;
 private:
 	std::string buffer_;
 };

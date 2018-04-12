@@ -14,14 +14,14 @@ public:
 	~Sender();
 	
 	bool setup(const std::string &name, const std::string &group="", bool clock_video=false, bool clock_audio=false);
-	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize);
-	void clearConnectionMetadata();
+	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize) const;
+	void clearConnectionMetadata() const;
 	
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected(int64_t timeout_ms) const;
 	
 	bool getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const;
-	void setFailover(const Source &source);
+	void setFailover(const Source &source) const;
 	
 	NDIlib_send_instance_t getInstance() const { return instance_; }
 private:

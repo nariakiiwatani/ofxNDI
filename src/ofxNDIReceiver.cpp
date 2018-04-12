@@ -29,7 +29,7 @@ bool ofxNDIReceiver::setup(const ofxNDI::Source &source, const Settings &setting
 	return true;
 }
 
-void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timecode)
+void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timecode) const
 {
 	const NDIlib_metadata_frame_t data = {
 		static_cast<int>(metadata.length()+1),
@@ -38,7 +38,7 @@ void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timec
 	};
 	NDIlib_recv_add_connection_metadata(instance_, &data);
 }
-void ofxNDIReceiver::clearConnectionMetadata()
+void ofxNDIReceiver::clearConnectionMetadata() const
 {
 	NDIlib_recv_clear_connection_metadata(instance_);
 }

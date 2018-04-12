@@ -4,7 +4,8 @@ using namespace ofxNDI;
 
 #pragma mark video
 
-uint64_t VideoFrame::allocate(int width, int height, NDIlib_FourCC_type_e type) {
+uint64_t VideoFrame::allocate(int width, int height, NDIlib_FourCC_type_e type)
+{
 	uint64_t needed_data_size = getDataSizeInBytes(width, height, type);
 	if(needed_data_size != getDataSizeInBytes(xres, yres, FourCC)) {
 		if(is_allocated_) free();
@@ -13,11 +14,13 @@ uint64_t VideoFrame::allocate(int width, int height, NDIlib_FourCC_type_e type) 
 	is_allocated_ = true;
 	return needed_data_size;
 }
-void VideoFrame::free() {
+void VideoFrame::free()
+{
 	delete[] p_data;
 	is_allocated_ = false;
 }
-void VideoFrame::encode(ofPixels &&src, bool copy) {
+void VideoFrame::encode(ofPixels &&src, bool copy)
+{
 	switch(src.getPixelFormat()) {
 		case OF_PIXELS_RGB:
 		case OF_PIXELS_BGR:		src.setImageType(OF_IMAGE_COLOR_ALPHA);	break;
@@ -40,7 +43,8 @@ void VideoFrame::encode(ofPixels &&src, bool copy) {
 	picture_aspect_ratio = w/(float)h;
 	line_stride_in_bytes = getLineStrideInBytes(FourCC, xres);
 }
-void VideoFrame::decode(ofPixels &dst) {
+void VideoFrame::decode(ofPixels &dst) const
+{
 	ofPixelFormat format;
 	switch(FourCC) {
 		case NDIlib_FourCC_type_RGBX:
@@ -60,7 +64,8 @@ void VideoFrame::setMetadata(const std::string &metadata)
 	p_metadata = metadata_buffer_.c_str();
 }
 
-int VideoFrame::getBitsPerPixel(NDIlib_FourCC_type_e type) {
+int VideoFrame::getBitsPerPixel(NDIlib_FourCC_type_e type)
+{
 	switch(type) {
 		case NDIlib_FourCC_type_RGBX:
 		case NDIlib_FourCC_type_RGBA:
@@ -73,19 +78,22 @@ int VideoFrame::getBitsPerPixel(NDIlib_FourCC_type_e type) {
 		case NDIlib_FourCC_type_I420: return 12;
 	}
 }
-int VideoFrame::getLineStrideInBytes(NDIlib_FourCC_type_e type, int width) {
+int VideoFrame::getLineStrideInBytes(NDIlib_FourCC_type_e type, int width)
+{
 	int bits_per_pixel = getBitsPerPixel(type);
 	static const int byte_size = 8;
 	return ceil(bits_per_pixel*width/(float)byte_size);
 }
-uint64_t VideoFrame::getDataSizeInBytes(int width, int height, NDIlib_FourCC_type_e type) {
+uint64_t VideoFrame::getDataSizeInBytes(int width, int height, NDIlib_FourCC_type_e type)
+{
 	uint64_t ret = getLineStrideInBytes(type, width) * height;
 	if(type == NDIlib_FourCC_type_UYVA) {
 		ret += sizeof(char)*width*height;
 	}
 	return ret;
 }
-NDIlib_FourCC_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFormat format) {
+NDIlib_FourCC_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFormat format)
+{
 	switch(format) {
 		//			case OF_PIXELS_GRAY:
 		//			case OF_PIXELS_GRAY_ALPHA:
@@ -140,7 +148,7 @@ void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 	}
 	channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*p_data));
 }
-void AudioFrame::decode(ofSoundBuffer &dst)
+void AudioFrame::decode(ofSoundBuffer &dst) const
 {
 	dst.copyFrom(p_data, channel_stride_in_bytes/sizeof(decltype(*p_data)), no_channels, sample_rate);
 }
@@ -164,7 +172,7 @@ void MetadataFrame::encode(std::string &&src, bool copy)
 	}
 	length = src.length();
 }
-void MetadataFrame::decode(std::string &dst)
+void MetadataFrame::decode(std::string &dst) const
 {
 	dst = p_data;
 }

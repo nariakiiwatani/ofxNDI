@@ -29,8 +29,8 @@ public:
 	};
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const Source &source, const Settings &settings=Settings());
-	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize);
-	void clearConnectionMetadata();
+	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize) const;
+	void clearConnectionMetadata() const;
 
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected() const;

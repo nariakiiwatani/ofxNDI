@@ -31,7 +31,7 @@ public:
 		sendFrame(frame);
 		frame_.swap();
 	}
-	virtual void sendFrame(const Frame &frame){}
+	virtual void sendFrame(const Frame &frame) const{}
 protected:
 	typename Type::Instance instance_;
 	DoubleBuffer<Frame> frame_;
@@ -51,7 +51,7 @@ protected:
 		frame.frame_rate_N = frame_rate_n_;
 		frame.frame_rate_D = frame_rate_d_;
 	}
-	void sendFrame(const Frame &frame);
+	void sendFrame(const Frame &frame) const;
 };
 
 class MetadataStream : public Stream<ofxNDI::MetadataFrame>
@@ -66,7 +66,7 @@ public:
 		frame_.swap();
 	}
 protected:
-	void sendFrame(const Frame &frame);
+	void sendFrame(const Frame &frame) const;
 };
 
 }}

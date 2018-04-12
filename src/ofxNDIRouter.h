@@ -12,8 +12,8 @@ public:
 	~Router();
 
 	bool setup(const std::string &name, const std::string &group="");
-	bool setRoute(const ofxNDI::Source &source);
-	bool clear();
+	bool setRoute(const ofxNDI::Source &source) const;
+	bool clear() const;
 private:
 	Instance instance_=nullptr;
 };
