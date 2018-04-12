@@ -42,6 +42,16 @@ void ofxNDISender::setFailover(const Source &source)
 	NDIlib_source_t src = source;
 	NDIlib_send_set_failover(instance_, &src);
 }
+bool ofxNDISender::getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const
+{
+	NDIlib_tally_t tally;
+	if(NDIlib_send_get_tally(instance_, &tally, timeout_ms)) {
+		if(on_program) *on_program = tally.on_program;
+		if(on_preview) *on_preview = tally.on_preview;
+		return true;
+	}
+	return false;
+}
 ofxNDISender::~Sender()
 {
 	NDIlib_send_destroy(instance_);

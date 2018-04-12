@@ -20,6 +20,7 @@ public:
 	bool isSetup() const { return instance_ != nullptr; }
 	bool isConnected(int64_t timeout_ms) const;
 	
+	bool getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const;
 	void setFailover(const Source &source);
 	
 	NDIlib_send_instance_t getInstance() const { return instance_; }
