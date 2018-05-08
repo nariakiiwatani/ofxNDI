@@ -1,4 +1,5 @@
 #include "ofxNDIFrame.h"
+#include "ofImage.h"
 
 using namespace ofxNDI;
 
