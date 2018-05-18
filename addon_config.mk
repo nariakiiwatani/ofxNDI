@@ -20,8 +20,8 @@ meta:
 	ADDON_AUTHOR = Nariaki Iwatani
 	ADDON_TAGS = "NDI" "Network" "Video"
 	ADDON_URL = https://github.com/nariakiiwatani/ofxNDI
-	ADDON_GIT_URL = git://github.com/nariakiiwatani/ofxNDI.git
-	ADDON_MINIMUM_OF_VERSION = 0.9.0
+	# ADDON_GIT_URL = git://github.com/nariakiiwatani/ofxNDI.git
+	# ADDON_MINIMUM_OF_VERSION = 0.9.0
 
 common:
 	# dependencies with other addons, a list of them separated by spaces 
