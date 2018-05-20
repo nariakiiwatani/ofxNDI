@@ -8,12 +8,7 @@ meta:
 common:
 	ADDON_INCLUDES = libs/NDI/include
 osx:
-	ADDON_SOURCES = libs/NDI/lib/osx/libndi.3.dylib
-	ADDON_LIBS = libs/NDI/lib/osx/libndi.3.dylib
 	ADDON_LDFLAGS = -Xlinker -rpath -Xlinker @executable_path
-ios:
-	ADDON_SOURCES = libs/NDI/lib/iOS/libndi_ios.a
-	ADDON_LIBS = libs/NDI/lib/iOS/libndi_ios.a
 vs:
 	# x64
 	ADDON_LIBS = libs/NDI/lib/vs/x64/Processing.NDI.Lib.x64.lib
