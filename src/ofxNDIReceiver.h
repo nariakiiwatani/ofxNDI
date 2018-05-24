@@ -17,9 +17,9 @@ public:
 	struct Settings {
 		Settings(){}
 #ifdef TARGET_WIN32
-		NDIlib_recv_color_format_e color_format=NDIlib_recv_color_format_e_BGRX_BGRA;
+		NDIlib_recv_color_format_e color_format=NDIlib_recv_color_format_BGRX_BGRA;
 #else
-		NDIlib_recv_color_format_e color_format=NDIlib_recv_color_format_e_RGBX_RGBA;
+		NDIlib_recv_color_format_e color_format=NDIlib_recv_color_format_RGBX_RGBA;
 #endif
 		NDIlib_recv_bandwidth_e bandwidth=NDIlib_recv_bandwidth_highest;
 		bool deinterlace=false;
