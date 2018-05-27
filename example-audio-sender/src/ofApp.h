@@ -24,8 +24,10 @@ public:
 	void gotMessage(ofMessage msg);
 
 	void audioIn(ofSoundBuffer &buffer);
+	void clearBuffer();
 private:
 	ofxNDISender sender_;
 	ofxNDISendAudio audio_;
 	ofSoundStream sound_;
+	std::deque<ofSoundBuffer> buffers_;
 };

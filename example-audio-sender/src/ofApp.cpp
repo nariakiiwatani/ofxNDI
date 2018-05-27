@@ -8,29 +8,37 @@ void ofApp::setup(){
 	else {
 		ofLogError("NDI setup failed.");
 	}
-	if(!sound_.setup(this, 0, 2, 48000, 256, 4)) {
+	if(!sound_.setup(this, 0, 1, 48000, 256, 16)) {
 		ofLogError("sound stream setup error");
 	}
 }
 
 void ofApp::audioIn(ofSoundBuffer &buffer)
 {
-	audio_.send(buffer);
+	buffers_.push_back(buffer);
+}
+
+void ofApp::clearBuffer()
+{
+	buffers_.clear();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	while(!buffers_.empty()) {
+		audio_.send(buffers_.front());
+		buffers_.pop_front();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	ofDrawBitmapString("press any key to clear sound buffer", 10, 10);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	clearBuffer();
 }
 
 //--------------------------------------------------------------
