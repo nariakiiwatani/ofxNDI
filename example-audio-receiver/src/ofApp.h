@@ -29,4 +29,5 @@ private:
 	ofxNDIRecvAudio audio_;
 	ofSoundBuffer buffer_;
 	ofSoundStream stream_;
+	float initial_delay_=1;
 };

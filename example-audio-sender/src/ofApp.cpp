@@ -8,26 +8,28 @@ void ofApp::setup(){
 	else {
 		ofLogError("NDI setup failed.");
 	}
-	if(!sound_.setup(this, 0, 1, 48000, 256, 16)) {
+	if(!sound_.setup(this, 0, 1, 48000, 512, 1)) {
 		ofLogError("sound stream setup error");
 	}
 }
 
 void ofApp::audioIn(ofSoundBuffer &buffer)
 {
-	buffers_.push_back(buffer);
+	buffer_.setSampleRate(buffer.getSampleRate());
+	buffer_.setNumChannels(buffer.getNumChannels());
+	buffer_.append(buffer);
 }
 
 void ofApp::clearBuffer()
 {
-	buffers_.clear();
+	buffer_.clear();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	while(!buffers_.empty()) {
-		audio_.send(buffers_.front());
-		buffers_.pop_front();
+	if(buffer_.getDurationMS() >= minimum_buffer_duration_*1000) {
+		audio_.send(buffer_);
+		buffer_.clear();
 	}
 }
 

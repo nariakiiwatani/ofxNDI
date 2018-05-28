@@ -4,8 +4,7 @@
 void ofApp::setup(){
 	if(receiver_.setup()) {
 		audio_.setup(receiver_, 1000, true);
-		// hyper big buffer to avoid clipping noise (causes delay)
-		stream_.setup(this, 1, 0, 48000, 3840, 128);
+		stream_.setup(this, 1, 0, 48000, 512, 2);
 	}
 }
 
@@ -40,7 +39,7 @@ void ofApp::audioOut(ofSoundBuffer &buffer){
 	int length = buffer.getNumFrames();
 	// once receiving buffer length is enough, start audio out
 	if(!valid) {
-		valid = buffer_.getNumFrames() >= length*16;
+		valid = buffer_.getDurationMS() >= initial_delay_*1000;
 	}
 	// when out of buffer, stop audio
 	if(valid && buffer_.getNumFrames() < length) {
@@ -50,9 +49,6 @@ void ofApp::audioOut(ofSoundBuffer &buffer){
 		buffer_.copyTo(buffer, length, buffer.getNumChannels(), 0, false);
 		auto &data = buffer_.getBuffer();
 		data.erase(begin(data), begin(data) + (length*buffer_.getNumChannels()));
-	}
-	else {
-		cout << "no enough source" << endl;
 	}
 }
 //--------------------------------------------------------------

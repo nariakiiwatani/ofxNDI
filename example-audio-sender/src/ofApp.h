@@ -29,5 +29,6 @@ private:
 	ofxNDISender sender_;
 	ofxNDISendAudio audio_;
 	ofSoundStream sound_;
-	std::deque<ofSoundBuffer> buffers_;
+	ofSoundBuffer buffer_;
+	float minimum_buffer_duration_=1;
 };
