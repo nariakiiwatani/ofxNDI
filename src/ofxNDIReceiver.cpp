@@ -1,6 +1,10 @@
 #include "ofxNDIReceiver.h"
 #include "ofUtils.h"
 
+#include "ofEvent.h"
+#include "ofEvents.h"
+#include "ofEventUtils.h"
+
 using namespace std;
 
 bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
@@ -26,6 +30,8 @@ bool ofxNDIReceiver::setup(const ofxNDI::Source &source, const Settings &setting
 		ofLogError("NDI Receiver failed to initialize");
 		return false;
 	}
+    
+    ofAddListener(ofEvents().exit, this, &ofxNDIReceiver::exit);
 	return true;
 }
 
@@ -91,8 +97,17 @@ void ofxNDIReceiver::getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t 
 	if(metadata) { *metadata = frames.metadata_frames; }
 }
 
+void ofxNDIReceiver::exit(ofEventArgs &args) {
+    NDIlib_recv_destroy(instance_);
+    NDIlib_destroy();
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    instance_ = nullptr;
+}
+
 ofxNDIReceiver::~Receiver()
 {
-	NDIlib_recv_destroy(instance_);
-	NDIlib_destroy();
+    if(instance_) {
+        NDIlib_recv_destroy(instance_);
+        NDIlib_destroy();
+    }
 }

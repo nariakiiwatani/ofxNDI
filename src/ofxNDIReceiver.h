@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+class ofEventArgs;
+
 namespace ofxNDI {
 namespace Recv {
 		
@@ -44,6 +46,7 @@ public:
 	void getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t *metadata) const;
 	
 	NDIlib_recv_instance_t getInstance() const { return instance_; }
+    void exit(ofEventArgs &args);
 private:
 	NDIlib_recv_instance_t instance_=nullptr;
 };
