@@ -14,6 +14,7 @@ template<typename Frame, typename Type=ofxNDIReceiver>
 class Stream : private ofThread
 {
 public:
+	virtual ~Stream();
 	void setup(Type &type, uint32_t timeout_ms, bool threaded=true);
 	void setup(typename Type::Instance instance, uint32_t timeout_ms, bool threaded=true);
 	void update();
@@ -35,6 +36,13 @@ private:
 	
 	mutable std::mutex mutex_;
 };
+
+template<typename Frame, typename Type>
+Stream<Frame, Type>::~Stream() {
+	if(isThreadRunning()) {
+		waitForThread();
+	}
+}
 
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::setup(Type &type, uint32_t timeout_ms, bool threaded) {
