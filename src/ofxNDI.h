@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <Processing.NDI.Lib.h>
 #include "ofPixels.h"
 #include "ofSoundBuffer.h"

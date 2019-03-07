@@ -19,7 +19,7 @@ bool ofxNDIReceiver::setup(const ofxNDI::Source &source, const Settings &setting
 	instance_ = NDIlib_recv_create_v2(&creator);
 #else
 	NDIlib_recv_create_v3_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace, nullptr };
-	creator.p_ndi_name = settings.name==""?nullptr:settings.name.c_str();
+	creator.p_ndi_recv_name = settings.name==""?nullptr:settings.name.c_str();
 	instance_ = NDIlib_recv_create_v3(&creator);
 #endif
 	if (!instance_) {
