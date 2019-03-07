@@ -8,6 +8,7 @@ meta:
 common:
 	ADDON_INCLUDES = libs/NDI/include
 	ADDON_INCLUDES += libs/utils
+	ADDON_INCLUDES += src
 osx:
 	ADDON_LDFLAGS = -Xlinker -rpath -Xlinker @executable_path
 vs:
