@@ -73,7 +73,6 @@ void Stream<Frame, Type>::update() {
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::threadedFunction() {
 	while(isThreadRunning()) {
-		std::lock_guard<std::mutex> lock(mutex_);
 		updateFrame();
 		sleep(1);
 	}
@@ -81,6 +80,7 @@ void Stream<Frame, Type>::threadedFunction() {
 template<typename Frame, typename Type>
 void Stream<Frame, Type>::updateFrame() {
 	if(captureFrame()) {
+		std::lock_guard<std::mutex> lock(mutex_);
 		frame_.swap();
 		if(is_front_allocated_) {
 			freeFrame();
