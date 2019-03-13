@@ -7,10 +7,10 @@ void ofApp::setup(){
 		int num_channels = 1;
 		int num_buffers = 1;
 		int num_samples = 512;
-		auto settings = audio_.setup<ofxNDI::Recv::FrameSyncAudio>(receiver_);
-		settings->setSampleRate(sample_rate);
-		settings->setNumChannels(num_channels);
-		settings->setNumSamples(num_samples);
+		audio_.setup(receiver_);
+		audio_.setSampleRate(sample_rate);
+		audio_.setNumChannels(num_channels);
+		audio_.setNumSamples(num_samples);
 		ofSoundStreamSettings sss;
 		sss.numInputChannels = 0;
 		sss.numOutputChannels = num_channels;

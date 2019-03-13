@@ -26,5 +26,5 @@ public:
 private:
 	ofxNDIReceiver receiver_;
 	ofxNDIRecorder recorder_;
-	ofxNDIRecvVideo video_;
+	ofxNDIRecvVideoFrameSync video_;
 };

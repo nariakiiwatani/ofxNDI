@@ -5,7 +5,7 @@ void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
 	if(receiver_.setup()) {
-		video_.setup<ofxNDI::Recv::FrameSyncVideo>(receiver_);
+		video_.setup(receiver_);
 		recorder_.setup(receiver_);
 	}
 }

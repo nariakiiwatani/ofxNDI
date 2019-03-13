@@ -24,6 +24,6 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDIReceiver receiver_;
-	ofxNDIRecvVideo video_;
+	ofxNDIRecvVideoFrameSync video_;
 	ofPixels pixels_;
 };

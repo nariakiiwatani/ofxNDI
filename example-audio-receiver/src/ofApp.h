@@ -26,6 +26,6 @@ public:
 	void audioOut(ofSoundBuffer &buffer);
 private:
 	ofxNDIReceiver receiver_;
-	ofxNDIRecvAudio audio_;
+	ofxNDIRecvAudioFrameSync audio_;
 	ofSoundStream stream_;
 };
