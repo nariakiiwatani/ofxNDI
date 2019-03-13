@@ -77,10 +77,10 @@ public:
 		}
 	}
 	void updateFrame() {
-		if(captureFrame()) {
+		if(captureFrame(frame_.back())) {
 			std::lock_guard<std::mutex> lock(mutex_);
 			frame_.swap();
-			freeFrame();
+			freeFrame(frame_.back());
 			has_new_frame_ = true;
 		}
 	}
