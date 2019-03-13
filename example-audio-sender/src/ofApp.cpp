@@ -8,39 +8,33 @@ void ofApp::setup(){
 	else {
 		ofLogError("NDI setup failed.");
 	}
-	if(!sound_.setup(this, 0, 1, 48000, 512, 1)) {
+	ofSoundStreamSettings sss;
+	sss.numInputChannels = 1;
+	sss.numOutputChannels = 0;
+	sss.sampleRate = 48000;
+	sss.numBuffers = 1;
+	sss.bufferSize = 512;
+	sss.setInListener(this);
+	if(!sound_.setup(sss)) {
 		ofLogError("sound stream setup error");
 	}
 }
 
 void ofApp::audioIn(ofSoundBuffer &buffer)
 {
-	buffer_.setSampleRate(buffer.getSampleRate());
-	buffer_.setNumChannels(buffer.getNumChannels());
-	buffer_.append(buffer);
-}
-
-void ofApp::clearBuffer()
-{
-	buffer_.clear();
+	audio_.send(buffer);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if(buffer_.getDurationMS() >= minimum_buffer_duration_*1000) {
-		audio_.send(buffer_);
-		buffer_.clear();
-	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofDrawBitmapString("press any key to clear sound buffer", 10, 10);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	clearBuffer();
 }
 
 //--------------------------------------------------------------

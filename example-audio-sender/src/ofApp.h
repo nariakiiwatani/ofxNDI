@@ -24,11 +24,8 @@ public:
 	void gotMessage(ofMessage msg);
 
 	void audioIn(ofSoundBuffer &buffer);
-	void clearBuffer();
 private:
 	ofxNDISender sender_;
 	ofxNDISendAudio audio_;
 	ofSoundStream sound_;
-	ofSoundBuffer buffer_;
-	float minimum_buffer_duration_=1;
 };
