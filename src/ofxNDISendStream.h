@@ -74,5 +74,4 @@ protected:
 using ofxNDISendVideo = ofxNDI::Send::VideoStream;
 using ofxNDISendAudio = ofxNDI::Send::Stream<ofxNDI::AudioFrame>;
 using ofxNDISendMetadata = ofxNDI::Send::MetadataStream;
-using ofxNDISendMetadataRecv = ofxNDI::Recv::Stream<ofxNDI::MetadataFrame, ofxNDISender>;
  

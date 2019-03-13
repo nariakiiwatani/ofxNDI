@@ -6,7 +6,7 @@ void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
 	if(receiver_.setup()) {
-		video_.setup(receiver_, 1000, true);
+		video_.setup<ofxNDI::Recv::Blocking<ofxNDI::VideoFrame>>(receiver_);
 	}
 }
 
