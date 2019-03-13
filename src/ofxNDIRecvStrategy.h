@@ -17,9 +17,9 @@ public:
 	virtual void update()=0;
 	virtual bool isFrameNew() const=0;
 	virtual Frame& getFrame()=0;
+protected:
 	virtual bool captureFrame(Frame &frame)=0;
 	virtual void freeFrame(Frame &frame)=0;
-protected:
 	typename Wrapper::Instance instance_;
 };
 
@@ -32,9 +32,9 @@ public:
 	void update() {
 		Frame frame;
 		if(captureFrame(frame)) {
+			using ::std::swap;
 			swap(frame, frame_);
 			freeFrame(frame);
-			using ::std::swap;
 			is_frame_new_ = true;
 		}
 		else {
@@ -96,14 +96,45 @@ private:
 	bool is_frame_new_=false;
 	bool has_new_frame_=false;
 };
-template<typename Frame, typename Wrapper=ofxNDIReceiver>
-class FrameSync : public FrameSyncStrategy<Frame, Wrapper>
+template<typename Frame>
+class FrameSync : public Blocking<Frame, ofxNDIReceiver>
 {
-	static_assert(!std::is_same<Frame, ofxNDI::MetadataFrame>::value, "FrameSync is not available for metadata");
 public:
-	FrameSync(Wrapper &wrapper) {
-		
+	FrameSync(ofxNDIReceiver &wrapper)
+	:Blocking<Frame,ofxNDIReceiver>(wrapper) {
+		sync_ = wrapper.getFrameSync();
+		if(!sync_) {
+			sync_ = wrapper.createFrameSync();
+		}
 	}
+protected:
+	NDIlib_framesync_instance_t sync_;
+	virtual bool captureFrame(Frame &frame)=0;
+	virtual void freeFrame(Frame &frame)=0;
+};
+
+class FrameSyncVideo : public FrameSync<ofxNDI::VideoFrame>
+{
+public:
+	using FrameSync<ofxNDI::VideoFrame>::FrameSync;
+	void setFieldType(NDIlib_frame_format_type_e format) { field_type_ = format; }
+protected:
+	bool captureFrame(ofxNDI::VideoFrame &frame);
+	void freeFrame(ofxNDI::VideoFrame &frame);
+	NDIlib_frame_format_type_e field_type_=NDIlib_frame_format_type_progressive;
+};
+
+class FrameSyncAudio : public FrameSync<ofxNDI::AudioFrame>
+{
+public:
+	using FrameSync<ofxNDI::AudioFrame>::FrameSync;
+	void setSampleRate(int sample_rate) { sample_rate_ = sample_rate; }
+	void setNumChannels(int num) { num_channels_ = num; }
+	void setNumSamples(int num) { num_samples_ = num; }
+protected:
+	bool captureFrame(ofxNDI::AudioFrame &frame);
+	void freeFrame(ofxNDI::AudioFrame &frame);
+	int sample_rate_=0, num_channels_=0, num_samples_=0;
 };
 
 #pragma mark Video Stream
@@ -120,6 +151,13 @@ template<> inline void Threading<ofxNDI::VideoFrame, ofxNDIReceiver>::freeFrame(
 template<> inline bool Threading<ofxNDI::VideoFrame, ofxNDIReceiver>::captureFrame(ofxNDI::VideoFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, &frame, nullptr, nullptr, timeout_ms_) == NDIlib_frame_type_video;
 }
+inline void FrameSyncVideo::freeFrame(ofxNDI::VideoFrame &frame) {
+	NDIlib_framesync_free_video(sync_, &frame);
+}
+inline bool FrameSyncVideo::captureFrame(ofxNDI::VideoFrame &frame) {
+	NDIlib_framesync_capture_video(sync_, &frame, field_type_);
+	return true;
+}
 
 #pragma mark Audio Stream
 template<> inline void Blocking<ofxNDI::AudioFrame, ofxNDIReceiver>::freeFrame(ofxNDI::AudioFrame &frame) {
@@ -133,6 +171,14 @@ template<> inline void Threading<ofxNDI::AudioFrame, ofxNDIReceiver>::freeFrame(
 }
 template<> inline bool Threading<ofxNDI::AudioFrame, ofxNDIReceiver>::captureFrame(ofxNDI::AudioFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, nullptr, &frame, nullptr, timeout_ms_) == NDIlib_frame_type_audio;
+}
+
+inline void FrameSyncAudio::freeFrame(ofxNDI::AudioFrame &frame) {
+	NDIlib_framesync_free_audio(sync_, &frame);
+}
+inline bool FrameSyncAudio::captureFrame(ofxNDI::AudioFrame &frame) {
+	NDIlib_framesync_capture_audio(sync_, &frame, sample_rate_, num_channels_, num_samples_);
+	return true;
 }
 
 #pragma mark Metadata Stream
