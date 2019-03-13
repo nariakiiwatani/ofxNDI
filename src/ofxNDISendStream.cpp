@@ -23,3 +23,13 @@ void ofxNDISendMetadata::sendFrame(const ofxNDI::MetadataFrame &frame) const
 	NDIlib_send_send_metadata(instance_, &frame);
 }
 
+template<>
+void ofxNDISenderRecvMetadata::freeFrame(ofxNDI::MetadataFrame &frame) {
+	NDIlib_send_free_metadata(instance_, &frame);
+}
+template<>
+bool ofxNDISenderRecvMetadata::captureFrame(ofxNDI::MetadataFrame &frame) {
+	return NDIlib_send_capture(instance_, &frame, timeout_ms_) == NDIlib_frame_type_metadata;
+}
+
+
