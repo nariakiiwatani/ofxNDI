@@ -136,19 +136,25 @@ protected:
 	void freeFrame(ofxNDI::AudioFrame &frame);
 	int sample_rate_=0, num_channels_=0, num_samples_=0;
 };
+	
+using BlockingVideo = Blocking<ofxNDI::VideoFrame>;
+using BlockingAudio = Blocking<ofxNDI::AudioFrame>;
+using ThreadingVideo = Threading<ofxNDI::VideoFrame>;
+using ThreadingAudio = Threading<ofxNDI::AudioFrame>;
+using Metadata = Blocking<ofxNDI::MetadataFrame>;
 
 #pragma mark Video Stream
 
-template<> inline void Blocking<ofxNDI::VideoFrame, ofxNDIReceiver>::freeFrame(ofxNDI::VideoFrame &frame) {
+template<> inline void BlockingVideo::freeFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_recv_free_video_v2(instance_, &frame);
 }
-template<> inline bool Blocking<ofxNDI::VideoFrame, ofxNDIReceiver>::captureFrame(ofxNDI::VideoFrame &frame) {
+template<> inline bool BlockingVideo::captureFrame(ofxNDI::VideoFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, &frame, nullptr, nullptr, timeout_ms_) == NDIlib_frame_type_video;
 }
-template<> inline void Threading<ofxNDI::VideoFrame, ofxNDIReceiver>::freeFrame(ofxNDI::VideoFrame &frame) {
+template<> inline void ThreadingVideo::freeFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_recv_free_video_v2(instance_, &frame);
 }
-template<> inline bool Threading<ofxNDI::VideoFrame, ofxNDIReceiver>::captureFrame(ofxNDI::VideoFrame &frame) {
+template<> inline bool ThreadingVideo::captureFrame(ofxNDI::VideoFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, &frame, nullptr, nullptr, timeout_ms_) == NDIlib_frame_type_video;
 }
 inline void FrameSyncVideo::freeFrame(ofxNDI::VideoFrame &frame) {
@@ -160,16 +166,16 @@ inline bool FrameSyncVideo::captureFrame(ofxNDI::VideoFrame &frame) {
 }
 
 #pragma mark Audio Stream
-template<> inline void Blocking<ofxNDI::AudioFrame, ofxNDIReceiver>::freeFrame(ofxNDI::AudioFrame &frame) {
+template<> inline void BlockingAudio::freeFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_recv_free_audio_v2(instance_, &frame);
 }
-template<> inline bool Blocking<ofxNDI::AudioFrame, ofxNDIReceiver>::captureFrame(ofxNDI::AudioFrame &frame) {
+template<> inline bool BlockingAudio::captureFrame(ofxNDI::AudioFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, nullptr, &frame, nullptr, timeout_ms_) == NDIlib_frame_type_audio;
 }
-template<> inline void Threading<ofxNDI::AudioFrame, ofxNDIReceiver>::freeFrame(ofxNDI::AudioFrame &frame) {
+template<> inline void ThreadingAudio::freeFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_recv_free_audio_v2(instance_, &frame);
 }
-template<> inline bool Threading<ofxNDI::AudioFrame, ofxNDIReceiver>::captureFrame(ofxNDI::AudioFrame &frame) {
+template<> inline bool ThreadingAudio::captureFrame(ofxNDI::AudioFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, nullptr, &frame, nullptr, timeout_ms_) == NDIlib_frame_type_audio;
 }
 
@@ -183,18 +189,13 @@ inline bool FrameSyncAudio::captureFrame(ofxNDI::AudioFrame &frame) {
 
 #pragma mark Metadata Stream
 
-template<> inline void Blocking<ofxNDI::MetadataFrame, ofxNDIReceiver>::freeFrame(ofxNDI::MetadataFrame &frame) {
+template<> inline void Metadata::freeFrame(ofxNDI::MetadataFrame &frame) {
 	NDIlib_recv_free_metadata(instance_, &frame);
 }
-template<> inline bool Blocking<ofxNDI::MetadataFrame, ofxNDIReceiver>::captureFrame(ofxNDI::MetadataFrame &frame) {
+template<> inline bool Metadata::captureFrame(ofxNDI::MetadataFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, nullptr, nullptr, &frame, timeout_ms_) == NDIlib_frame_type_metadata;
 }
-template<> inline void Threading<ofxNDI::MetadataFrame, ofxNDIReceiver>::freeFrame(ofxNDI::MetadataFrame &frame) {
-	NDIlib_recv_free_metadata(instance_, &frame);
-}
-template<> inline bool Threading<ofxNDI::MetadataFrame, ofxNDIReceiver>::captureFrame(ofxNDI::MetadataFrame &frame) {
-	return NDIlib_recv_capture_v2(instance_, nullptr, nullptr, &frame, timeout_ms_) == NDIlib_frame_type_metadata;
-}
+
 template<> inline void Blocking<ofxNDI::MetadataFrame, ofxNDISender>::freeFrame(ofxNDI::MetadataFrame &frame) {
 	NDIlib_send_free_metadata(instance_, &frame);
 }
