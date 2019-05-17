@@ -47,7 +47,7 @@ namespace ofxNDI {
 			std::vector<Source> ret;
 			ret.insert(std::end(ret), sources, sources+num_sources);
 			for(auto &r : ret) {
-                std::cout << "NDI Source Detected : " << r.p_ndi_name << "," << r.p_url_address << std::endl;
+				ofLogVerbose("ofxNDI::listSources") << "NDI Source Detected : " << r.p_ndi_name << "," << r.p_url_address;
 			}
 			NDIlib_find_destroy(finder);
 			return ret;
