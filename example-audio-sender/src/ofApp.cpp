@@ -9,7 +9,7 @@ void ofApp::setup(){
 		ofLogError("NDI setup failed.");
 	}
 	ofSoundStreamSettings sss;
-	sss.numInputChannels = 1;
+	sss.numInputChannels = 2;
 	sss.numOutputChannels = 0;
 	sss.sampleRate = 48000;
 	sss.numBuffers = 1;
