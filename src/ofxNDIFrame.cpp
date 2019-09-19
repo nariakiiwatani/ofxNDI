@@ -137,16 +137,11 @@ void AudioFrame::free()
 }
 void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 {
-	
-	if(is_allocated_ && 
-	   (sample_rate != src.getSampleRate() ||
-	    no_channels != src.getNumChannels() ||
-	    no_samples  != src.getNumFrames())){
-		free();
-	}
-	if(!is_allocated_) {
+	sample_rate = src.getSampleRate();
+	if(!is_allocated_ ||
+	   no_channels != src.getNumChannels() ||
+	   no_samples  != src.getNumFrames()) {
 		allocate(src.size());
-		sample_rate = src.getSampleRate();
 		no_channels = src.getNumChannels();
 		no_samples = src.getNumFrames();
 		channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*p_data));
