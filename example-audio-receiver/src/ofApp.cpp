@@ -21,8 +21,8 @@ void ofApp::setup(){
 	std::string name_or_url = "";	// Specify name or address of expected NDI source. In case of blank or not found, receiver will grab default(which is found first) source.
 	auto result = findSource(name_or_url);
 	if(result.second ? receiver_.setup(result.first) : receiver_.setup()) {
-		int sample_rate = 44100;
-		int num_channels = 1;
+		int sample_rate = 48000;
+		int num_channels = 2;
 		int num_buffers = 1;
 		int num_samples = 512;
 		audio_.setup(receiver_);
