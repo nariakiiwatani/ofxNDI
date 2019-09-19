@@ -156,6 +156,14 @@ void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 }
 void AudioFrame::decode(ofSoundBuffer &dst) const
 {
+	if(dst.getSampleRate() != sample_rate) {
+		dst.setSampleRate(sample_rate);
+	}
+	if(dst.getNumChannels() != no_channels ||
+	   dst.getNumFrames() != no_samples) {
+		dst.allocate(no_samples, no_channels);
+		dst.setNumChannels(no_channels);
+	}
 	
 	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
 										 , static_cast<float*>(dst.getBuffer().data()));
