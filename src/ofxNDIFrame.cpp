@@ -1,5 +1,6 @@
 #include "ofxNDIFrame.h"
 #include "ofImage.h"
+#include "Processing.NDI.utilities.h"
 
 using namespace ofxNDI;
 
@@ -136,22 +137,37 @@ void AudioFrame::free()
 }
 void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 {
-	sample_rate = src.getSampleRate();
-	no_channels = src.getNumChannels();
-	no_samples = src.size();
-	if(copy) {
-		uint64_t size = allocate(src.size());
-		memcpy(p_data, src.getBuffer().data(), size);
+	
+	if(is_allocated_ && 
+	   (sample_rate != src.getSampleRate() ||
+	    no_channels != src.getNumChannels() ||
+	    no_samples  != src.getNumFrames())){
+		free();
 	}
-	else {
-		if(is_allocated_) free();
-		p_data = static_cast<float*>(src.getBuffer().data());
+	if(!is_allocated_) {
+		allocate(src.size());
+		sample_rate = src.getSampleRate();
+		no_channels = src.getNumChannels();
+		no_samples = src.getNumFrames();
+		channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*p_data));
 	}
-	channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*p_data));
+	
+	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
+										 ,  static_cast<float*>(src.getBuffer().data()));
+	
+	
+	NDIlib_util_audio_from_interleaved_32f_v2(&interleaved_frame, this);
+	
 }
 void AudioFrame::decode(ofSoundBuffer &dst) const
 {
-	dst.copyFrom(p_data, channel_stride_in_bytes/sizeof(decltype(*p_data)), no_channels, sample_rate);
+	
+	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
+										 , static_cast<float*>(dst.getBuffer().data()));
+	
+	NDIlib_util_audio_to_interleaved_32f_v2(this, &interleaved_frame);
+	
+
 }
 void AudioFrame::setMetadata(const std::string &metadata)
 {
