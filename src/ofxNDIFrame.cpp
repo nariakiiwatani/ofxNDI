@@ -56,6 +56,7 @@ void VideoFrame::decode(ofPixels &dst) const
 		case NDIlib_FourCC_video_type_UYVY:	format = OF_PIXELS_UYVY;	break;
 		default:
 			ofLogWarning("ofxNDI : this pixel format is not supported");
+			format = OF_PIXELS_RGBA;
 			break;
 	}
 	dst.setFromPixels(p_data, xres, yres, format);
@@ -122,7 +123,7 @@ NDIlib_FourCC_video_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFor
 			//			case OF_PIXELS_VU:
 		default:
 			ofLogWarning("ofxNDI : this pixel format is not supported");
-			break;
+			return NDIlib_FourCC_video_type_RGBA;
 	}
 }
 
