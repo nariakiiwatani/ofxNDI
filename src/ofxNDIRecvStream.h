@@ -135,6 +135,7 @@ public:
 	void setSampleRate(int sample_rate) { sample_rate_ = sample_rate; }
 	void setNumChannels(int num) { num_channels_ = num; }
 	void setNumSamples(int num) { num_samples_ = num; }
+	int getNumQueuedSamples() const;
 protected:
 	bool captureFrame(ofxNDI::AudioFrame &frame);
 	void freeFrame(ofxNDI::AudioFrame &frame);

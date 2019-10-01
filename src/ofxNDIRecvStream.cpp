@@ -49,6 +49,10 @@ bool ofxNDIRecvAudioFrameSync::captureFrame(ofxNDI::AudioFrame &frame) {
 void ofxNDIRecvAudioFrameSync::freeFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_framesync_free_audio(sync_, &frame);
 }
+int ofxNDIRecvAudioFrameSync::getNumQueuedSamples() const {
+	return NDIlib_framesync_audio_queue_depth(sync_);
+}
+
 
 #pragma mark Metadata Stream
 
