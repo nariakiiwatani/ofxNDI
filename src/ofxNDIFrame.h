@@ -6,7 +6,7 @@ namespace ofxNDI {
 class VideoFrame : public NDIlib_video_frame_v2_t
 {
 public:
-	uint64_t allocate(int width, int height, NDIlib_FourCC_type_e type);
+	uint64_t allocate(int width, int height, NDIlib_FourCC_video_type_e type);
 	void free();
 	void encode(ofPixels &&src, bool copy);
 	void decode(ofPixels &dst) const;
@@ -14,10 +14,10 @@ public:
 private:
 	std::string metadata_buffer_;
 	bool is_allocated_=false;
-	static int getBitsPerPixel(NDIlib_FourCC_type_e type);
-	static int getLineStrideInBytes(NDIlib_FourCC_type_e type, int width);
-	static uint64_t getDataSizeInBytes(int width, int height, NDIlib_FourCC_type_e type);
-	static NDIlib_FourCC_type_e getFourCCTypeFromOfPixelFormat(ofPixelFormat format);
+	static int getBitsPerPixel(NDIlib_FourCC_video_type_e type);
+	static int getLineStrideInBytes(NDIlib_FourCC_video_type_e type, int width);
+	static uint64_t getDataSizeInBytes(int width, int height, NDIlib_FourCC_video_type_e type);
+	static NDIlib_FourCC_video_type_e getFourCCTypeFromOfPixelFormat(ofPixelFormat format);
 };
 
 class AudioFrame : public NDIlib_audio_frame_v2_t

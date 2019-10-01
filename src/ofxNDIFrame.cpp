@@ -6,7 +6,7 @@ using namespace ofxNDI;
 
 #pragma mark video
 
-uint64_t VideoFrame::allocate(int width, int height, NDIlib_FourCC_type_e type)
+uint64_t VideoFrame::allocate(int width, int height, NDIlib_FourCC_video_type_e type)
 {
 	uint64_t needed_data_size = getDataSizeInBytes(width, height, type);
 	if(needed_data_size != getDataSizeInBytes(xres, yres, FourCC)) {
@@ -30,7 +30,7 @@ void VideoFrame::encode(ofPixels &&src, bool copy)
 	}
 
 	int w = (int)src.getWidth(), h = (int)src.getHeight();
-	NDIlib_FourCC_type_e type = getFourCCTypeFromOfPixelFormat(src.getPixelFormat());
+	NDIlib_FourCC_video_type_e type = getFourCCTypeFromOfPixelFormat(src.getPixelFormat());
 	if(copy) {
 		uint64_t size = allocate(w, h, type);
 		memcpy(p_data, static_cast<unsigned char*>(src.getData()), size);
@@ -49,11 +49,11 @@ void VideoFrame::decode(ofPixels &dst) const
 {
 	ofPixelFormat format;
 	switch(FourCC) {
-		case NDIlib_FourCC_type_RGBX:
-		case NDIlib_FourCC_type_RGBA:	format = OF_PIXELS_RGBA;	break;
-		case NDIlib_FourCC_type_BGRX:
-		case NDIlib_FourCC_type_BGRA:	format = OF_PIXELS_BGRA;	break;
-		case NDIlib_FourCC_type_UYVY:	format = OF_PIXELS_UYVY;	break;
+		case NDIlib_FourCC_video_type_RGBX:
+		case NDIlib_FourCC_video_type_RGBA:	format = OF_PIXELS_RGBA;	break;
+		case NDIlib_FourCC_video_type_BGRX:
+		case NDIlib_FourCC_video_type_BGRA:	format = OF_PIXELS_BGRA;	break;
+		case NDIlib_FourCC_video_type_UYVY:	format = OF_PIXELS_UYVY;	break;
 		default:
 			ofLogWarning("ofxNDI : this pixel format is not supported");
 			break;
@@ -66,50 +66,55 @@ void VideoFrame::setMetadata(const std::string &metadata)
 	p_metadata = metadata_buffer_.c_str();
 }
 
-int VideoFrame::getBitsPerPixel(NDIlib_FourCC_type_e type)
+int VideoFrame::getBitsPerPixel(NDIlib_FourCC_video_type_e type)
 {
 	switch(type) {
-		case NDIlib_FourCC_type_RGBX:
-		case NDIlib_FourCC_type_RGBA:
-		case NDIlib_FourCC_type_BGRX:
-		case NDIlib_FourCC_type_BGRA: return 32;
-		case NDIlib_FourCC_type_UYVY:
-		case NDIlib_FourCC_type_UYVA: return 16;
-		case NDIlib_FourCC_type_YV12:
-		case NDIlib_FourCC_type_NV12:
-		case NDIlib_FourCC_type_I420: return 12;
+		case NDIlib_FourCC_video_type_RGBX:
+		case NDIlib_FourCC_video_type_RGBA:
+		case NDIlib_FourCC_video_type_BGRX:
+		case NDIlib_FourCC_video_type_BGRA: return 32;
+		case NDIlib_FourCC_video_type_P216:
+		case NDIlib_FourCC_video_type_PA16:
+		case NDIlib_FourCC_video_type_UYVY:
+		case NDIlib_FourCC_video_type_UYVA: return 16;
+		case NDIlib_FourCC_video_type_YV12:
+		case NDIlib_FourCC_video_type_NV12:
+		case NDIlib_FourCC_video_type_I420: return 12;
+		default:
+			ofLogWarning("ofxNDI::VideoFrame") << "unhandled FourCC type: " << type;
+			return 0;
 	}
 }
-int VideoFrame::getLineStrideInBytes(NDIlib_FourCC_type_e type, int width)
+int VideoFrame::getLineStrideInBytes(NDIlib_FourCC_video_type_e type, int width)
 {
 	int bits_per_pixel = getBitsPerPixel(type);
 	static const int byte_size = 8;
 	return ceil(bits_per_pixel*width/(float)byte_size);
 }
-uint64_t VideoFrame::getDataSizeInBytes(int width, int height, NDIlib_FourCC_type_e type)
+uint64_t VideoFrame::getDataSizeInBytes(int width, int height, NDIlib_FourCC_video_type_e type)
 {
 	uint64_t ret = getLineStrideInBytes(type, width) * height;
-	if(type == NDIlib_FourCC_type_UYVA) {
+	if(type == NDIlib_FourCC_video_type_UYVA) {
 		ret += sizeof(char)*width*height;
 	}
 	return ret;
 }
-NDIlib_FourCC_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFormat format)
+NDIlib_FourCC_video_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFormat format)
 {
 	switch(format) {
 		//			case OF_PIXELS_GRAY:
 		//			case OF_PIXELS_GRAY_ALPHA:
 		//			case OF_PIXELS_RGB:
 		//			case OF_PIXELS_BGR:
-		case OF_PIXELS_RGBA: return NDIlib_FourCC_type_RGBA;
-		case OF_PIXELS_BGRA: return NDIlib_FourCC_type_BGRA;
+		case OF_PIXELS_RGBA: return NDIlib_FourCC_video_type_RGBA;
+		case OF_PIXELS_BGRA: return NDIlib_FourCC_video_type_BGRA;
 			//			case OF_PIXELS_RGB565:
-		case OF_PIXELS_NV12: return NDIlib_FourCC_type_NV12;
+		case OF_PIXELS_NV12: return NDIlib_FourCC_video_type_NV12;
 			//			case OF_PIXELS_NV21:
-		case OF_PIXELS_YV12: return NDIlib_FourCC_type_YV12;
-		case OF_PIXELS_I420: return NDIlib_FourCC_type_I420;
+		case OF_PIXELS_YV12: return NDIlib_FourCC_video_type_YV12;
+		case OF_PIXELS_I420: return NDIlib_FourCC_video_type_I420;
 			//			case OF_PIXELS_YUY2:
-		case OF_PIXELS_UYVY: return NDIlib_FourCC_type_UYVY;
+		case OF_PIXELS_UYVY: return NDIlib_FourCC_video_type_UYVY;
 			//			case OF_PIXELS_Y:
 			//			case OF_PIXELS_U:
 			//			case OF_PIXELS_V:
