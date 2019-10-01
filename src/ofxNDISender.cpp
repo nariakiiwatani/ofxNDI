@@ -3,6 +3,11 @@
 
 using namespace std;
 
+const NDIlib_source_t* ofxNDISender::getSourceName() const
+{
+	return NDIlib_send_get_source_name(instance_);
+}
+
 bool ofxNDISender::setup(const string &name, const string &group, bool clock_video, bool clock_audio)
 {
 	NDIlib_send_create_t create_settings = {
