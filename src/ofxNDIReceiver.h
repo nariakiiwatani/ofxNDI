@@ -23,9 +23,7 @@ public:
 #endif
 		NDIlib_recv_bandwidth_e bandwidth=NDIlib_recv_bandwidth_highest;
 		bool deinterlace=false;
-#ifndef OFXNDI_USE_V2
 		std::string name="";
-#endif
 	};
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const Source &source, const Settings &settings=Settings());
