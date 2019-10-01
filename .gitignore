@@ -7,6 +7,8 @@ example-*/icon.rc
 example-*/Makefile
 example-*/openFrameworks-info.plist
 example-*/Project.xcconfig
+example-*/mediaAssets
+example-*/ofxiOS-Info.plist
 
 ### https://raw.github.com/github/gitignore/ade08baee2cf60afd794432b3e779fe5844c545d/C++.gitignore
 
