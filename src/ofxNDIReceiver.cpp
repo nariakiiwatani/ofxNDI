@@ -24,6 +24,16 @@ bool ofxNDIReceiver::setup(const ofxNDI::Source &source, const Settings &setting
 	}
 	return true;
 }
+void ofxNDIReceiver::changeConnection(const Source &source)
+{
+	NDIlib_source_t src = source;
+	NDIlib_recv_connect(instance_, &src);
+}
+void ofxNDIReceiver::disconnect()
+{
+	NDIlib_recv_connect(instance_, nullptr);
+}
+
 NDIlib_framesync_instance_t ofxNDIReceiver::createFrameSync()
 {
 	frame_sync_ = NDIlib_framesync_create(instance_);
