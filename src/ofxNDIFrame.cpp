@@ -47,19 +47,7 @@ void VideoFrame::encode(ofPixels &&src, bool copy)
 }
 void VideoFrame::decode(ofPixels &dst) const
 {
-	ofPixelFormat format;
-	switch(FourCC) {
-		case NDIlib_FourCC_video_type_RGBX:
-		case NDIlib_FourCC_video_type_RGBA:	format = OF_PIXELS_RGBA;	break;
-		case NDIlib_FourCC_video_type_BGRX:
-		case NDIlib_FourCC_video_type_BGRA:	format = OF_PIXELS_BGRA;	break;
-		case NDIlib_FourCC_video_type_UYVY:	format = OF_PIXELS_UYVY;	break;
-		default:
-			ofLogWarning("ofxNDI : this pixel format is not supported");
-			format = OF_PIXELS_RGBA;
-			break;
-	}
-	dst.setFromPixels(p_data, xres, yres, format);
+	dst.setFromPixels(p_data, xres, yres, getOfPixelFormat());
 }
 void VideoFrame::setMetadata(const std::string &metadata)
 {
@@ -86,6 +74,11 @@ int VideoFrame::getBitsPerPixel(NDIlib_FourCC_video_type_e type)
 			return 0;
 	}
 }
+ofPixelFormat VideoFrame::getOfPixelFormat() const
+{
+	return getOfPixelFormatFromFourCCType(FourCC);
+}
+
 int VideoFrame::getLineStrideInBytes(NDIlib_FourCC_video_type_e type, int width)
 {
 	int bits_per_pixel = getBitsPerPixel(type);
@@ -125,6 +118,22 @@ NDIlib_FourCC_video_type_e VideoFrame::getFourCCTypeFromOfPixelFormat(ofPixelFor
 			ofLogWarning("ofxNDI : this pixel format is not supported");
 			return NDIlib_FourCC_video_type_RGBA;
 	}
+}
+ofPixelFormat VideoFrame::getOfPixelFormatFromFourCCType(NDIlib_FourCC_video_type_e type)
+{
+	ofPixelFormat format;
+	switch(type) {
+		case NDIlib_FourCC_video_type_RGBX:
+		case NDIlib_FourCC_video_type_RGBA:	format = OF_PIXELS_RGBA;	break;
+		case NDIlib_FourCC_video_type_BGRX:
+		case NDIlib_FourCC_video_type_BGRA:	format = OF_PIXELS_BGRA;	break;
+		case NDIlib_FourCC_video_type_UYVY:	format = OF_PIXELS_UYVY;	break;
+		default:
+			ofLogWarning("ofxNDI : this pixel format is not supported");
+			format = OF_PIXELS_RGBA;
+			break;
+	}
+	return format;
 }
 
 #pragma mark audio

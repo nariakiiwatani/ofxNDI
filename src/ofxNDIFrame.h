@@ -11,6 +11,7 @@ public:
 	void encode(ofPixels &&src, bool copy);
 	void decode(ofPixels &dst) const;
 	void setMetadata(const std::string &metadata);
+	ofPixelFormat getOfPixelFormat() const;
 private:
 	std::string metadata_buffer_;
 	bool is_allocated_=false;
@@ -18,6 +19,7 @@ private:
 	static int getLineStrideInBytes(NDIlib_FourCC_video_type_e type, int width);
 	static uint64_t getDataSizeInBytes(int width, int height, NDIlib_FourCC_video_type_e type);
 	static NDIlib_FourCC_video_type_e getFourCCTypeFromOfPixelFormat(ofPixelFormat format);
+	static ofPixelFormat getOfPixelFormatFromFourCCType(NDIlib_FourCC_video_type_e type);
 };
 
 class AudioFrame : public NDIlib_audio_frame_v2_t
