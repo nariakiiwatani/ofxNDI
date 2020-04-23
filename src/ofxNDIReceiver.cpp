@@ -2,6 +2,7 @@
 #include "ofUtils.h"
 
 using namespace std;
+using namespace ofxNDI;
 
 bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 {
