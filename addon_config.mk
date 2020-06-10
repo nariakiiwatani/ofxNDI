@@ -14,9 +14,7 @@ osx:
 	ADDON_LDFLAGS = -Xlinker -rpath -Xlinker @executable_path
 vs:
 	# x64
-	ADDON_LIBS += libs/NDI/lib/vs/x64/Processing.NDI.Lib.x64.lib
 	ADDON_DLLS_TO_COPY += windows-copy-to-bin/Processing.NDI.Lib.x64.dll
 	# Win32
-	ADDON_LIBS += libs/NDI/lib/vs/Win32/Processing.NDI.Lib.x86.lib
 	ADDON_DLLS_TO_COPY += windows-copy-to-bin/Processing.NDI.Lib.x86.dll
 
