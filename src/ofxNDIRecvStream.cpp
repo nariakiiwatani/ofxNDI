@@ -19,7 +19,7 @@ void ofxNDIRecvVideoThreading::freeFrame(ofxNDI::VideoFrame &frame) {
 }
 bool ofxNDIRecvVideoFrameSync::captureFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_framesync_capture_video(sync_, &frame, field_type_);
-	return true;
+	return frame.p_data != nullptr;
 }
 void ofxNDIRecvVideoFrameSync::freeFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_framesync_free_video(sync_, &frame);
@@ -44,7 +44,7 @@ void ofxNDIRecvAudioThreading::freeFrame(ofxNDI::AudioFrame &frame) {
 }
 bool ofxNDIRecvAudioFrameSync::captureFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_framesync_capture_audio(sync_, &frame, sample_rate_, num_channels_, num_samples_);
-	return true;
+	return frame.no_channels != 0;
 }
 void ofxNDIRecvAudioFrameSync::freeFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_framesync_free_audio(sync_, &frame);
