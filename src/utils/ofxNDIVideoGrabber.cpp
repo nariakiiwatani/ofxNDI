@@ -2,6 +2,7 @@
 #include "ofxNDIRecvStream.h"
 
 using namespace std;
+using namespace ofxNDI;
 using namespace ofxNDI::Recv;
 
 namespace {
@@ -50,7 +51,7 @@ public:
 	float getHeight() const { return pixels_.getHeight(); }
 	
 	bool isInitialized() const { return (bool)stream_; }
-	bool setPixelFormat(ofPixelFormat pixelFormat) {}
+    bool setPixelFormat(ofPixelFormat pixelFormat) { return false;  }
 	ofPixelFormat getPixelFormat() const { return pixels_.getPixelFormat(); }
 	ofPixels& getPixels() { return pixels_; }
 	const ofPixels& getPixels() const { return pixels_; }
