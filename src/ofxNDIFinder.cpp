@@ -6,7 +6,12 @@ using namespace ofxNDI;
 using namespace std;
 
 
-std::function<std::vector<Finder::Source>(bool, bool)> Finder::watchSources(bool show_local_resources, const std::string &group, const std::vector<std::string> extra_ips)
+Finder::~Finder()
+{
+	terminate(true);
+}
+
+std::function<std::vector<Source>(bool, bool)> Finder::watchSources(bool show_local_resources, const std::string &group, const std::vector<std::string> extra_ips)
 {
 	if (!NDIlib_initialize()) {
 		printf("Cannot run NDI.");
@@ -55,14 +60,14 @@ void Finder::terminate(bool wait)
 	}
 }
 
-std::vector<Finder::Source> Finder::getSources() const
+std::vector<Source> Finder::getSources() const
 {
 	std::lock_guard<std::mutex> lock(mutex_);
 	auto ret = found_sources_;
 	return std::move(ret);
 }
 
-std::vector<Finder::Source> Finder::listSources(std::size_t waittime_ms, bool show_local_resources, const std::string &group, const std::vector<std::string> extra_ips)
+std::vector<Source> Finder::listSources(std::size_t waittime_ms, bool show_local_resources, const std::string &group, const std::vector<std::string> extra_ips)
 {
 	auto op = watchSources(show_local_resources, group, extra_ips);
 	ofSleepMillis(waittime_ms);

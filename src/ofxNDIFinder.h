@@ -1,7 +1,6 @@
 #pragma once
 
-#include <stddef.h>
-#include <Processing.NDI.Lib.h>
+#include "ofxNDI.h"
 
 #include <string>
 #include <vector>
@@ -12,16 +11,7 @@ namespace ofxNDI {
 class Finder
 {
 public:
-	struct Source {
-		Source(){}
-		Source(const NDIlib_source_t &src)
-		:p_ndi_name(src.p_ndi_name)
-		,p_url_address(src.p_url_address){}
-		std::string p_ndi_name, p_url_address;
-		operator NDIlib_source_t() const {
-			return NDIlib_source_t(p_ndi_name.c_str(), p_url_address.c_str());
-		}
-	};
+	~Finder();
 	std::function<std::vector<Source>(bool, bool)> watchSources(bool show_local_resources=true, const std::string &group="", const std::vector<std::string> extra_ips={});
 	std::vector<Source> getSources() const;
 	void terminate(bool wait);
