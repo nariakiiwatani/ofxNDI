@@ -4,6 +4,7 @@
 #include "ofxNDIReceiver.h"
 #include "ofxNDIRecvStream.h"
 #include "ofxNDIRecorder.h"
+#include "ofxNDIFinder.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -24,6 +25,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 private:
+	ofxNDIFinder finder_;
 	ofxNDIReceiver receiver_;
 	ofxNDIRecorder recorder_;
 	ofxNDIRecvVideoFrameSync video_;

@@ -4,40 +4,24 @@ using namespace std;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	auto findSource = [](const std::string &name_or_url) {
-		auto sources = ofxNDI::listSources();
-		if(name_or_url == "") {
-			return make_pair(ofxNDI::Source(), false);
-		}
-		auto found = find_if(begin(sources), end(sources), [name_or_url](const ofxNDI::Source &s) {
-			return ofIsStringInString(s.p_ndi_name, name_or_url) || ofIsStringInString(s.p_url_address, name_or_url);
-		});
-		if(found == end(sources)) {
-			ofLogWarning("ofxNDI") << "no NDI source found by string:" << name_or_url;
-			return make_pair(ofxNDI::Source(), false);
-		}
-		return make_pair(*found, true);
-	};
-	std::string name_or_url = "";	// Specify name or address of expected NDI source. In case of blank or not found, receiver will grab default(which is found first) source.
-	auto result = findSource(name_or_url);
-	if(result.second ? receiver_.setup(result.first) : receiver_.setup()) {
-		int sample_rate = 48000;
-		int num_channels = 2;
-		int num_buffers = 1;
-		int num_samples = 512;
-		audio_.setup(receiver_);
-		audio_.setSampleRate(sample_rate);
-		audio_.setNumChannels(num_channels);
-		audio_.setNumSamples(num_samples);
-		ofSoundStreamSettings sss;
-		sss.numInputChannels = 0;
-		sss.numOutputChannels = num_channels;
-		sss.sampleRate = sample_rate;
-		sss.numBuffers = num_buffers;
-		sss.bufferSize = num_samples;
-		sss.setOutListener(this);
-		stream_.setup(sss);
-	}
+	int sample_rate = 48000;
+	int num_channels = 2;
+	int num_buffers = 1;
+	int num_samples = 512;
+
+	audio_.setSampleRate(sample_rate);
+	audio_.setNumChannels(num_channels);
+	audio_.setNumSamples(num_samples);
+	ofSoundStreamSettings sss;
+	sss.numInputChannels = 0;
+	sss.numOutputChannels = num_channels;
+	sss.sampleRate = sample_rate;
+	sss.numBuffers = num_buffers;
+	sss.bufferSize = num_samples;
+	sss.setOutListener(this);
+	stream_.setup(sss);
+
+	finder_.watchSources();
 }
 
 //--------------------------------------------------------------
@@ -46,6 +30,14 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	using namespace std;
+	auto sources = finder_.getSources();
+	auto names = accumulate(begin(sources), end(sources), vector<string>(), [](vector<string> result, const ofxNDI::Source &src) {
+		result.push_back(ofToString(result.size()+1, 2, '0')+". "+src.p_ndi_name+"("+src.p_url_address+")");
+		return result;
+	});
+	ofDrawBitmapString("press 1-9 to select available source", 10, 10);
+	ofDrawBitmapString(ofJoinString(names, "\n"), 10, 20);
 }
 
 //--------------------------------------------------------------
@@ -59,7 +51,15 @@ void ofApp::audioOut(ofSoundBuffer &buffer){
 }
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	if(key >= '1' && key <= '9') {
+		int index = key - '1';
+		auto sources = finder_.getSources();
+		if(sources.size() > index) {
+			if(receiver_.isSetup() ? (receiver_.changeConnection(sources[index]), true) : receiver_.setup(sources[index])) {
+				audio_.setup(receiver_);
+			}
+		}
+	}
 }
 
 //--------------------------------------------------------------

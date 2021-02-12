@@ -71,10 +71,27 @@ VideoGrabber::VideoGrabber()
 
 bool VideoGrabber::setup(std::size_t index, const Settings &settings)
 {
-	return Receiver::setup(index, settings) && ofVideoGrabber::setup(0,0);
+	if(ofVideoGrabber::isInitialized()) {
+		ofVideoGrabber::close();
+	}
+	if(Receiver::isSetup()) {
+		Receiver::changeConnection(ofxNDI::listSources()[index]);
+	}
+	else {
+		Receiver::setup(index, settings);
+	}
+	return Receiver::isSetup() && ofVideoGrabber::setup(0,0);
 }
 bool VideoGrabber::setup(const Source &source, const Settings &settings)
 {
-	return Receiver::setup(source, settings) && ofVideoGrabber::setup(0,0);
+	if(ofVideoGrabber::isInitialized()) {
+		ofVideoGrabber::close();
+	}
+	if(Receiver::isSetup()) {
+		Receiver::changeConnection(source);
+	}
+	else {
+		Receiver::setup(source, settings);
+	}
+	return Receiver::isSetup() && ofVideoGrabber::setup(0,0);
 }
-

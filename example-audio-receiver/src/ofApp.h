@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxNDIReceiver.h"
 #include "ofxNDIRecvStream.h"
+#include "ofxNDIFinder.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -25,6 +26,7 @@ public:
 	
 	void audioOut(ofSoundBuffer &buffer);
 private:
+	ofxNDIFinder finder_;
 	ofxNDIReceiver receiver_;
 	ofxNDIRecvAudioFrameSync audio_;
 	ofSoundStream stream_;

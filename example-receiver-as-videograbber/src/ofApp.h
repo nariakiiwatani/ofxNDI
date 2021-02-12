@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxNDIVideoGrabber.h"
+#include "ofxNDIFinder.h"
 
 class ofApp : public ofBaseApp{
 	
@@ -22,5 +23,6 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 private:
+	ofxNDIFinder finder_;
 	ofxNDIVideoGrabber grabber_;
 };
