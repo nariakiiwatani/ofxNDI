@@ -23,7 +23,8 @@ public:
 
 	std::string getMetadata() const { 
 		static_assert(!std::is_same<Frame, ofxNDI::MetadataFrame>::value, "this function is not for ofxNDIRecvMetadata");
-		return getFrame().p_metadata;
+		auto ptr = getFrame().p_metadata;
+		return ptr ? ptr : "";
 	}
 protected:
 	typename Wrapper::Instance instance_;
