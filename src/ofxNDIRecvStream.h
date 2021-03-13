@@ -7,6 +7,7 @@
 #include "ofxNDI.h"
 #include "ofThread.h"
 #include "DoubleBuffer.h"
+#include "ofEvents.h"
 
 namespace ofxNDI {
 namespace Recv {
@@ -26,6 +27,7 @@ public:
 		auto ptr = getFrame().p_metadata;
 		return ptr ? ptr : "";
 	}
+	ofEvent<const Frame> onFrameReceived;
 protected:
 	typename Wrapper::Instance instance_;
 	bool is_frame_new_=false;
@@ -42,6 +44,7 @@ public:
 			swap(frame, frame_);
 			freeFrame(frame);
 			is_frame_new_ = true;
+			ofNotifyEvent(Stream<Frame, Wrapper>::onFrameReceived, getFrame(), this);
 		}
 		else {
 			is_frame_new_ = false;
@@ -88,6 +91,7 @@ public:
 			frame_.swap();
 			freeFrame(frame_.back());
 			has_new_frame_ = true;
+			ofNotifyEvent(Stream<Frame, Wrapper>::onFrameReceived, getFrame(), this);
 		}
 	}
 	const Frame& getFrame() const { return frame_.front(); }
