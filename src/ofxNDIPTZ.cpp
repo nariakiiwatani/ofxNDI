@@ -81,4 +81,7 @@ bool ofxNDIPTZControl::exposure(float exposure) const
 {
 	return NDIlib_recv_ptz_exposure_manual(instance_, exposure);
 }
-
+bool ofxNDIPTZControl::exposure(float iris, float gain, float shutter_speed) const
+{
+	return NDIlib_recv_ptz_exposure_manual_v2(instance_, iris, gain, shutter_speed);
+}

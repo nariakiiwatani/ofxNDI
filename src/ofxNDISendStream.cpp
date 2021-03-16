@@ -15,7 +15,7 @@ void ofxNDISendVideo::sendFrame(const ofxNDI::VideoFrame &frame) const
 template<>
 void ofxNDISendAudio::sendFrame(const ofxNDI::AudioFrame &frame) const
 {
-	NDIlib_send_send_audio_v2(instance_, &frame);
+	NDIlib_send_send_audio_v3(instance_, &frame);
 }
 
 void ofxNDISendMetadata::sendFrame(const ofxNDI::MetadataFrame &frame) const

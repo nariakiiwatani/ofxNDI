@@ -32,6 +32,7 @@ public:
 	
 	bool exposureAuto() const;
 	bool exposure(float exposure) const;
+	bool exposure(float iris, float gain, float shutter_speed) const;
 private:
 	Receiver::Instance instance_;
 };

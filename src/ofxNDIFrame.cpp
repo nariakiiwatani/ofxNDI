@@ -141,7 +141,7 @@ ofPixelFormat VideoFrame::getOfPixelFormatFromFourCCType(NDIlib_FourCC_video_typ
 uint64_t AudioFrame::allocate(uint64_t samples)
 {
 	if(is_allocated_) free();
-	p_data = new float[samples];
+	p_data = new uint8_t[samples*sizeof(float)];
 	is_allocated_ = true;
 	return samples*sizeof(decltype(*p_data));
 }
@@ -165,9 +165,8 @@ void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
 										 ,  static_cast<float*>(src.getBuffer().data()));
 	
-	
-	NDIlib_util_audio_from_interleaved_32f_v2(&interleaved_frame, this);
-	
+	NDIlib_audio_frame_v2_t v2_frame(sample_rate, no_channels, no_samples, timecode, reinterpret_cast<float*>(p_data), channel_stride_in_bytes, p_metadata, timestamp);
+	NDIlib_util_audio_from_interleaved_32f_v2(&interleaved_frame, &v2_frame);
 }
 void AudioFrame::decode(ofSoundBuffer &dst) const
 {
@@ -182,9 +181,8 @@ void AudioFrame::decode(ofSoundBuffer &dst) const
 	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
 										 , static_cast<float*>(dst.getBuffer().data()));
 	
-	NDIlib_util_audio_to_interleaved_32f_v2(this, &interleaved_frame);
-	
-
+	NDIlib_audio_frame_v2_t v2_frame(sample_rate, no_channels, no_samples, timecode, reinterpret_cast<float*>(p_data), channel_stride_in_bytes, p_metadata, timestamp);
+	NDIlib_util_audio_to_interleaved_32f_v2(&v2_frame, &interleaved_frame);
 }
 void AudioFrame::setMetadata(const std::string &metadata)
 {

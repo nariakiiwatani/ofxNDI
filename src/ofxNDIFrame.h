@@ -22,7 +22,7 @@ private:
 	static ofPixelFormat getOfPixelFormatFromFourCCType(NDIlib_FourCC_video_type_e type);
 };
 
-class AudioFrame : public NDIlib_audio_frame_v2_t
+class AudioFrame : public NDIlib_audio_frame_v3_t
 {
 public:
 	uint64_t allocate(uint64_t samples);

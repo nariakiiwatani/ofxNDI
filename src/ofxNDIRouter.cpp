@@ -14,6 +14,14 @@ bool ofxNDIRouter::setRoute(const ofxNDI::Source &source) const
 	NDIlib_source_t src = source;
 	return NDIlib_routing_change(instance_, &src);
 }
+ofxNDI::Source ofxNDIRouter::getSource() const
+{
+	return *NDIlib_routing_get_source_name(instance_);
+}
+int ofxNDIRouter::getNumConnections(uint32_t timeout) const
+{
+	return NDIlib_routing_get_no_connections(instance_, timeout);
+}
 bool ofxNDIRouter::clear() const
 {
 	return NDIlib_routing_clear(instance_);
