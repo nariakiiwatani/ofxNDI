@@ -95,6 +95,11 @@ public:
 		}
 	}
 	const Frame& getFrame() const { return frame_.front(); }
+	template<typename Output> void decodeTo(Output &dst) const {
+		std::lock_guard<std::mutex> lock(mutex_);
+		Stream<Frame, Wrapper>::decodeTo(dst);
+	}
+
 	bool isFrameNew() const { return is_frame_new_; }
 private:
 	bool captureFrame(Frame &frame);
