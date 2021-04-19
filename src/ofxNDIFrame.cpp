@@ -159,7 +159,7 @@ void AudioFrame::encode(ofSoundBuffer &&src, bool copy)
 		allocate(src.size());
 		no_channels = src.getNumChannels();
 		no_samples = src.getNumFrames();
-		channel_stride_in_bytes = src.getNumFrames()*sizeof(decltype(*p_data));
+		channel_stride_in_bytes = src.getNumFrames()*sizeof(float);
 	}
 	
 	NDIlib_audio_frame_interleaved_32f_t interleaved_frame(sample_rate, no_channels, no_samples, timecode
