@@ -2,6 +2,7 @@
 
 #include "ofConstants.h"
 #include "ofxNDI.h"
+#include <Processing.NDI.Advanced.h>
 #include <string>
 #include <vector>
 
@@ -36,6 +37,8 @@ public:
 	bool isConnected() const;
 	
 	bool setTally(bool on_program, bool on_preview) const;
+	
+	bool isKVMSupported() const;
 	
 	void getQueue(int *video, int *audio, int *metadata) const;
 	std::string getWebControl() const;

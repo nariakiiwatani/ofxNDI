@@ -17,7 +17,7 @@ bool ofxNDIReceiver::setup(const ofxNDI::Source &source, const Settings &setting
 {
 	NDIlib_recv_create_v3_t creator = { source, settings.color_format, settings.bandwidth, settings.deinterlace, nullptr };
 	creator.p_ndi_recv_name = settings.name==""?nullptr:settings.name.c_str();
-	instance_ = NDIlib_recv_create_v3(&creator);
+	instance_ = NDIlib_recv_create_v4(&creator);
 
 	if (!instance_) {
 		ofLogError("NDI Receiver failed to initialize");
@@ -67,6 +67,11 @@ bool ofxNDIReceiver::setTally(bool on_program, bool on_preview) const
 	};
 	
 	return NDIlib_recv_set_tally(instance_, &tally);
+}
+
+bool ofxNDIReceiver::isKVMSupported() const
+{
+	return NDIlib_recv_kvm_is_supported(instance_);
 }
 
 void ofxNDIReceiver::getQueue(int *video, int *audio, int *metadata) const

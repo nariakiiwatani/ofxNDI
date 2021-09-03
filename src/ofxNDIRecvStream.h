@@ -28,6 +28,15 @@ public:
 		return ptr ? ptr : "";
 	}
 	ofEvent<const Frame> onFrameReceived;
+
+	void setAllocator(void* p_opaque, NDIlib_video_alloc_t p_allocator, NDIlib_video_free_t p_deallocator) {
+		static_assert(std::is_same<Frame, ofxNDI::VideoFrame>::value, "this function is valid only for videoFrame");
+		NDIlib_recv_set_video_allocator(instance_, p_opaque, p_allocator, p_deallocator);
+	}
+	void setAllocator(void* p_opaque, NDIlib_audio_alloc_t p_allocator, NDIlib_audio_free_t p_deallocator) {
+		   static_assert(std::is_same<Frame, ofxNDI::AudioFrame>::value, "this function is valid only for audioFrame");
+		   NDIlib_recv_set_audio_allocator(instance_, p_opaque, p_allocator, p_deallocator);
+	   }
 protected:
 	typename Wrapper::Instance instance_;
 	bool is_frame_new_=false;
