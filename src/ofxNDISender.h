@@ -21,6 +21,7 @@ public:
 	bool isConnected(int64_t timeout_ms) const;
 	
 	bool getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const;
+	bool setTally(bool on_program, bool on_preview) const;
 	void setFailover(const Source &source) const;
 	
 	NDIlib_send_instance_t getInstance() const { return instance_; }

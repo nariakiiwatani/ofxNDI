@@ -1,5 +1,6 @@
 #include "ofxNDISender.h"
 #include "ofLog.h"
+#include <Processing.NDI.Advanced.h>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ bool ofxNDISender::setup(const string &name, const string &group, bool clock_vid
 		group.c_str(),
 		clock_video,
 		clock_audio };
-	instance_ = NDIlib_send_create(&create_settings);
+	instance_ = NDIlib_send_create_v2(&create_settings);
 	if(!instance_) {
 		ofLogError("NDI Sender failed to initialize");
 		return false;
@@ -57,6 +58,12 @@ bool ofxNDISender::getTally(bool *on_program, bool *on_preview, int64_t timeout_
 	}
 	return false;
 }
+bool ofxNDISender::setTally(bool on_program, bool on_preview) const
+{
+	NDIlib_tally_t tally{on_program, on_preview};
+	return NDIlib_send_set_tally(instance_, &tally);
+}
+
 ofxNDISender::~Sender()
 {
 	NDIlib_send_destroy(instance_);
