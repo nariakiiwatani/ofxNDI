@@ -7,7 +7,6 @@ void ofApp::setup(){
 	camera_.setup(1920, 1080);
 	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
-		video_.setAsync(true);
 	}
 }
 
@@ -15,7 +14,9 @@ void ofApp::setup(){
 void ofApp::update(){
 	camera_.update();
 	if(camera_.isFrameNew()) {
-		video_.send(camera_.getPixels());
+		ofPixels pix = camera_.getPixels();
+		pix.setImageType(OF_IMAGE_COLOR_ALPHA);
+		video_.send(pix);
 	}
 }
 

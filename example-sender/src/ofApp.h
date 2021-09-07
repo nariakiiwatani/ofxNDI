@@ -24,6 +24,6 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDISender sender_;
-	ofxNDISendVideo video_;
+	ofxNDISendVideoAsync video_;
 	ofVideoGrabber camera_;
 };

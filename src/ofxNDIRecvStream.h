@@ -12,68 +12,68 @@
 namespace ofxNDI {
 namespace Recv {
 
-template<typename Frame, typename Wrapper=ofxNDIReceiver>
+template<typename FrameType, typename Wrapper=ofxNDIReceiver>
 class Stream
 {
 public:
 	virtual void setup(Wrapper &wrapper) { instance_ = wrapper.getInstance(); }
 	virtual void update(){}
 	bool isFrameNew() const { return is_frame_new_; }
-	virtual const Frame& getFrame() const=0;
-	template<typename Output> void decodeTo(Output &dst) const { getFrame().decode(dst); }
+	virtual const FrameType& getFrame() const=0;
+	template<typename Output> void decodeTo(Output &dst) const { Frame::decode(getFrame(), dst); }
 
 	std::string getMetadata() const { 
-		static_assert(!std::is_same<Frame, ofxNDI::MetadataFrame>::value, "this function is not for ofxNDIRecvMetadata");
+		static_assert(!std::is_same<FrameType, ofxNDI::MetadataFrame>::value, "this function is not for ofxNDIRecvMetadata");
 		auto ptr = getFrame().p_metadata;
 		return ptr ? ptr : "";
 	}
-	ofEvent<const Frame> onFrameReceived;
+	ofEvent<const FrameType> onFrameReceived;
 
 	void setAllocator(void* p_opaque, NDIlib_video_alloc_t p_allocator, NDIlib_video_free_t p_deallocator) {
-		static_assert(std::is_same<Frame, ofxNDI::VideoFrame>::value, "this function is valid only for videoFrame");
+		static_assert(std::is_same<FrameType, ofxNDI::VideoFrame>::value, "this function is valid only for videoFrame");
 		NDIlib_recv_set_video_allocator(instance_, p_opaque, p_allocator, p_deallocator);
 	}
 	void setAllocator(void* p_opaque, NDIlib_audio_alloc_t p_allocator, NDIlib_audio_free_t p_deallocator) {
-		   static_assert(std::is_same<Frame, ofxNDI::AudioFrame>::value, "this function is valid only for audioFrame");
+		   static_assert(std::is_same<FrameType, ofxNDI::AudioFrame>::value, "this function is valid only for audioFrame");
 		   NDIlib_recv_set_audio_allocator(instance_, p_opaque, p_allocator, p_deallocator);
 	   }
 protected:
 	typename Wrapper::Instance instance_;
 	bool is_frame_new_=false;
 };
-template<typename Frame, typename Wrapper=ofxNDIReceiver>
-class Blocking : public Stream<Frame, Wrapper>
+template<typename FrameType, typename Wrapper=ofxNDIReceiver>
+class Blocking : public Stream<FrameType, Wrapper>
 {
 public:
 	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
 	void update() {
-		Frame frame;
+		FrameType frame;
 		if(captureFrame(frame)) {
 			using ::std::swap;
 			swap(frame, frame_);
 			freeFrame(frame);
 			is_frame_new_ = true;
-			ofNotifyEvent(Stream<Frame, Wrapper>::onFrameReceived, getFrame(), this);
+			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
 		}
 		else {
 			is_frame_new_ = false;
 		}
 	}
-	const Frame& getFrame() const { return frame_; }
+	const FrameType& getFrame() const { return frame_; }
 	bool isFrameNew() const { return is_frame_new_; }
 private:
-	virtual bool captureFrame(Frame &frame);
-	virtual void freeFrame(Frame &frame);
-	Frame frame_;
+	virtual bool captureFrame(FrameType &frame);
+	virtual void freeFrame(FrameType &frame);
+	FrameType frame_;
 	bool is_frame_new_=false;
 	uint32_t timeout_ms_=1000;
 };
-template<typename Frame, typename Wrapper=ofxNDIReceiver>
-class Threading : public Stream<Frame, Wrapper>, private ofThread
+template<typename FrameType, typename Wrapper=ofxNDIReceiver>
+class Threading : public Stream<FrameType, Wrapper>, private ofThread
 {
 public:
 	void setup(Wrapper &wrapper) {
-		Stream<Frame,Wrapper>::setup(wrapper);
+		Stream<FrameType, Wrapper>::setup(wrapper);
 		startThread();
 	}
 	~Threading() {
@@ -100,42 +100,42 @@ public:
 			frame_.swap();
 			freeFrame(frame_.back());
 			has_new_frame_ = true;
-			ofNotifyEvent(Stream<Frame, Wrapper>::onFrameReceived, getFrame(), this);
+			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
 		}
 	}
-	const Frame& getFrame() const { return frame_.front(); }
+	const FrameType& getFrame() const { return frame_.front(); }
 	template<typename Output> void decodeTo(Output &dst) const {
 		std::lock_guard<std::mutex> lock(mutex_);
-		Stream<Frame, Wrapper>::decodeTo(dst);
+		Stream<FrameType, Wrapper>::decodeTo(dst);
 	}
 
 	bool isFrameNew() const { return is_frame_new_; }
 private:
-	bool captureFrame(Frame &frame);
-	void freeFrame(Frame &frame);
+	bool captureFrame(FrameType &frame);
+	void freeFrame(FrameType &frame);
 	
 	mutable std::mutex mutex_;
-	DoubleBuffer<Frame> frame_;
+	DoubleBuffer<FrameType> frame_;
 	uint32_t timeout_ms_=1000;
 	bool is_frame_new_=false;
 	bool has_new_frame_=false;
 };
-template<typename Frame>
-class FrameSync : public Blocking<Frame, ofxNDIReceiver>
+template<typename FrameType>
+class FrameSync : public Blocking<FrameType, ofxNDIReceiver>
 {
 public:
 	void setup(ofxNDIReceiver &wrapper) {
-		Blocking<Frame,ofxNDIReceiver>::setup(wrapper);
+		Blocking<FrameType, ofxNDIReceiver>::setup(wrapper);
 		sync_ = wrapper.getFrameSync();
 		if(!sync_) {
 			sync_ = wrapper.createFrameSync();
 		}
 	}
-	using Blocking<Frame, ofxNDIReceiver>::getFrame;
+	using Blocking<FrameType, ofxNDIReceiver>::getFrame;
 protected:
 	NDIlib_framesync_instance_t sync_;
-	virtual bool captureFrame(Frame &frame)=0;
-	virtual void freeFrame(Frame &frame)=0;
+	virtual bool captureFrame(FrameType &frame)=0;
+	virtual void freeFrame(FrameType &frame)=0;
 };
 
 class FrameSyncVideo : public FrameSync<ofxNDI::VideoFrame>

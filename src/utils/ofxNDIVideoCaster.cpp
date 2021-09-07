@@ -7,15 +7,16 @@ using namespace ofxNDI::Send;
 void VideoCaster::setSource(std::shared_ptr<ofBaseVideo> source, bool async)
 {
 	source_ = source;
-	stream_ = make_shared<ofxNDISendVideo>();
+	stream_ = make_shared<ofxNDISendVideoAsync>();
 	stream_->setup(*this);
-	stream_->setAsync(async);
 }
 void VideoCaster::update()
 {
 	if(!source_) return;
 	if(source_->isFrameNew()) {
-		stream_->send(source_->getPixels());
+		ofPixels pix = source_->getPixels();
+		pix.setImageType(OF_IMAGE_COLOR_ALPHA);
+		stream_->send(pix);
 	}
 }
 

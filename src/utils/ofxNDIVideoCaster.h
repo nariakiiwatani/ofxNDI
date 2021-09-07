@@ -15,7 +15,7 @@ public:
 	void update();
 private:
 	std::shared_ptr<ofBaseVideo> source_;
-	std::shared_ptr<ofxNDISendVideo> stream_;
+	std::shared_ptr<ofxNDISendVideoAsync> stream_;
 };
 }}
 
