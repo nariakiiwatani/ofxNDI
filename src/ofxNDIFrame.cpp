@@ -1,5 +1,6 @@
 #include "ofxNDIFrame.h"
 #include "ofImage.h"
+#include "ofSoundBuffer.h"
 #include "Processing.NDI.utilities.h"
 
 using namespace ofxNDI;

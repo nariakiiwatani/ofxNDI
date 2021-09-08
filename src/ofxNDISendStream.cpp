@@ -1,4 +1,5 @@
 #include "ofxNDISendStream.h"
+#include "ofSoundBuffer.h"
 
 using namespace ofxNDI;
 using namespace ofxNDI::Send;

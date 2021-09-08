@@ -1,5 +1,7 @@
 #include "ofxNDIRouter.h"
 
+using namespace ofxNDI;
+
 bool ofxNDIRouter::setup(const std::string &name, const std::string &group)
 {
 	NDIlib_routing_create_t info = {
@@ -9,14 +11,14 @@ bool ofxNDIRouter::setup(const std::string &name, const std::string &group)
 	instance_ = NDIlib_routing_create(&info);
 	return instance_ != nullptr;
 }
-bool ofxNDIRouter::setRoute(const ofxNDI::Source &source) const
+bool ofxNDIRouter::setRoute(const Source &source) const
 {
-	NDIlib_source_t src = source;
+	auto src = toV1(source);
 	return NDIlib_routing_change(instance_, &src);
 }
-ofxNDI::Source ofxNDIRouter::getSource() const
+Source ofxNDIRouter::getSource() const
 {
-	return *NDIlib_routing_get_source_name(instance_);
+	return toV2(*NDIlib_routing_get_source_name(instance_));
 }
 int ofxNDIRouter::getNumConnections(uint32_t timeout) const
 {

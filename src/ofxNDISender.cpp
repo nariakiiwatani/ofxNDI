@@ -45,7 +45,7 @@ void ofxNDISender::clearConnectionMetadata() const
 
 void ofxNDISender::setFailover(const ofxNDI::Source &source) const
 {
-	NDIlib_source_t src = source;
+	auto src = toV1(source);
 	NDIlib_send_set_failover(instance_, &src);
 }
 bool ofxNDISender::getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const

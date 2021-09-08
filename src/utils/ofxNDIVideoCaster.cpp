@@ -1,5 +1,6 @@
 #include "ofxNDIVideoCaster.h"
 #include "ofBaseTypes.h"
+#include "ofPixels.h"
 
 using namespace std;
 using namespace ofxNDI::Send;

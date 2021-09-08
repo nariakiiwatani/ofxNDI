@@ -1,13 +1,19 @@
 #pragma once
 
-#include "ofxNDI.h"
-
+#include <stddef.h>
+#include <Processing.NDI.Advanced.h>
 #include <string>
 #include <vector>
 #include <mutex>
 #include <thread>
 
 namespace ofxNDI {
+
+using Source = NDIlib_source_v2_t;
+static NDIlib_source_t toV1(const NDIlib_source_v2_t &v2) { return {v2.p_ndi_name, v2.p_url_address}; }
+static NDIlib_source_v2_t toV2(const NDIlib_source_t &v1) { return {v1.p_ndi_name, v1.p_url_address, ""}; }
+
+namespace Find {
 class Finder
 {
 public:
@@ -25,6 +31,6 @@ private:
 	bool terminate_;
 };
 
-}
+}}
 
-using ofxNDIFinder = ofxNDI::Finder;
+using ofxNDIFinder = ofxNDI::Find::Finder;
