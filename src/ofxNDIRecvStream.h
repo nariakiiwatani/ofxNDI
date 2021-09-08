@@ -27,41 +27,36 @@ public:
 		auto ptr = getFrame().p_metadata;
 		return ptr ? ptr : "";
 	}
+
+	int getQueue() const;
+	int64_t getNumReceivedFrame() const;
+	int64_t getNumDroppedFrame() const;
+
 	ofEvent<const FrameType> onFrameReceived;
 
-	void setAllocator(void* p_opaque, NDIlib_video_alloc_t p_allocator, NDIlib_video_free_t p_deallocator) {
-		static_assert(std::is_same<FrameType, ofxNDI::VideoFrame>::value, "this function is valid only for videoFrame");
-		NDIlib_recv_set_video_allocator(instance_, p_opaque, p_allocator, p_deallocator);
-	}
-	void setAllocator(void* p_opaque, NDIlib_audio_alloc_t p_allocator, NDIlib_audio_free_t p_deallocator) {
-		   static_assert(std::is_same<FrameType, ofxNDI::AudioFrame>::value, "this function is valid only for audioFrame");
-		   NDIlib_recv_set_audio_allocator(instance_, p_opaque, p_allocator, p_deallocator);
-	   }
+	template<typename Allocator, typename Deallocator>
+	void setAllocator(void* p_opaque, Allocator p_allocator, Deallocator p_deallocator);
 protected:
 	typename Wrapper::Instance instance_;
 	bool is_frame_new_=false;
 };
+
 template<typename FrameType, typename Wrapper=ofxNDIReceiver>
 class Blocking : public Stream<FrameType, Wrapper>
 {
 public:
 	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
-	void update() {
+	void update() override {
 		FrameType frame;
-		if(captureFrame(frame)) {
-			using ::std::swap;
-			swap(frame, frame_);
+		if((is_frame_new_ = captureFrame(frame))) {
+			std::swap(frame, frame_);
 			freeFrame(frame);
-			is_frame_new_ = true;
 			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
 		}
-		else {
-			is_frame_new_ = false;
-		}
 	}
-	const FrameType& getFrame() const { return frame_; }
+	const FrameType& getFrame() const override { return frame_; }
 	bool isFrameNew() const { return is_frame_new_; }
-private:
+protected:
 	virtual bool captureFrame(FrameType &frame);
 	virtual void freeFrame(FrameType &frame);
 	FrameType frame_;
@@ -72,7 +67,7 @@ template<typename FrameType, typename Wrapper=ofxNDIReceiver>
 class Threading : public Stream<FrameType, Wrapper>, private ofThread
 {
 public:
-	void setup(Wrapper &wrapper) {
+	void setup(Wrapper &wrapper) override {
 		Stream<FrameType, Wrapper>::setup(wrapper);
 		startThread();
 	}
@@ -82,16 +77,16 @@ public:
 		}
 	}
 	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
-	void update() {
+	void update() override {
 		std::lock_guard<std::mutex> lock(mutex_);
 		is_frame_new_ = has_new_frame_;
 		has_new_frame_ = false;
 	}
 	
-	void threadedFunction() {
+	void threadedFunction() override {
 		while(isThreadRunning()) {
 			updateFrame();
-			sleep(1);
+			std::this_thread::yield();
 		}
 	}
 	void updateFrame() {
@@ -103,7 +98,7 @@ public:
 			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
 		}
 	}
-	const FrameType& getFrame() const { return frame_.front(); }
+	const FrameType& getFrame() const override { return frame_.front(); }
 	template<typename Output> void decodeTo(Output &dst) const {
 		std::lock_guard<std::mutex> lock(mutex_);
 		Stream<FrameType, Wrapper>::decodeTo(dst);
@@ -124,18 +119,15 @@ template<typename FrameType>
 class FrameSync : public Blocking<FrameType, ofxNDIReceiver>
 {
 public:
-	void setup(ofxNDIReceiver &wrapper) {
+	void setup(ofxNDIReceiver &wrapper) override {
 		Blocking<FrameType, ofxNDIReceiver>::setup(wrapper);
 		sync_ = wrapper.getFrameSync();
 		if(!sync_) {
 			sync_ = wrapper.createFrameSync();
 		}
 	}
-	using Blocking<FrameType, ofxNDIReceiver>::getFrame;
 protected:
 	NDIlib_framesync_instance_t sync_;
-	virtual bool captureFrame(FrameType &frame)=0;
-	virtual void freeFrame(FrameType &frame)=0;
 };
 
 class FrameSyncVideo : public FrameSync<ofxNDI::VideoFrame>
@@ -143,8 +135,8 @@ class FrameSyncVideo : public FrameSync<ofxNDI::VideoFrame>
 public:
 	void setFieldType(NDIlib_frame_format_type_e format) { field_type_ = format; }
 protected:
-	bool captureFrame(ofxNDI::VideoFrame &frame);
-	void freeFrame(ofxNDI::VideoFrame &frame);
+	bool captureFrame(ofxNDI::VideoFrame &frame) override;
+	void freeFrame(ofxNDI::VideoFrame &frame) override;
 	NDIlib_frame_format_type_e field_type_=NDIlib_frame_format_type_progressive;
 };
 
@@ -156,8 +148,8 @@ public:
 	void setNumSamples(int num) { num_samples_ = num; }
 	int getNumQueuedSamples() const;
 protected:
-	bool captureFrame(ofxNDI::AudioFrame &frame);
-	void freeFrame(ofxNDI::AudioFrame &frame);
+	bool captureFrame(ofxNDI::AudioFrame &frame) override;
+	void freeFrame(ofxNDI::AudioFrame &frame) override;
 	int sample_rate_=0, num_channels_=0, num_samples_=0;
 };
 

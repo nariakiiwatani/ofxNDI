@@ -28,27 +28,28 @@ public:
 	};
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const Source &source, const Settings &settings=Settings());
+	bool isSetup() const { return instance_ != nullptr; }
+
+	bool isConnected() const;
 	void changeConnection(const Source &source);
 	void disconnect();
+	
 	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize) const;
 	void clearConnectionMetadata() const;
 
-	bool isSetup() const { return instance_ != nullptr; }
-	bool isConnected() const;
-	
 	bool setTally(bool on_program, bool on_preview) const;
 	
 	bool isKVMSupported() const;
-	
-	void getQueue(int *video, int *audio, int *metadata) const;
 	std::string getWebControl() const;
 	
+	void getQueue(int *video, int *audio, int *metadata) const;
 	void getNumReceivedFrame(int64_t *video, int64_t *audio, int64_t *metadata) const;
 	void getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t *metadata) const;
 	
 	NDIlib_recv_instance_t getInstance() const { return instance_; }
 	NDIlib_framesync_instance_t createFrameSync();
 	NDIlib_framesync_instance_t getFrameSync() const { return frame_sync_; }
+	void destroyFrameSync();
 private:
 	NDIlib_recv_instance_t instance_=nullptr;
 	NDIlib_framesync_instance_t frame_sync_=nullptr;

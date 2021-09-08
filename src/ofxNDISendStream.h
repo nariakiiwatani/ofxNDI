@@ -57,7 +57,10 @@ void Stream<AudioFrameInterleaved>::send(const SrcType &src, const std::string &
 class VideoStream : public Stream<ofxNDI::VideoFrame>
 {
 public:
-	void setFrameRate(int frame_rate_n, int frame_rate_d) { frame_rate_n_=frame_rate_n; frame_rate_d_=frame_rate_d; }
+	void setFrameRate(int frame_rate_n, int frame_rate_d) {
+		frame_rate_n_=frame_rate_n;
+		frame_rate_d_=frame_rate_d;
+	}
 protected:
 	int frame_rate_n_=30000, frame_rate_d_=1001;
 

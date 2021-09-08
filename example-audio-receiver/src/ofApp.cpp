@@ -5,7 +5,7 @@ using namespace std;
 //--------------------------------------------------------------
 void ofApp::setup(){
 	int sample_rate = 48000;
-	int num_channels = 2;
+	int num_channels = 1;
 	int num_buffers = 1;
 	int num_samples = 512;
 

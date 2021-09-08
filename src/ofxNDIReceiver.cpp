@@ -37,8 +37,17 @@ void ofxNDIReceiver::disconnect()
 
 NDIlib_framesync_instance_t ofxNDIReceiver::createFrameSync()
 {
+	destroyFrameSync();
 	frame_sync_ = NDIlib_framesync_create(instance_);
 	return frame_sync_;
+}
+
+void ofxNDIReceiver::destroyFrameSync()
+{
+	if(frame_sync_) {
+		NDIlib_framesync_destroy(frame_sync_);
+		frame_sync_ = nullptr;
+	}
 }
 
 void ofxNDIReceiver::addConnectionMetadata(const string &metadata, int64_t timecode) const
@@ -110,7 +119,7 @@ void ofxNDIReceiver::getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t 
 
 ofxNDIReceiver::~Receiver()
 {
-	if(frame_sync_) NDIlib_framesync_destroy(frame_sync_);
+	destroyFrameSync();
 	if(instance_) NDIlib_recv_destroy(instance_);
 	NDIlib_destroy();
 }
