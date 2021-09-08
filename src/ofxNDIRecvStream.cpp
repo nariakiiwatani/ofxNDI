@@ -1,5 +1,5 @@
 #include "ofxNDIRecvStream.h"
-
+#include <Processing.NDI.AVSync.h>
 
 #pragma mark Video Stream
 
@@ -30,20 +30,12 @@ inline void ofxNDI::Recv::Stream<ofxNDI::VideoFrame>::setAllocator(void* p_opaqu
 }
 
 template<>
-bool ofxNDIRecvVideoBlocking::captureFrame(ofxNDI::VideoFrame &frame) {
-	return NDIlib_recv_capture_v2(instance_, &frame, nullptr, nullptr, timeout_ms_) == NDIlib_frame_type_video;
-}
-template<>
-void ofxNDIRecvVideoBlocking::freeFrame(ofxNDI::VideoFrame &frame) {
+void ofxNDI::Recv::Stream<ofxNDI::VideoFrame>::freeFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_recv_free_video_v2(instance_, &frame);
 }
 template<>
-bool ofxNDIRecvVideoThreading::captureFrame(ofxNDI::VideoFrame &frame) {
+bool ofxNDI::Recv::Stream<ofxNDI::VideoFrame>::captureFrame(ofxNDI::VideoFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, &frame, nullptr, nullptr, timeout_ms_) == NDIlib_frame_type_video;
-}
-template<>
-void ofxNDIRecvVideoThreading::freeFrame(ofxNDI::VideoFrame &frame) {
-	NDIlib_recv_free_video_v2(instance_, &frame);
 }
 bool ofxNDIRecvVideoFrameSync::captureFrame(ofxNDI::VideoFrame &frame) {
 	NDIlib_framesync_capture_video(sync_, &frame, field_type_);
@@ -82,20 +74,12 @@ inline void ofxNDI::Recv::Stream<ofxNDI::AudioFrame>::setAllocator(void* p_opaqu
 }
 
 template<>
-bool ofxNDIRecvAudioBlocking::captureFrame(ofxNDI::AudioFrame &frame) {
-	return NDIlib_recv_capture_v3(instance_, nullptr, &frame, nullptr, timeout_ms_) == NDIlib_frame_type_audio;
-}
-template<>
-void ofxNDIRecvAudioBlocking::freeFrame(ofxNDI::AudioFrame &frame) {
+void ofxNDI::Recv::Stream<ofxNDI::AudioFrame>::freeFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_recv_free_audio_v3(instance_, &frame);
 }
 template<>
-bool ofxNDIRecvAudioThreading::captureFrame(ofxNDI::AudioFrame &frame) {
+bool ofxNDI::Recv::Stream<ofxNDI::AudioFrame>::captureFrame(ofxNDI::AudioFrame &frame) {
 	return NDIlib_recv_capture_v3(instance_, nullptr, &frame, nullptr, timeout_ms_) == NDIlib_frame_type_audio;
-}
-template<>
-void ofxNDIRecvAudioThreading::freeFrame(ofxNDI::AudioFrame &frame) {
-	NDIlib_recv_free_audio_v3(instance_, &frame);
 }
 bool ofxNDIRecvAudioFrameSync::captureFrame(ofxNDI::AudioFrame &frame) {
 	NDIlib_framesync_capture_audio_v2(sync_, &frame, sample_rate_, num_channels_, num_samples_);
@@ -133,11 +117,48 @@ int64_t ofxNDI::Recv::Stream<ofxNDI::MetadataFrame>::getNumDroppedFrame() const
 	return frames.metadata_frames;
 }
 template<>
-bool ofxNDIRecvMetadata::captureFrame(ofxNDI::MetadataFrame &frame) {
+bool ofxNDI::Recv::Stream<ofxNDI::MetadataFrame>::captureFrame(ofxNDI::MetadataFrame &frame) {
 	return NDIlib_recv_capture_v2(instance_, nullptr, nullptr, &frame, timeout_ms_) == NDIlib_frame_type_metadata;
 }
 template<>
-void ofxNDIRecvMetadata::freeFrame(ofxNDI::MetadataFrame &frame) {
+void ofxNDI::Recv::Stream<ofxNDI::MetadataFrame>::freeFrame(ofxNDI::MetadataFrame &frame) {
 	NDIlib_recv_free_metadata(instance_, &frame);
 }
 
+#pragma mark AVSync
+
+ofxNDIRecvAVSyncAudio::~AVSyncAudio()
+{
+	unsubscribe_();
+	if(av_sync_) {
+		NDIlib_avsync_destroy(av_sync_);
+	}
+}
+void ofxNDIRecvAVSyncAudio::setup(ofxNDIReceiver &receiver)
+{
+	Threading::setup(receiver);
+	av_sync_ = NDIlib_avsync_create(receiver.getInstance());
+}
+void ofxNDIRecvAVSyncAudio::setupSourceStream(Stream<SourceFrame> &source)
+{
+	unsubscribe_();
+	ofAddListener(source.onFrameReceived, this, &ofxNDIRecvAVSyncAudio::onSourceFrameReceived);
+	unsubscribe_ = [&]() {
+		ofRemoveListener(source.onFrameReceived, this, &ofxNDIRecvAVSyncAudio::onSourceFrameReceived);
+	};
+}
+void ofxNDIRecvAVSyncAudio::onSourceFrameReceived(const SourceFrame &source)
+{
+	std::lock_guard<std::mutex> lock(source_mtx_);
+	source_frame_ = &source;
+}
+
+bool ofxNDIRecvAVSyncAudio::captureFrame(ofxNDI::AudioFrame &frame)
+{
+	std::lock_guard<std::mutex> lock(source_mtx_);
+	return NDIlib_avsync_synchronize(av_sync_, source_frame_, &frame_.back()) >= NDIlib_avsync_ret_success;
+}
+void ofxNDIRecvAVSyncAudio::freeFrame(ofxNDI::AudioFrame &frame)
+{
+	NDIlib_avsync_free_audio(av_sync_, &frame);
+}

@@ -29,11 +29,11 @@ void Stream<AudioFrameInterleaved>::sendFrame(const AudioFrameInterleaved &frame
 	NDIlib_util_send_send_audio_interleaved_32f(instance_, &frame);
 }
 template<>
-void ofxNDISenderRecvMetadata::freeFrame(ofxNDI::MetadataFrame &frame) {
+void ofxNDI::Recv::Stream<ofxNDI::MetadataFrame, ofxNDISender>::freeFrame(ofxNDI::MetadataFrame &frame) {
 	NDIlib_send_free_metadata(instance_, &frame);
 }
 template<>
-bool ofxNDISenderRecvMetadata::captureFrame(ofxNDI::MetadataFrame &frame) {
+bool ofxNDI::Recv::Stream<ofxNDI::MetadataFrame, ofxNDISender>::captureFrame(ofxNDI::MetadataFrame &frame) {
 	return NDIlib_send_capture(instance_, &frame, timeout_ms_) == NDIlib_frame_type_metadata;
 }
 

@@ -21,6 +21,7 @@ public:
 	bool isFrameNew() const { return is_frame_new_; }
 	virtual const FrameType& getFrame() const=0;
 	template<typename Output> void decodeTo(Output &dst) const { Frame::decode(getFrame(), dst); }
+	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
 
 	std::string getMetadata() const { 
 		static_assert(!std::is_same<FrameType, ofxNDI::MetadataFrame>::value, "this function is not for ofxNDIRecvMetadata");
@@ -36,32 +37,35 @@ public:
 
 	template<typename Allocator, typename Deallocator>
 	void setAllocator(void* p_opaque, Allocator p_allocator, Deallocator p_deallocator);
+
 protected:
 	typename Wrapper::Instance instance_;
 	bool is_frame_new_=false;
+	uint32_t timeout_ms_=1000;
+
+	virtual bool captureFrame(FrameType &frame);
+	virtual void freeFrame(FrameType &frame);
 };
 
 template<typename FrameType, typename Wrapper=ofxNDIReceiver>
 class Blocking : public Stream<FrameType, Wrapper>
 {
 public:
-	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
 	void update() override {
 		FrameType frame;
 		if((is_frame_new_ = captureFrame(frame))) {
 			std::swap(frame, frame_);
-			freeFrame(frame);
 			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
+			freeFrame(frame);
 		}
 	}
 	const FrameType& getFrame() const override { return frame_; }
 	bool isFrameNew() const { return is_frame_new_; }
 protected:
-	virtual bool captureFrame(FrameType &frame);
-	virtual void freeFrame(FrameType &frame);
+	using Stream<FrameType, Wrapper>::captureFrame;
+	using Stream<FrameType, Wrapper>::freeFrame;
 	FrameType frame_;
 	bool is_frame_new_=false;
-	uint32_t timeout_ms_=1000;
 };
 template<typename FrameType, typename Wrapper=ofxNDIReceiver>
 class Threading : public Stream<FrameType, Wrapper>, private ofThread
@@ -76,7 +80,6 @@ public:
 			waitForThread();
 		}
 	}
-	void setTimeout(uint32_t milliseconds) { timeout_ms_ = milliseconds; }
 	void update() override {
 		std::lock_guard<std::mutex> lock(mutex_);
 		is_frame_new_ = has_new_frame_;
@@ -93,9 +96,9 @@ public:
 		if(captureFrame(frame_.back())) {
 			std::lock_guard<std::mutex> lock(mutex_);
 			frame_.swap();
-			freeFrame(frame_.back());
 			has_new_frame_ = true;
 			ofNotifyEvent(Stream<FrameType, Wrapper>::onFrameReceived, getFrame(), this);
+			freeFrame(frame_.back());
 		}
 	}
 	const FrameType& getFrame() const override { return frame_.front(); }
@@ -105,15 +108,14 @@ public:
 	}
 
 	bool isFrameNew() const { return is_frame_new_; }
-private:
-	bool captureFrame(FrameType &frame);
-	void freeFrame(FrameType &frame);
-	
+protected:
 	mutable std::mutex mutex_;
 	DoubleBuffer<FrameType> frame_;
-	uint32_t timeout_ms_=1000;
 	bool is_frame_new_=false;
 	bool has_new_frame_=false;
+
+	using Stream<FrameType, Wrapper>::captureFrame;
+	using Stream<FrameType, Wrapper>::freeFrame;
 };
 template<typename FrameType>
 class FrameSync : public Blocking<FrameType, ofxNDIReceiver>
@@ -153,6 +155,27 @@ protected:
 	int sample_rate_=0, num_channels_=0, num_samples_=0;
 };
 
+class AVSyncAudio : public Threading<ofxNDI::AudioFrame>
+{
+public:
+	~AVSyncAudio();
+	using SourceFrame = ofxNDI::VideoFrame;
+	
+	void setup(ofxNDIReceiver &receiver) override;
+	void setupSourceStream(Stream<SourceFrame> &source);
+
+protected:
+	NDIlib_avsync_instance_t av_sync_;
+	void onSourceFrameReceived(const SourceFrame &source);
+	std::function<void()> unsubscribe_=[]{};
+
+	mutable std::mutex source_mtx_;
+	const SourceFrame *source_frame_;
+	bool captureFrame(ofxNDI::AudioFrame &frame) override;
+	void freeFrame(ofxNDI::AudioFrame &frame) override;
+};
+
+
 }}
 using ofxNDIRecvVideoBlocking = ofxNDI::Recv::Blocking<ofxNDI::VideoFrame>;
 using ofxNDIRecvVideoThreading = ofxNDI::Recv::Threading<ofxNDI::VideoFrame>;
@@ -160,4 +183,5 @@ using ofxNDIRecvVideoFrameSync = ofxNDI::Recv::FrameSyncVideo;
 using ofxNDIRecvAudioBlocking = ofxNDI::Recv::Blocking<ofxNDI::AudioFrame>;
 using ofxNDIRecvAudioThreading = ofxNDI::Recv::Threading<ofxNDI::AudioFrame>;
 using ofxNDIRecvAudioFrameSync = ofxNDI::Recv::FrameSyncAudio;
+using ofxNDIRecvAVSyncAudio = ofxNDI::Recv::AVSyncAudio;
 using ofxNDIRecvMetadata = ofxNDI::Recv::Blocking<ofxNDI::MetadataFrame>;
