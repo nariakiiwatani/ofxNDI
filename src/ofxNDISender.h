@@ -25,7 +25,7 @@ public:
 	void setFailover(const Source &source) const;
 	
 	NDIlib_send_instance_t getInstance() const { return instance_; }
-	const NDIlib_source_t* getSourceName() const;
+	ofxNDI::Source getSourceName() const;
 private:
 	NDIlib_send_instance_t instance_=nullptr;
 };

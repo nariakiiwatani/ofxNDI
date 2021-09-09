@@ -53,20 +53,37 @@ void Stream<AudioFrameInterleaved>::send(const SrcType &src, const std::string &
 	sendFrame(frame);
 	data_buffer_.swap();
 }
+template<> template<typename SrcType>
+void Stream<MetadataFrame>::send(const SrcType &src, const std::string &metadata, int64_t timecode) {
+	auto frame = createFrame(src);
+	frame.timecode = timecode;
+	beforeSend(frame);
+	sendFrame(frame);
+	data_buffer_.swap();
+}
 
 class VideoStream : public Stream<ofxNDI::VideoFrame>
 {
 public:
 	void setFrameRate(int frame_rate_n, int frame_rate_d) {
-		frame_rate_n_=frame_rate_n;
-		frame_rate_d_=frame_rate_d;
+		frame_rate_n_ = frame_rate_n;
+		frame_rate_d_ = frame_rate_d;
+	}
+	void setFieldType(NDIlib_frame_format_type_e frame_format_type) {
+		frame_format_type_ = frame_format_type;
+	}
+	void getVideoFormat(int &frame_rate_n, int &frame_rate_d, NDIlib_frame_format_type_e &frame_format_type) {
+		frame_rate_n = frame_rate_n_;
+		frame_rate_d = frame_rate_d_;
+		frame_format_type = frame_format_type_;
 	}
 protected:
 	int frame_rate_n_=30000, frame_rate_d_=1001;
-
+	NDIlib_frame_format_type_e frame_format_type_ = NDIlib_frame_format_type_progressive;
 	void beforeSend(ofxNDI::VideoFrame &frame) override {
 		frame.frame_rate_N = frame_rate_n_;
 		frame.frame_rate_D = frame_rate_d_;
+		frame.frame_format_type = frame_format_type_;
 	}
 };
 

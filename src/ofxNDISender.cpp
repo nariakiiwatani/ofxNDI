@@ -4,9 +4,9 @@
 
 using namespace std;
 
-const NDIlib_source_t* ofxNDISender::getSourceName() const
+ofxNDI::Source ofxNDISender::getSourceName() const
 {
-	return NDIlib_send_get_source_name(instance_);
+	return toV2(*NDIlib_send_get_source_name(instance_));
 }
 
 bool ofxNDISender::setup(const string &name, const string &group, bool clock_video, bool clock_audio)

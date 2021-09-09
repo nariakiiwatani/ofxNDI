@@ -69,5 +69,5 @@ std::vector<Source> ofxNDIFinder::listSources(std::size_t waittime_ms, bool show
 {
 	auto op = watchSources(show_local_resources, group, extra_ips);
 	ofSleepMillis(waittime_ms);
-	return op(true, false);
+	return op(true, true);
 }

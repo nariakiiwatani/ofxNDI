@@ -31,7 +31,7 @@ void ofxNDIRouter::clearConnectionMetadata() const
 	NDIlib_routing_clear_connection_metadata(instance_);
 }
 
-Source ofxNDIRouter::getSource() const
+Source ofxNDIRouter::getSourceName() const
 {
 	return toV2(*NDIlib_routing_get_source_name(instance_));
 }

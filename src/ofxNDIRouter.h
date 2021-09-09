@@ -17,7 +17,7 @@ public:
 	void addConnectionMetadata(const std::string &metadata, int64_t timecode=NDIlib_send_timecode_synthesize) const;
 	void clearConnectionMetadata() const;
 
-	ofxNDI::Source getSource() const;
+	ofxNDI::Source getSourceName() const;
 	int getNumConnections(uint32_t timeout=0) const;
 	bool clear() const;
 private:
