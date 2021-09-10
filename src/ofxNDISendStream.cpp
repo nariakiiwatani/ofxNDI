@@ -1,8 +1,11 @@
 #include "ofxNDISendStream.h"
 #include "ofSoundBuffer.h"
+#include "ofxNDIFrameCompressed.h"
 
 using namespace ofxNDI;
 using namespace ofxNDI::Send;
+
+#pragma mark - Video
 
 template<>
 void Stream<VideoFrame>::sendFrame(const VideoFrame &frame) const {
@@ -11,7 +14,25 @@ void Stream<VideoFrame>::sendFrame(const VideoFrame &frame) const {
 void VideoStreamAsync::sendFrame(const VideoFrame &frame) const {
 	NDIlib_send_send_video_async_v2(instance_, &frame);
 }
+template<>
+void Stream<VideoFrame>::sendScatter(const VideoFrame &frame, const NDIlib_frame_scatter_t *scatter) const {
+	NDIlib_send_send_video_scatter(instance_, &frame, scatter);
+}
+void VideoStreamAsync::sendScatter(const VideoFrame &frame, const NDIlib_frame_scatter_t *scatter) const {
+	NDIlib_send_send_video_scatter_async(instance_, &frame, scatter);
+}
+template<> template<>
+void Stream<VideoFrame>::send(const CompressedVideoInfo &src, const std::string &metadata, int64_t timecode) {
+	auto frame = createFrame(src);
+	frame.p_metadata = metadata.c_str();
+	frame.timecode = timecode;
+	beforeSend(frame);
+	sendScatter(frame, (const NDIlib_frame_scatter_t*)frame.p_data);
+	data_buffer_.swap();
+}
 
+
+#pragma mark - Audio
 
 template<> template<>
 AudioFrameInterleaved Stream<AudioFrameInterleaved>::createFrame<ofSoundBuffer>(const ofSoundBuffer &src) {
@@ -26,6 +47,23 @@ template<>
 void Stream<AudioFrameInterleaved>::sendFrame(const AudioFrameInterleaved &frame) const {
 	NDIlib_util_send_send_audio_interleaved_32f(instance_, &frame);
 }
+
+template<>
+void Stream<AudioFrame>::sendScatter(const AudioFrame &frame, const NDIlib_frame_scatter_t *scatter) const {
+	NDIlib_send_send_audio_scatter(instance_, &frame, scatter);
+}
+template<> template<>
+void Stream<AudioFrame>::send(const CompressedAudioInfo &src, const std::string &metadata, int64_t timecode) {
+	auto frame = createFrame(src);
+	frame.p_metadata = metadata.c_str();
+	frame.timecode = timecode;
+	beforeSend(frame);
+	sendScatter(frame, (const NDIlib_frame_scatter_t*)frame.p_data);
+	data_buffer_.swap();
+}
+
+
+#pragma mark - Metadata
 
 template<>
 void Stream<MetadataFrame>::sendFrame(const MetadataFrame &frame) const {

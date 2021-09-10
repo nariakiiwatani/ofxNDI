@@ -33,6 +33,7 @@ public:
 protected:
 	typename Type::Instance instance_;
 	virtual void sendFrame(const FrameType &frame) const;
+	virtual void sendScatter(const FrameType &frame, const NDIlib_frame_scatter_t *scatter) const;
 	virtual void beforeSend(FrameType &frame){}
 
 	template<typename SrcType>
@@ -46,7 +47,7 @@ protected:
 };
 
 template<> template<typename SrcType>
-void Stream<AudioFrameInterleaved>::send(const SrcType &src, const std::string &metadata, int64_t timecode) {
+void Stream<ofxNDI::AudioFrameInterleaved>::send(const SrcType &src, const std::string &metadata, int64_t timecode) {
 	auto frame = createFrame(src);
 	frame.timecode = timecode;
 	beforeSend(frame);
@@ -54,7 +55,7 @@ void Stream<AudioFrameInterleaved>::send(const SrcType &src, const std::string &
 	data_buffer_.swap();
 }
 template<> template<typename SrcType>
-void Stream<MetadataFrame>::send(const SrcType &src, const std::string &metadata, int64_t timecode) {
+void Stream<ofxNDI::MetadataFrame>::send(const SrcType &src, const std::string &metadata, int64_t timecode) {
 	auto frame = createFrame(src);
 	frame.timecode = timecode;
 	beforeSend(frame);
@@ -91,6 +92,7 @@ class VideoStreamAsync : public VideoStream
 {
 protected:
 	void sendFrame(const ofxNDI::VideoFrame &frame) const override;
+	void sendScatter(const ofxNDI::VideoFrame &frame, const NDIlib_frame_scatter_t *scatter) const override;
 };
 }}
 
