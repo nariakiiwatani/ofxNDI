@@ -7,6 +7,11 @@ void ofApp::setup(){
 	camera_.setup(1920, 1080);
 	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
+		int frame_rate_n, frame_rate_d;
+		NDIlib_frame_format_type_e frame_format_type;
+		genlock_.setup();
+		video_.getVideoFormat(frame_rate_n, frame_rate_d, frame_format_type);
+		genlock_.setVideoFormat(frame_rate_n, frame_rate_d, frame_format_type);
 	}
 }
 
@@ -16,14 +21,17 @@ void ofApp::update(){
 	if(camera_.isFrameNew()) {
 		ofPixels pix = camera_.getPixels();
 		pix.setImageType(OF_IMAGE_COLOR_ALPHA);
-		video_.send(pix);
+		if(genlock_.waitVideo()) {
+			video_.send(pix);
+		}
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	if(camera_.isInitialized()) {
-		camera_.draw(ofGetCurrentViewport());
+		ofPixels pix = camera_.getPixels();
+		ofImage(pix).draw(ofGetCurrentViewport());
 	}
 	else {
 		int gray = ofGetFrameNum()%256;

@@ -23,9 +23,15 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	void audioOut(ofSoundBuffer &buffer);
 private:
 	ofxNDIFinder finder_;
 	ofxNDIReceiver receiver_;
+
 	ofxNDIRecvVideoFrameSync video_;
 	ofPixels pixels_;
+
+	ofxNDIRecvAVSyncAudio audio_;
+	ofSoundStream stream_;
 };

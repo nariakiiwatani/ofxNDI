@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxNDISender.h"
+#include "ofxNDIGenlock.h"
 #include "ofxNDISendStream.h"
 
 class ofApp : public ofBaseApp{
@@ -24,6 +25,8 @@ public:
 	void gotMessage(ofMessage msg);
 private:
 	ofxNDISender sender_;
-	ofxNDISendVideoAsync video_;
+	ofxNDISendVideo video_;
 	ofVideoGrabber camera_;
+	
+	ofxNDIGenlock genlock_;
 };

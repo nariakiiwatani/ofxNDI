@@ -114,6 +114,7 @@ template<>
 bool Frame::decode(const VideoFrame &src, ofPixels &dst)
 {
 	dst.setFromPixels(src.p_data, src.xres, src.yres, getOfPixelFormatFromFourCCType(src.FourCC));
+	return true;
 }
 
 #pragma mark audio
@@ -144,6 +145,7 @@ bool Frame::decode(const AudioFrameInterleaved &src, ofSoundBuffer &dst)
 {
 	dst.allocate(src.no_samples, src.no_channels);
 	dst.copyFrom(src.p_data, src.no_samples, src.no_channels, src.sample_rate);
+	return true;
 }
 
 template<>
@@ -178,6 +180,7 @@ bool Frame::decode(const AudioFrame &src, ofSoundBuffer &dst)
 	
 	NDIlib_audio_frame_v2_t v2_frame(src.sample_rate, src.no_channels, src.no_samples, src.timecode, reinterpret_cast<float*>(src.p_data), src.channel_stride_in_bytes, src.p_metadata, src.timestamp);
 	NDIlib_util_audio_to_interleaved_32f_v2(&v2_frame, &interleaved_frame);
+	return true;
 }
 
 #pragma mark metadata
