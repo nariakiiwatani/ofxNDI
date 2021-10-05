@@ -22,7 +22,7 @@ bool ofxNDIGenlock::setup(std::size_t index)
 	instance_ = NDIlib_genlock_create(nullptr);
 	return isSetup();
 }
-bool ofxNDIGenlock::setup(const Source &source)
+bool ofxNDIGenlock::setup(const ofxNDI::Source &source)
 {
 	destroy();
 	auto src = toV1(source);
@@ -35,7 +35,7 @@ bool ofxNDIGenlock::isSourceActive() const
 	return NDIlib_genlock_is_active(instance_);
 }
 
-void ofxNDIGenlock::changeConnection(const Source &source)
+void ofxNDIGenlock::changeConnection(const ofxNDI::Source &source)
 {
 	auto src = toV1(source);
 	NDIlib_genlock_connect(instance_, &src);

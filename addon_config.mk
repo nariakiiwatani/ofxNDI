@@ -8,3 +8,6 @@ meta:
 osx:
 	ADDON_LDFLAGS = -Xlinker -rpath -Xlinker @executable_path
 
+vs:
+	ADDON_DLLS_TO_COPY += windows-copy-to-bin/Processing.NDI.Lib.Advanced.x64.dll
+	ADDON_DLLS_TO_COPY += windows-copy-to-bin/Processing.NDI.Lib.Advanced.x86.dll
