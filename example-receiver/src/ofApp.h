@@ -24,7 +24,6 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	void audioOut(ofSoundBuffer &buffer);
 private:
 	ofxNDIFinder finder_;
 	ofxNDIReceiver receiver_;
