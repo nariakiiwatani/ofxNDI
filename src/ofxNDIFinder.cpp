@@ -40,7 +40,7 @@ std::function<std::vector<Source>(bool, bool)> ofxNDIFinder::watchSources(bool s
 			std::swap(found_sources_, ret);
 		}
 		NDIlib_find_destroy(finder);
-	}, NDIlib_find_create_t{show_local_resources, group.c_str(), ofJoinString(extra_ips, ",").c_str()});
+	}, NDIlib_find_create_t{show_local_resources, group.empty()?"":group.c_str(), extra_ips.empty()?"":ofJoinString(extra_ips, ",").c_str()});
 	
 	return [&](bool terminate, bool wait) {
 		if(terminate) {
