@@ -25,6 +25,14 @@ bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 	}
 	return true;
 }
+void ofxNDIReceiver::clear()
+{
+	destroyFrameSync();
+	if(instance_) {
+		NDIlib_recv_destroy(instance_);
+		instance_ = nullptr;
+	}
+}
 void ofxNDIReceiver::changeConnection(const Source &source)
 {
 	auto src = toV1(source);
@@ -119,7 +127,6 @@ void ofxNDIReceiver::getNumDroppedFrame(int64_t *video, int64_t *audio, int64_t 
 
 ofxNDIReceiver::~Receiver()
 {
-	destroyFrameSync();
-	if(instance_) NDIlib_recv_destroy(instance_);
+	clear();
 	NDIlib_destroy();
 }

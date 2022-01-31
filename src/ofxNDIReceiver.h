@@ -28,6 +28,7 @@ public:
 	};
 	bool setup(std::size_t index=0, const Settings &settings=Settings());
 	bool setup(const Source &source, const Settings &settings=Settings());
+	void clear();
 	bool isSetup() const { return instance_ != nullptr; }
 
 	bool isConnected() const;
