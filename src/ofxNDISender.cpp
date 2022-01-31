@@ -24,9 +24,22 @@ bool ofxNDISender::setup(const string &name, const string &group, bool clock_vid
 	return true;
 }
 
+void ofxNDISender::clear()
+{
+	if(instance_) {
+		NDIlib_send_destroy(instance_);
+		instance_ = nullptr;
+	}
+}
+
+int ofxNDISender::getNumConnected(int64_t timeout_ms) const
+{
+	return isSetup() ? NDIlib_send_get_no_connections(instance_, timeout_ms) : 0;
+}
+
 bool ofxNDISender::isConnected(int64_t timeout_ms) const
 {
-	return isSetup() && NDIlib_send_get_no_connections(instance_, timeout_ms);
+	return getNumConnected(timeout_ms) > 0;
 }
 
 void ofxNDISender::addConnectionMetadata(const string &metadata, int64_t timecode) const
@@ -66,6 +79,6 @@ bool ofxNDISender::setTally(bool on_program, bool on_preview) const
 
 ofxNDISender::~Sender()
 {
-	NDIlib_send_destroy(instance_);
+	clear();
 	NDIlib_destroy();
 }
