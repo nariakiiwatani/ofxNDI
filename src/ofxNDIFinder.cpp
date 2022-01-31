@@ -30,11 +30,11 @@ std::function<std::vector<Source>(bool, bool)> ofxNDIFinder::watchSources(bool s
 				continue;
 			}
 			unsigned int num_sources=0;
-			const Source* sources = NDIlib_find_get_current_sources_v2(finder, &num_sources);
+			const NDIlib_source_v2_t* sources = NDIlib_find_get_current_sources_v2(finder, &num_sources);
 			std::vector<Source> ret;
 			ret.insert(std::end(ret), sources, sources+num_sources);
 			for(auto &r : ret) {
-				ofLogVerbose("ofxNDI::listSources") << "NDI Source Detected : " << r.p_ndi_name << ", " << r.p_url_address << ", " << r.p_metadata;
+				ofLogVerbose("ofxNDI::listSources") << "NDI Source Detected : " << r.ndi_name << ", " << r.url_address << ", " << r.metadata;
 			}
 			std::lock_guard<std::mutex> lock(mutex_);
 			std::swap(found_sources_, ret);

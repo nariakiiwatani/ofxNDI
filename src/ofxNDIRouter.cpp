@@ -13,7 +13,7 @@ bool ofxNDIRouter::setup(const std::string &name, const std::string &group)
 }
 bool ofxNDIRouter::setRoute(const Source &source) const
 {
-	auto src = toV1(source);
+	auto src = source.toV1();
 	return NDIlib_routing_change(instance_, &src);
 }
 
@@ -33,7 +33,7 @@ void ofxNDIRouter::clearConnectionMetadata() const
 
 Source ofxNDIRouter::getSourceName() const
 {
-	return toV2(*NDIlib_routing_get_source_name(instance_));
+	return *NDIlib_routing_get_source_name(instance_);
 }
 int ofxNDIRouter::getNumConnections(uint32_t timeout) const
 {

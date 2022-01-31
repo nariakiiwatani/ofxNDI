@@ -28,7 +28,7 @@ void ofApp::draw(){
 	using namespace std;
 	auto sources = finder_.getSources();
 	auto names = accumulate(begin(sources), end(sources), vector<string>(), [](vector<string> result, const ofxNDI::Source &src) {
-		result.push_back(ofToString(result.size()+1, 2, '0')+". "+src.p_ndi_name+"("+src.p_url_address+")");
+		result.push_back(ofToString(result.size()+1, 2, '0')+". "+src.ndi_name+"("+src.url_address+")");
 		return result;
 	});
 	ofDrawBitmapString("press 1-9 to select available source", 10, 10);

@@ -18,8 +18,8 @@ public:
 		for(auto &&s : sources) {
 			ofVideoDevice v;
 			v.id = ret.size();
-			v.deviceName = s.p_ndi_name;
-			v.hardwareName = s.p_url_address;
+			v.deviceName = s.ndi_name;
+			v.hardwareName = s.url_address;
 			v.bAvailable = true;
 			ret.emplace_back(v);
 		}

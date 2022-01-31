@@ -15,7 +15,7 @@ bool ofxNDIReceiver::setup(size_t index, const Settings &settings)
 }
 bool ofxNDIReceiver::setup(const Source &source, const Settings &settings)
 {
-	NDIlib_recv_create_v3_t creator = { toV1(source), settings.color_format, settings.bandwidth, settings.deinterlace, nullptr };
+	NDIlib_recv_create_v3_t creator = { source.toV1(), settings.color_format, settings.bandwidth, settings.deinterlace, nullptr };
 	creator.p_ndi_recv_name = settings.name==""?nullptr:settings.name.c_str();
 	instance_ = NDIlib_recv_create_v4(&creator);
 
@@ -35,7 +35,7 @@ void ofxNDIReceiver::clear()
 }
 void ofxNDIReceiver::changeConnection(const Source &source)
 {
-	auto src = toV1(source);
+	auto src = source.toV1();
 	NDIlib_recv_connect(instance_, &src);
 }
 void ofxNDIReceiver::disconnect()

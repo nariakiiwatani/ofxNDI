@@ -6,7 +6,7 @@ using namespace std;
 
 ofxNDI::Source ofxNDISender::getSourceName() const
 {
-	return toV2(*NDIlib_send_get_source_name(instance_));
+	return *NDIlib_send_get_source_name(instance_);
 }
 
 bool ofxNDISender::setup(const string &name, const string &group, bool clock_video, bool clock_audio)
@@ -58,7 +58,7 @@ void ofxNDISender::clearConnectionMetadata() const
 
 void ofxNDISender::setFailover(const ofxNDI::Source &source) const
 {
-	auto src = toV1(source);
+	auto src = source.toV1();
 	NDIlib_send_set_failover(instance_, &src);
 }
 bool ofxNDISender::getTally(bool *on_program, bool *on_preview, int64_t timeout_ms) const
