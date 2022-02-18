@@ -11,9 +11,13 @@ namespace ofxNDI {
 
 struct Source {
 	std::string ndi_name, url_address, metadata;
-	Source(){}
-	Source(NDIlib_source_t v):ndi_name(v.p_ndi_name),url_address(v.p_url_address),metadata(""){}
-	Source(NDIlib_source_v2_t v):ndi_name(v.p_ndi_name),url_address(v.p_url_address),metadata(v.p_metadata){}
+	Source(const char *p_ndi_name=nullptr, const char *p_url_address=nullptr, const char *p_metadata=nullptr) {
+		ndi_name = p_ndi_name ? p_ndi_name : "";
+		url_address = p_url_address ? p_url_address : "";
+		metadata = p_metadata ? p_metadata : "";
+	}
+	Source(NDIlib_source_t v):Source(v.p_ndi_name, v.p_url_address){}
+	Source(NDIlib_source_v2_t v):Source(v.p_ndi_name, v.p_url_address, v.p_metadata){}
 	NDIlib_source_t toV1() const { return {ndi_name.c_str(), url_address.c_str()}; }
 	NDIlib_source_v2_t toV2() const { return {ndi_name.c_str(), url_address.c_str(), ""}; }
 };
