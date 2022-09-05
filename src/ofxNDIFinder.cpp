@@ -37,7 +37,7 @@ std::function<std::vector<Source>(bool, bool)> ofxNDIFinder::watchSources(bool s
 				ofLogVerbose("ofxNDI::listSources") << "NDI Source Detected : " << r.ndi_name << ", " << r.url_address << ", " << r.metadata;
 			}
 			std::lock_guard<std::mutex> lock(mutex_);
-			std::swap(found_sources_, ret);
+			found_sources_ = filter(ret);
 		}
 		NDIlib_find_destroy(finder);
 	}, NDIlib_find_create_t{show_local_resources, group.empty()?"":group.c_str(), extra_ips.empty()?"":ofJoinString(extra_ips, ",").c_str()});
@@ -70,4 +70,27 @@ std::vector<Source> ofxNDIFinder::listSources(std::size_t waittime_ms, bool show
 	auto op = watchSources(show_local_resources, group, extra_ips);
 	ofSleepMillis(waittime_ms);
 	return op(true, true);
+}
+
+
+void ofxNDIFinder::setFilter(const std::string &name_or_url) {
+	filter_.name_or_url = name_or_url;
+	std::lock_guard<std::mutex> lock(mutex_);
+	found_sources_ = filter(found_sources_);
+}
+
+std::vector<Source> ofxNDIFinder::filter(const std::vector<Source> &source) const
+{
+	auto ret = source;
+	ret.erase(remove_if(begin(ret), end(ret), [&](const Source &s) {
+		return !filter_.isMatch(s);
+	}), end(ret));
+	return ret;
+}
+
+bool ofxNDIFinder::Filter::isMatch(const Source &s) const
+{
+	return name_or_url == ""
+	|| ofIsStringInString(s.ndi_name, name_or_url)
+	|| ofIsStringInString(s.url_address, name_or_url);
 }

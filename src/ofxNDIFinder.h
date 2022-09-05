@@ -33,11 +33,18 @@ public:
 
 	std::vector<Source> listSources(std::size_t waittime_ms=1000, bool show_local_resources=true, const std::string &group="", const std::vector<std::string> extra_ips={});
 
+	void setFilter(const std::string &name_or_url);
 private:
 	mutable std::mutex mutex_;
 	std::thread watcher_;
 	std::vector<Source> found_sources_;
 	bool terminate_;
+	struct Filter {
+		std::string name_or_url;
+		bool isMatch(const Source &source) const;
+	} filter_;
+	
+	std::vector<Source> filter(const std::vector<Source> &source) const;
 };
 
 }}
