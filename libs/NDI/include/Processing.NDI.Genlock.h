@@ -2,14 +2,15 @@
 
 //-----------------------------------------------------------------------------------------------------------
 //
-// Copyright (C)2014-2021, NewTek, inc.
+// Copyright (C)2014-2022, NewTek, inc.
 //
 // This file is part of the NDI Advanced SDK and may not be distributed.
 //
 //-----------------------------------------------------------------------------------------------------------
 
 // The type instance for a genlock object.
-typedef void* NDIlib_genlock_instance_t;
+struct NDIlib_genlock_instance_type;
+typedef struct NDIlib_genlock_instance_type* NDIlib_genlock_instance_t;
 
 // This will create a genlock object. You may specify the NDI source that you wish to lock the signal too,
 // and the NDI JSON settings associated with it. It is important that you remember to fill out the vendor_id
@@ -36,7 +37,7 @@ PROCESSINGNDILIB_ADVANCED_API
 bool NDIlib_genlock_is_active(NDIlib_genlock_instance_t p_instance);
 
 // This function will wait for the time at which the next video frame is expected. A full frame structure is
-// passed into the function, however only the frame-rate and field_type members of the structure are used and
+// passed into the function, however only the frame rate and field type members of the structure are used and
 // the rest need not be filled in. The return value tells you whether an NDI genlock signal is present (true)
 // or if system clocking is being used to clock the signal (false). Note that audio and video clocks need not
 // be in line with each other and can be operated from entirely separate threads.

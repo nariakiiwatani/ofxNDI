@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	router_.setup("example-router", "ofxNDI");
+	router_.setup("example-router");
 	sources_ = ofxNDI::listSources();
 }
 
@@ -15,7 +15,7 @@ void ofApp::update(){
 void ofApp::draw(){
 	int label = 1;
 	for(auto &s : sources_) {
-		ofDrawBitmapString(ofToString(label) + ":" + s.p_ndi_name + "(" + s.p_url_address + ")", 10, label*20);
+		ofDrawBitmapString(ofToString(label) + ":" + s.ndi_name + "(" + s.url_address + ")", 10, label*20);
 		++label;
 	}
 }

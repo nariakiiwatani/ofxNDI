@@ -2,9 +2,9 @@
 
 //-----------------------------------------------------------------------------------------------------------
 //
-// Copyright (C)2014-2021, NewTek, inc.
+// Copyright (C)2014-2022, NewTek, inc.
 //
-// This file is part of the Advanced SDK and may not be distributed.
+// This file is part of the NDI Advanced SDK and may not be distributed.
 //
 //-----------------------------------------------------------------------------------------------------------
 
@@ -16,10 +16,11 @@
 
 #include "Processing.NDI.AVSync.h"
 #include "Processing.NDI.Genlock.h"
+#include "Processing.NDI.KVM.h"
 
-// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_video_frame instances
-typedef enum NDIlib_FourCC_video_type_ex_e
-{	// SpeedHQ formats at the highest bandwidth
+// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_video_frame instances.
+typedef enum NDIlib_FourCC_video_type_ex_e {
+	// SpeedHQ formats at the highest bandwidth.
 	NDIlib_FourCC_video_type_ex_SHQ0_highest_bandwidth = NDI_LIB_FOURCC('S', 'H', 'Q', '0'),		// SpeedHQ 4:2:0
 	NDIlib_FourCC_type_SHQ0_highest_bandwidth = NDIlib_FourCC_video_type_ex_SHQ0_highest_bandwidth,	// Backwards compatibility
 
@@ -29,7 +30,7 @@ typedef enum NDIlib_FourCC_video_type_ex_e
 	NDIlib_FourCC_video_type_ex_SHQ7_highest_bandwidth = NDI_LIB_FOURCC('S', 'H', 'Q', '7'),		// SpeedHQ 4:2:2:4
 	NDIlib_FourCC_type_SHQ7_highest_bandwidth = NDIlib_FourCC_video_type_ex_SHQ7_highest_bandwidth,	// Backwards compatibility
 
-	// SpeedHQ formats at the lowest bandwidth
+	// SpeedHQ formats at the lowest bandwidth.
 	NDIlib_FourCC_video_type_ex_SHQ0_lowest_bandwidth = NDI_LIB_FOURCC('s', 'h', 'q', '0'),			// SpeedHQ 4:2:0
 	NDIlib_FourCC_type_SHQ0_lowest_bandwidth = NDIlib_FourCC_video_type_ex_SHQ0_lowest_bandwidth,	// Backwards compatibility
 
@@ -42,27 +43,28 @@ typedef enum NDIlib_FourCC_video_type_ex_e
 	// If SpeedHQ 4:4:4 / 4:4:4:4 formats are desired, please contact ndi@newtek.com.
 
 	// H.264 video at the highest bandwidth -- the data field is expected to be prefixed with the
-	// NDIlib_compressed_packet_t structure
+	// NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_video_type_ex_H264_highest_bandwidth = NDI_LIB_FOURCC('H', '2', '6', '4'),
 	NDIlib_FourCC_type_H264_highest_bandwidth = NDIlib_FourCC_video_type_ex_H264_highest_bandwidth,	// Backwards compatibility
 
 	// H.264 video at the lowest bandwidth -- the data field is expected to be prefixed with the
-	// NDIlib_compressed_packet_t structure
+	// NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_video_type_ex_H264_lowest_bandwidth = NDI_LIB_FOURCC('h', '2', '6', '4'),
 	NDIlib_FourCC_type_H264_lowest_bandwidth = NDIlib_FourCC_video_type_ex_H264_lowest_bandwidth,	// Backwards compatibility
 
 	// H.265/HEVC video at the highest bandwidth -- the data field is expected to be prefixed with
-	// the NDIlib_compressed_packet_t structure
+	// the NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_video_type_ex_HEVC_highest_bandwidth = NDI_LIB_FOURCC('H', 'E', 'V', 'C'),
 	NDIlib_FourCC_type_HEVC_highest_bandwidth = NDIlib_FourCC_video_type_ex_HEVC_highest_bandwidth,	// Backwards compatibility
 
 	// H.265/HEVC video at the lowest bandwidth -- the data field is expected to be prefixed with
-	// the NDIlib_compressed_packet_t structure
+	// the NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_video_type_ex_HEVC_lowest_bandwidth = NDI_LIB_FOURCC('h', 'e', 'v', 'c'),
 	NDIlib_FourCC_type_HEVC_lowest_bandwidth = NDIlib_FourCC_video_type_ex_HEVC_lowest_bandwidth,	// Backwards compatibility
 
 	// H.264 video at the highest bandwidth -- the data field is expected to be prefixed with the
-	// NDIlib_compressed_packet_t structure
+	// NDIlib_compressed_packet_t structure.
+	//
 	// This version is basically a frame of double the height where to top part is the color and the bottom
 	// half has the alpha channel (against chroma being gray).
 	NDIlib_FourCC_video_type_ex_H264_alpha_highest_bandwidth = NDI_LIB_FOURCC('A', '2', '6', '4'),
@@ -92,47 +94,47 @@ typedef enum NDIlib_FourCC_video_type_ex_e
 	NDIlib_FourCC_video_type_ex_HEVC_alpha_lowest_bandwidth = NDI_LIB_FOURCC('a', 'e', 'v', 'c'),
 	NDIlib_FourCC_type_HEVC_alpha_lowest_bandwidth = NDIlib_FourCC_video_type_ex_HEVC_alpha_lowest_bandwidth,	// Backwards compatibility
 
-	// Make sure this is a 32 bit enumeration
+	// Make sure this is a 32-bit enumeration.
 	NDIlib_FourCC_video_type_ex_max = 0x7fffffff
 } NDIlib_FourCC_video_type_ex_e;
 
-// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_audio_frame instances
-typedef enum NDIlib_FourCC_audio_type_ex_e
-{	// AAC audio -- the data field is expected to be prefixed with the NDIlib_compressed_packet_t structure
+// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_audio_frame instances.
+typedef enum NDIlib_FourCC_audio_type_ex_e {
+	// AAC audio -- the data field is expected to be prefixed with the NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_audio_type_ex_AAC = 0x00ff,
 
 	// Multi channel Opus stream -- unlike other compressed formats, the data field is not expected to be
-	// prefixed with the NDIlib_compressed_packet_t structure
+	// prefixed with the NDIlib_compressed_packet_t structure.
 	NDIlib_FourCC_audio_type_ex_OPUS = NDI_LIB_FOURCC('O', 'p', 'u', 's'),
 
-	// Make sure this is a 32 bit enumeration
+	// Make sure this is a 32-bit enumeration.
 	NDIlib_FourCC_audio_type_ex_max = 0x7fffffff
 } NDIlib_FourCC_audio_type_ex_e;
 
-// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_compressed_packet_t instances
-typedef enum NDIlib_compressed_FourCC_type_e
-{	// Used in the NDIlib_compressed_packet type to signify H.264 video data that is prefixed with the
-	// NDIlib_compressed_packet_t structure
+// Additional values for the NDIlib_FourCC_type_e type that are for usage with NDIlib_compressed_packet_t instances.
+typedef enum NDIlib_compressed_FourCC_type_e {
+	// Used in the NDIlib_compressed_packet type to signify H.264 video data that is prefixed with the
+	// NDIlib_compressed_packet_t structure.
 	NDIlib_compressed_FourCC_type_H264 = NDI_LIB_FOURCC('H', '2', '6', '4'),
 	NDIlib_FourCC_type_H264 = NDIlib_compressed_FourCC_type_H264,
 
 	// Used in the NDIlib_compressed_packet type to signify H.265/HEVC video data that is prefixed with the
-	// NDIlib_compressed_packet_t structure
+	// NDIlib_compressed_packet_t structure.
 	NDIlib_compressed_FourCC_type_HEVC = NDI_LIB_FOURCC('H', 'E', 'V', 'C'),
 	NDIlib_FourCC_type_HEVC = NDIlib_compressed_FourCC_type_HEVC,
 
 	// Used in the NDIlib_compressed_packet type to signify AAC audio data that is prefixed with the
-	// NDIlib_compressed_packet_t structure
+	// NDIlib_compressed_packet_t structure.
 	NDIlib_compressed_FourCC_type_AAC = 0x00ff,
 	NDIlib_FourCC_type_AAC = NDIlib_compressed_FourCC_type_AAC,
 
-	// Make sure the size is 32bits
+	// Make sure this is a 32-bit enumeration.
 	NDIlib_compressed_FourCC_type_max = 0x7fffffff
 } NDIlib_compressed_FourCC_type_e;
 
-// Additional values for NDIlib_recv_color_format_e type
-typedef enum NDIlib_recv_color_format_ex_e
-{	// Request that compressed video data is the desired format.
+// Additional values for NDIlib_recv_color_format_e type.
+typedef enum NDIlib_recv_color_format_ex_e {
+	// Request that compressed video data is the desired format.
 	NDIlib_recv_color_format_ex_compressed = 300,
 	NDIlib_recv_color_format_compressed = NDIlib_recv_color_format_ex_compressed,
 
@@ -170,7 +172,7 @@ typedef enum NDIlib_recv_color_format_ex_e
 	NDIlib_recv_color_format_ex_compressed_v5_with_audio = 308,
 	NDIlib_recv_color_format_compressed_v5_with_audio = NDIlib_recv_color_format_ex_compressed_v5_with_audio,
 
-	// Ensure that this is 32 bits in size.
+	// Make sure this is a 32-bit enumeration.
 	NDIlib_recv_color_format_ex_max = 0x7fffffff
 } NDIlib_recv_color_format_ex_e;
 
@@ -179,8 +181,7 @@ static const uint32_t NDIlib_compressed_packet_flags_none = 0;
 static const uint32_t NDIlib_compressed_packet_flags_keyframe = 1;
 static const  int32_t NDIlib_compressed_packet_version_0 = 44;
 
-typedef struct NDIlib_compressed_packet_t
-{
+typedef struct NDIlib_compressed_packet_t {
 	int32_t version;                         // Structure size (used to get version).
 	NDIlib_compressed_FourCC_type_e fourCC;  // The FourCC of this format (e.g. "H264" or "AAC").
 	int64_t pts;                             // The presentation time-stamp. In 10000000 intervals.
@@ -209,15 +210,22 @@ typedef struct NDIlib_compressed_packet_t
 #endif
 
 #if NDILIB_CPP_DEFAULT_CONSTRUCTORS
-	NDIlib_compressed_packet_t(void) : version(sizeof(NDIlib_compressed_packet_t)), fourCC(NDIlib_compressed_FourCC_type_H264),
-		pts(0), dts(0), reserved(0), flags(flags_none), data_size(0), extra_data_size(0) { }
+	NDIlib_compressed_packet_t(void)
+		: version(sizeof(NDIlib_compressed_packet_t))
+		, fourCC(NDIlib_compressed_FourCC_type_H264)
+		, pts(0), dts(0)
+		, reserved(0)
+		, flags(flags_none)
+		, data_size(0), extra_data_size(0)
+	{
+	}
 #endif
 } NDIlib_compressed_packet_t;
 #pragma pack(pop)
 
 // This describes a scatter-gather list that can be used for audio or video data.
-typedef struct NDIlib_frame_scatter_t
-{	// List of pointers to scatter-gather data. The list should be terminated with a NULL pointer.
+typedef struct NDIlib_frame_scatter_t {
+	// List of pointers to scatter-gather data. The list should be terminated with a NULL pointer.
 	const uint8_t* const* p_data_blocks;
 
 	// A list of sizes for each data block in the scatter-gather list.
@@ -258,6 +266,12 @@ bool NDIlib_send_is_keyframe_required(NDIlib_send_instance_t p_instance, const N
 // matching bandwidth. In this case, the data pointer is not required to be valid.
 PROCESSINGNDILIB_ADVANCED_API
 bool NDIlib_send_wait_for_keyframe_request(NDIlib_send_instance_t p_instance, uint32_t timeout_in_ms, const NDIlib_video_frame_v2_t* p_video_data NDILIB_CPP_DEFAULT_VALUE(NULL));
+
+// Initiate a new request for a keyframe to be sent to the NDI sender. The NDI receiver will typically handle
+// this kind of request automatically, however, there may be scenarios in which you need to make a request
+// yourself.
+PROCESSINGNDILIB_ADVANCED_API
+void NDIlib_recv_request_keyframe(NDIlib_recv_instance_t p_instance);
 
 // Send a video frame synchronously from a scatter-gather list. If the p_video_scatter argument is NULL,
 // then it would be as if the NDIlib_send_send_video_v2 were called instead. If the p_video_scatter argument
@@ -333,7 +347,7 @@ NDIlib_send_instance_t NDIlib_send_create_v2(const NDIlib_send_create_t* p_creat
 PROCESSINGNDILIB_ADVANCED_API
 NDIlib_routing_instance_t NDIlib_routing_create_v2(const NDIlib_routing_create_t* p_create_settings, const char* p_config_data NDILIB_CPP_DEFAULT_VALUE(NULL));
 
-// As of NDI version 5, we support custom memory allocators.
+// As of NDI 5, we support custom memory allocators.
 typedef bool (*NDIlib_video_alloc_t)(void* p_opaque, NDIlib_video_frame_v2_t* p_video_data);
 typedef bool (*NDIlib_video_free_t)(void* p_opaque, const NDIlib_video_frame_v2_t* p_video_data);
 typedef bool (*NDIlib_audio_alloc_t)(void* p_opaque, NDIlib_audio_frame_v3_t* p_audio_data);
@@ -344,10 +358,6 @@ void NDIlib_recv_set_video_allocator(NDIlib_recv_instance_t p_instance, void* p_
 
 PROCESSINGNDILIB_ADVANCED_API
 void NDIlib_recv_set_audio_allocator(NDIlib_recv_instance_t p_instance, void* p_opaque, NDIlib_audio_alloc_t p_allocator, NDIlib_audio_free_t p_deallocator);
-
-// This will tell you whether the source that you are connected to supports.
-PROCESSINGNDILIB_ADVANCED_API
-bool NDIlib_recv_kvm_is_supported(NDIlib_recv_instance_t p_instance);
 
 // When you are working with asynchronous buffers, by default a send operation from the previous send
 // operation must have completed before the current one will complete. What this means is that if a sender is
@@ -360,8 +370,8 @@ typedef void (*NDIlib_video_send_async_completion_t)(void* p_opaque, const NDIli
 PROCESSINGNDILIB_ADVANCED_API
 void NDIlib_send_set_video_async_completion(NDIlib_send_instance_t p_instance, void* p_opaque, NDIlib_video_send_async_completion_t p_deallocator);
 
-typedef struct NDIlib_source_v2_t
-{	// A UTF8 string that provides a user readable name for this source. This can be used for serialization,
+typedef struct NDIlib_source_v2_t {
+	// A UTF8 string that provides a user readable name for this source. This can be used for serialization,
 	// etc... and comprises the machine name and the source name on that machine. In the following form,
 	//     MACHINE_NAME (NDI_SOURCE_NAME)
 	// If you specify this parameter either as NULL, or an EMPTY string then the specific IP address and port
@@ -377,7 +387,6 @@ typedef struct NDIlib_source_v2_t
 	// A UTF8 string that represents the metadata on this connection. This is currently only supported in
 	// the Advanced SDK.
 	const char* p_metadata;
-
 } NDIlib_source_v2_t;
 
 // This function will recover the current set of sources (i.e. the ones that exist right this second). The

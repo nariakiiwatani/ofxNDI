@@ -2,14 +2,15 @@
 
 //-----------------------------------------------------------------------------------------------------------
 //
-// Copyright (C)2014-2021, NewTek, inc.
+// Copyright (C)2014-2022, NewTek, inc.
 //
 // This file is part of the NDI Advanced SDK and may not be distributed.
 //
 //-----------------------------------------------------------------------------------------------------------
 
 // The type instance for a AV synchronizer.
-typedef void* NDIlib_avsync_instance_t;
+struct NDIlib_avsync_instance_type;
+typedef struct NDIlib_avsync_instance_type* NDIlib_avsync_instance_t;
 
 // This will create an AV sync object. A receiver is passed into this object and audio will be taken from
 // this receiver. One may then use the NDIlib_avsync_instance_t to pass in a video frame as a reference and
@@ -23,8 +24,8 @@ PROCESSINGNDILIB_ADVANCED_API
 void NDIlib_avsync_destroy(NDIlib_avsync_instance_t p_avsync);
 
 // The returned results from
-typedef enum NDIlib_avsync_ret_e
-{	// We recovered the audio that you asked for, if you requested an exact number of samples it was
+typedef enum NDIlib_avsync_ret_e {
+	// We recovered the audio that you asked for, if you requested an exact number of samples it was
 	// returned. If you do not specify the number of audio samples that you want then this is always returned.
 	NDIlib_avsync_ret_success = 1,
 
@@ -39,7 +40,7 @@ typedef enum NDIlib_avsync_ret_e
 	NDIlib_avsync_ret_no_audio_stream_received = -1,
 
 	// No audio could be capture that matched this video frame. Audio is currently on this source, however
-	// none could be found that matched the video frame. THis is likely because the sync, timestamps or
+	// none could be found that matched the video frame. This is likely because the sync, timestamps or
 	// clocks on the remote source are so far away from the expectations. Or that the video has a timestamp
 	// that is incorrect. This can also occur if the sender is putting audio and video into the stream in
 	// such a way that they are out of sync.

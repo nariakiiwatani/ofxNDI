@@ -2,9 +2,9 @@
 
 //-----------------------------------------------------------------------------------------------------------
 //
-// Copyright (C)2014-2021, NewTek, inc.
+// Copyright (C)2014-2022, NewTek, inc.
 //
-// This file is part of the Advanced SDK and may not be distributed.
+// This file is part of the NDI Advanced SDK and may not be distributed.
 //
 //-----------------------------------------------------------------------------------------------------------
 

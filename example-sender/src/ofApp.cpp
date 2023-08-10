@@ -4,6 +4,7 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
+	camera_.setDeviceID(2);
 	camera_.setup(1920, 1080);
 	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
