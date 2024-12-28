@@ -3,7 +3,6 @@
 #include "ofPixels.h"
 #include "ofSoundBuffer.h"
 #include "Processing.NDI.utilities.h"
-
 using namespace ofxNDI;
 
 #pragma mark video

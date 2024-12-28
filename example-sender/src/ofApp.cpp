@@ -4,8 +4,17 @@
 void ofApp::setup(){
 	ofBackground(0);
 	ofSetFrameRate(60);
-	camera_.setDeviceID(2);
+	
+	// get proper grabber device ID 
+	vector<ofVideoDevice> devices = camera_.listDevices();
+	for (int i = 0; i < devices.size(); i++) {
+		if (devices[i].bAvailable) {
+			cout << devices[i].id << ":" << devices[i].deviceName << endl;
+		}
+	}
+	camera_.setDeviceID(4);		// set proper device ID
 	camera_.setup(1920, 1080);
+
 	if(sender_.setup("ofxNDISender example")) {
 		video_.setup(sender_);
 		int frame_rate_n, frame_rate_d;
@@ -20,11 +29,13 @@ void ofApp::setup(){
 void ofApp::update(){
 	camera_.update();
 	if(camera_.isFrameNew()) {
+		
 		ofPixels pix = camera_.getPixels();
 		pix.setImageType(OF_IMAGE_COLOR_ALPHA);
-		if(genlock_.waitVideo()) {
-			video_.send(pix);
-		}
+		//if(genlock_.waitVideo()) {
+		//	video_.send(pix);
+		//}
+		video_.send(pix);
 	}
 }
 
@@ -33,19 +44,22 @@ void ofApp::draw(){
 	if(camera_.isInitialized()) {
 		ofPixels pix = camera_.getPixels();
 		ofImage(pix).draw(ofGetCurrentViewport());
+		//ofPixels pixels;
+		//ofGetGLRenderer()->saveFullViewport(pixels);
+		//video_.send(pixels);
 	}
-	else {
-		int gray = ofGetFrameNum()%256;
-		ofPushStyle();
-		ofSetColor(gray);
-		ofDrawRectangle(ofGetCurrentViewport());
-		ofSetColor(255-gray,0,0);
-		ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
-		ofPopStyle();
-		ofPixels pixels;
-		ofGetGLRenderer()->saveFullViewport(pixels);
-		video_.send(pixels);
-	}
+	//else {
+	//	int gray = ofGetFrameNum()%256;
+	//	ofPushStyle();
+	//	ofSetColor(gray);
+	//	ofDrawRectangle(ofGetCurrentViewport());
+	//	ofSetColor(255-gray,0,0);
+	//	ofDrawCircle(ofGetMouseX(), ofGetMouseY(), 30);
+	//	ofPopStyle();
+	//	ofPixels pixels;
+	//	ofGetGLRenderer()->saveFullViewport(pixels);
+	//	video_.send(pixels);
+	//}
 }
 
 //--------------------------------------------------------------
