@@ -2,7 +2,9 @@
 #include "ofImage.h"
 #include "ofSoundBuffer.h"
 #include "Processing.NDI.utilities.h"
-
+#if defined( __WIN32__ ) || defined( _WIN32 )
+	#include "ofPixels.h"
+#endif
 using namespace ofxNDI;
 
 #pragma mark video

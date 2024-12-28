@@ -7,6 +7,11 @@
 #include <mutex>
 #include <thread>
 
+
+#if defined( __WIN32__ ) || defined( _WIN32 )
+	#include <functional>
+#endif
+
 namespace ofxNDI {
 
 struct Source {
